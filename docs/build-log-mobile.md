@@ -1,5 +1,32 @@
 # Developer A build log
 
+## Final merged-code live rerun — 24 October 2026, 03:39 IST
+
+At main `78e5825`, both shared mobile discovery/conversation SDK adapters freshly
+passed against the development backend using ordinary dedicated account sessions.
+Mobile **8 model tests** and TypeScript passed; backend **36 tests, zero skips**
+and SQL **63 tests** passed. No new phone operation or native build was performed;
+existing user-reported Android/iOS acceptance remains the device evidence.
+See [final live verification](final-live-verification-2026-10-24.md).
+
+## Current closeout — P0–P3 accepted, 24 October 2026
+
+P0, P1, P2 and P3 are accepted for Developer A and integrated with Developer B's
+work on main at `78e5825`. Android/iOS acceptance is based on the user confirmations
+recorded in the integration checklist, rather than newly captured per-device traces.
+This supersedes the pending/blocked statuses in the historical entries below.
+
+P3 evidence includes mobile TypeScript, 8 model tests, Expo compatibility,
+Android/iOS exports and the hosted shared SDK checks. Combined backend evidence
+records 63 SQL tests and an earlier configured 36-test Python run with zero skips.
+Final merge checks ran 33 Python tests with 3 live tests skipped because live
+configuration was not loaded; this was not a fresh all-live rerun.
+
+Existing dependency audit/advisor warnings remain documented; acceptance does not
+mean a clean security audit. P4 has not started. This note reconciles the existing
+records and does not claim a new test run. See [integration checklist](integration-checklist.md)
+and [P3 evidence](p3-verification.md).
+
 ## P3 — 24 October 2026, combined A/B implementation
 
 **Implemented:** user assigned both P3 owners to one agent and confirmed Android/iOS

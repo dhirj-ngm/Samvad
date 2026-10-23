@@ -1,5 +1,34 @@
 # Developer B build log
 
+## Final merged-code live rerun — 24 October 2026, 03:39 IST
+
+At main `78e5825`, freshly configured Python suite **36 passed, zero skips**,
+including P1/P2/P3 hosted two-account tests. Both actual shared mobile SDK live
+checks passed; SQL **63 passed**, mobile **8 passed**, TypeScript, Ruff and pip
+check passed. The earlier final-merge live skip gap is now closed. No database
+schema or moderation changes were made. Dedicated-account test data was updated
+by the existing harnesses, with owner cleanup and local session logout.
+See [final live verification](final-live-verification-2026-10-24.md) for commands,
+test effects and remaining historical security/device evidence limitations.
+
+## Current closeout — P0–P3 accepted, 24 October 2026
+
+P0, P1, P2 and P3 are accepted for Developer B and integrated with Developer A's
+work on main at `78e5825`. The user's P3 completion confirmation supersedes the
+pending device/reply-visibility follow-up statuses in the historical entries below.
+
+P3 evidence records 63 local SQL tests, an earlier configured 36-test Python run
+with zero skips, hosted two-account HTTP/SDK checks, Ruff and dependency checks.
+Final merge checks ran 33 Python tests with 3 live tests skipped because live
+configuration was not loaded; the earlier configured result remains historical
+evidence. Android/iOS acceptance is user-reported, without new per-device traces.
+
+Existing Expo dependency audit findings and disabled leaked-password protection
+remain documented; acceptance does not mean all security warnings are resolved.
+P4 has not started. This note reconciles the existing records and does not claim
+a new test run. See [integration checklist](integration-checklist.md) and
+[P3 evidence](p3-verification.md).
+
 ## 2026-10-24 — Device reply visibility diagnosis
 
 User reported replies missing from the other account during P3 device testing.

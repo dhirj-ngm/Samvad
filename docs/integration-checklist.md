@@ -1,5 +1,14 @@
 # Integration gates
 
+## Final merged-code live rerun — 24 October 2026, 03:39 IST
+
+Main `78e5825` freshly passed **36 configured Python tests with zero skips**,
+including all three P1/P2/P3 live suites, plus both shared mobile SDK live checks.
+SQL **63 passed**, mobile **8 passed**, TypeScript, Ruff and pip check passed.
+This closes the live rerun gap from merge preparation below. No fresh phone run,
+bundle export or security-advisor scan is claimed. P0–P3 remain accepted; existing
+audit warnings remain documented. [Full result](final-live-verification-2026-10-24.md).
+
 ## P3 acceptance and main integration — 24 October 2026
 
 User confirmation: "p3 is tested and completed and it works" with an explicit

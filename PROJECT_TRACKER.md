@@ -7,6 +7,13 @@
 
 ## Where the project stands
 
+Final merged-code rerun at `78e5825` (24 October, 03:39 IST): **36 configured Python
+tests, zero skips**, including P1/P2/P3 live suites; **63 SQL**, **8 mobile model**,
+both actual shared SDK live checks, TypeScript, Ruff and pip check passed. The
+earlier merge-preparation live skips are superseded by this fresh result.
+[Final verification](docs/final-live-verification-2026-10-24.md). Existing device
+acceptance remains user-reported; security/dependency warnings are not erased.
+
 P2 was implemented for both workstreams at the user's request. The mixed feed,
 archive/source links, topic filters, durable composer, account-scoped drafts,
 pending status and owner removal are connected to Supabase. The development
