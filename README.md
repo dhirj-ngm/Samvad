@@ -6,7 +6,7 @@ Samvad is an Expo/React Native app for Android and iOS with a separate FastAPI a
 
 ```bash
 cd mobile
-npm install
+npm ci
 npm run typecheck
 npx expo start
 ```
@@ -14,3 +14,5 @@ npx expo start
 Open the QR code in Expo Go on an Android phone and an iPhone to validate each platform separately. Device and tool access results are in `docs/build-log-mobile.md`. Do not add provider secrets to any `EXPO_PUBLIC_*` value; those values are bundled into the app.
 
 The product scope, technical specification, and implementation plan are the three `Samvad_*.md` files at the repository root. The proposed shared contract is in `docs/contracts.md`; Developer B's proposal is in `api/docs/contracts-proposal.md`. Developer A owns `mobile/**`, while Developer B owns `api/**` and `supabase/**`.
+
+The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. Both platform bundles can export, but phone launches and app-to-API connectivity still require device checks.

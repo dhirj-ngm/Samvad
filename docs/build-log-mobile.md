@@ -41,3 +41,10 @@
 - Installed mobile dependencies with `npm install --no-audit --no-fund`; generated `mobile/package-lock.json`.
 - Fixed the tab icon helper's `ColorValue` type after the first TypeScript run identified five matching errors. `npm run typecheck` then passed.
 - Android and iOS device launches remain unverified. The shared contracts remain drafts pending agreement with Developer B.
+
+### P0 integration review (23 October 2026)
+
+- Reproduced a fresh `npm ci` peer conflict from the first lockfile, then pinned `react-dom` to React `19.2.3`; clean `npm ci` passed.
+- Expo compatibility check expected TypeScript `~6.0.3`; updated the development dependency. Clean `npm ci`, `npx expo install --check`, and `npm run typecheck` passed.
+- `npx expo export --platform android` and `--platform ios` both produced bundles. These exports do not prove either app launched on a device.
+- The integration captain adopted Developer B's proposed P1 schema/API shapes into `docs/contracts.md` and aligned the mobile draft DTOs. No live adapter, migration, or authenticated endpoint was implemented.
