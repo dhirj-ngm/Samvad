@@ -1,5 +1,51 @@
 # Developer B build log
 
+## 2026-10-24 — P2 discovery/publishing, combined A/B ownership
+
+User authorized both workstreams and phase integration. Inspected main 7e6d25d,
+contracts/specs and live P1 evidence. P0/P1 already integrated and accepted. Created
+integrate/p2, preserving unrelated untracked .agents/ and skills-lock.json. Loaded
+Supabase/Postgres skills before SQL work. No sub-agents were delegated.
+
+**Implemented:** deployed CLI-generated, ledger-aligned migrations
+20261023210206_discovery_posts and 20261023210636_consolidate_post_read_policy.
+News/posts/conversation roots; indexed interest/recency discovery; public/owner
+visibility; private request fingerprints; retry-safe submit with conflict detection;
+owner soft delete/body removal; fixed-search-path internal definer helpers and
+public invoker wrappers. Actor derives from auth.uid(); clients cannot choose
+author/status/time/fixture flags. Pending content stays private until trusted review.
+No replies, reports, translation, AI inference or paid service added.
+
+Six real sourced historical items were checked against official ISRO/RBI/ICC/PIB/
+UNESCO pages and seeded with visible dates and short editorial descriptions. Three
+dedicated-account demo posts in en/ml/hi were created pending, individually reviewed
+as benign questions, labeled is_fixture and approved using operator MCP. No personal
+account content was read or changed.
+
+**Tested:** SQL suite **41 passed**; configured Python suite **35 passed**, no skips,
+including live P1/P2 account tests; Ruff and pip check passed. Actual shared mobile
+SDK smoke check passed against Supabase. P2 HTTP checks passed: eight concurrent
+retries share one ID/root; changed retry 409; Unicode persistence; pending author-only
+visibility; no self-publication/forged owner/anonymous write/cross-owner deletion;
+keyset/topic correctness; soft delete clears text and replay cannot resurrect it.
+Temporary verification posts were removed through their ordinary owner sessions.
+Privilege was used for migration/review only, not to claim ordinary-user RLS passes.
+
+P1 migration 20261023201908 was not reapplied. Both new migrations applied to the
+agreed development project mtgsyjqcoyzijicpydee. No reset or destructive migration.
+Hosted policy advisor warning was fixed in a separate migration; performance now
+has only unused-index INFO. Security advisor retains intentional private identity
+no-policy INFO and existing leaked-password-protection setting WARN. See
+docs/p2-verification.md for full evidence and source provenance.
+
+**Blocked / next:** new P2 Android/iPhone interaction checks remain pending; P0/P1
+acceptance is not reused as a P2 pass. Verify sources/topics/refresh, Indic compose,
+offline/double-tap/relaunch retry, private pending, trusted review then cross-account
+public visibility, and owner removal. Supabase MCP is connected; no new MCP needed.
+Native acceptance needs Expo Go/devices. Stop after P2. Code integration at the
+user's request does not sign off the joint device gate. Exact commit/push SHAs are
+reported in the final handoff; staged secrets/ownership/whitespace are reviewed.
+
 ## 2026-10-24 — Live dedicated-account acceptance
 
 User created both generated dedicated accounts in Dashboard Auth and reported an

@@ -1,5 +1,12 @@
 # Identity migration and later-phase plan
 
+P2 deployment (24 October): `20261023210206_discovery_posts.sql` and
+`20261023210636_consolidate_post_read_policy.sql` are applied to the agreed
+development project. Filenames match the hosted ledger. The first creates P2
+content/RLS/RPCs plus six sourced archive records; the second consolidates
+equivalent read policies after advisor feedback. See docs/p2-verification.md at
+repository root for actual checks and the remaining phone gate. P1 is not reapplied.
+
 P1 `20261023201908_identity_interests.sql` implements the captain-accepted P0 identity
 baseline: profiles, private identities, interests, user_interests, Auth-owned private
 sync, grants/RLS and six seeded topics. SQL passed 22 isolated PostgreSQL tests
