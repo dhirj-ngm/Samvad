@@ -1,5 +1,17 @@
 # Developer A build log
 
+## P1 mobile identity and onboarding — 24 October 2026
+
+**P0 closeout:** The user reported that Samvad opened in Expo Go on an iPhone 17 Pro running iOS 27.0.1. Home, Explore, Compose, Activity, Profile, and a sample conversation all worked, and Safari loaded the P0 API `/health` JSON. No error was reported. The Expo Go app version was not supplied. This is user-observed iPhone evidence, separate from the prior iQOO Z7 Pro 5G / Android 15 observation. Android and iOS P0 navigation and phone-browser `/health` checks now **PASS**. The P0 app had no in-app API call; browser reachability does not prove that later integration. The overall P0 bootstrap gate is **PASS** on the stated device evidence and code checks.
+
+**Implemented:** Synced Developer A's branch to integrated `main`. Added the Expo SDK 58-compatible Supabase client with persistent session storage and foreground refresh, sign-in/sign-up UI, confirmed-email handoff message, public-handle/language/interest onboarding, retry-safe profile and interest writes, session restore and logout, and explicit unconfigured-state UI. An interrupted onboarding draft remains local until a reread confirms the saved interest set. The five-tab sample shell remains visibly sample content; P1 auth does not make the feed or API routes live. No `api/**` or `supabase/**` implementation was edited.
+
+**Tested:** A fresh `npm ci --no-audit --no-fund` installed 530 packages; `npm run typecheck` and `npx expo install --check` passed. `npx expo export --platform android` and `--platform ios` both passed with the new P1 code. The first Android export detected an incompatible old Metro cache and performed a full crawl successfully; no code failure occurred. Android/iOS P1 device tests, real Auth sign-up/sign-in, email confirmation, session restoration, handle uniqueness, interest persistence and two-account privacy checks have **not run**. These need a configured development Supabase project and Developer B's hosted migration/real-account checks. No URL, public key, or test accounts were present in this workspace; the mobile client remains intentionally unconfigured without them.
+
+**Blocked:** Joint P1 gate is **BLOCKED**. Developer B's migration has local SQL evidence but was not applied to a hosted project. The exact email confirmation redirect/Expo Go callback behavior still needs development project configuration and separate Android/iOS observations. The P1 UI has no observed device launch yet.
+
+**Next:** Developer B applies the reviewed migration to the agreed development project and runs two real-account Auth/RLS checks. Developer A adds only the public project URL/key to ignored `mobile/.env`, then observes signup, confirmation, sign-in, onboarding, restart/session restore, edit and logout on Android and iOS separately. Record exact device/OS and failures; verify each account cannot read the other's private data before passing P1.
+
 ## P0 — 23 October 2026
 
 ### Implemented

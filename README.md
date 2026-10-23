@@ -17,7 +17,7 @@ The mobile project is on Expo SDK 58. Open the dev-server address shown by Expo 
 
 The product scope, technical specification, and implementation plan are the three `Samvad_*.md` files at the repository root. The proposed shared contract is in `docs/contracts.md`; Developer B's proposal is in `api/docs/contracts-proposal.md`. Developer A owns `mobile/**`, while Developer B owns `api/**` and `supabase/**`.
 
-The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. Both platform bundles can export. The user observed all five tabs and a sample conversation on Android, and loaded `/health` in Android Chrome. The iOS launch remains untested; no in-app API call exists in P0.
+The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. The user observed all five tabs, a sample conversation, and browser `/health` on both Android and iPhone; the P0 gate passed on this user-reported evidence. P1 Auth/onboarding code is on `dev/mobile`, but its live Supabase and device gate is blocked. No in-app API call exists in P0.
 
 ### If Expo Go buffers on a phone
 
