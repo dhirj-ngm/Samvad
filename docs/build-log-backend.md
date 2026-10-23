@@ -22,13 +22,13 @@ sessions. Report retained for test evidence explicitly says verification only/no
 misconduct; no personal account content accessed. Temporary test reply bodies removed
 through owner RPC. Contract and review/device instructions: docs/p3-verification.md.
 
-**Tested:** 62 local SQL tests pass (actual migrations, minimal Auth shim/SET ROLE);
+**Tested:** 63 local SQL tests pass (actual migrations, minimal Auth shim/SET ROLE);
 36 configured Python tests pass, zero skips, one existing Starlette warning. Hosted
 P3 harness: two real logins, eight concurrent retry calls share one ID, changed retry
 409, Unicode preservation, author-only held visibility, parent/anonymous/forgery/
 self-publication/cross-delete denial, reviewed two-user nested thread, private report
 persist/retry/read denial, cursor pagination, deletion and no resurrection. Shared
-mobile SDK two-account verification passes. Minute quotas tested in isolated SQL;
+mobile SDK two-account verification passes. Minute and hourly quotas tested in isolated SQL;
 hosted quotas were not deliberately exhausted. Ruff and pip check pass. Mobile
 TypeScript/8 model tests/dependency compatibility/both platform exports pass.
 

@@ -76,6 +76,13 @@ test('reply accepts 2000 emoji code points without altering text',()=>as(A,async
   const saved=await reply(randomUUID(),thread,null,'😀'.repeat(2000),'en');
   assert.equal((await list()).find(row=>row.id===saved.id).body,'😀'.repeat(2000));
 }));
+test('report hourly cap is enforced independently of the minute budget',async()=>{
+  // Privileged fixture setup only: simulate this account reaching its hourly budget.
+  await db.query(`insert into samvad_internal.write_budgets(actor_id,action,window_start,used)
+    values($1,'report_hour',to_timestamp(floor(extract(epoch from statement_timestamp())/3600)*3600),30)`,[A]);
+  try { await as(A,()=>assert.rejects(()=>report(),/Too many submissions/)); }
+  finally { await db.query("delete from samvad_internal.write_budgets where actor_id=$1 and action='report_hour'",[A]); }
+});
 test('owner removal clears body, leaves tombstone, cannot resurrect; B cannot delete',()=>as(A,async()=>{
   const key=randomUUID(),saved=await reply(key);
   await db.query("select set_config('request.jwt.claim.sub',$1,true)",[B]);
