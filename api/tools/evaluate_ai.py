@@ -64,8 +64,15 @@ async def evaluate(start, count):
             print(f'Generated evaluation sample {index}; human review pending')
         print('Saved ignored .local/ai-evaluation.json. No quality pass inferred from generation.')
         return 0
-    except (Failure, httpx.HTTPError, IdentityCheckError):
-        print('BLOCKED: inference/configuration/free quota unavailable. Saved samples retained; no automatic retry.')
+    except Failure as error:
+        # Only our normalized diagnostic; never print upstream bodies/headers/keys.
+        print(f'BLOCKED: HTTP {error.status} ({error.code}): {error.message}')
+        if error.status == 429:
+            print('Wait at least 60 seconds before retrying. Daily quota may require waiting until the next UTC day.')
+        print('Saved samples retained; no automatic retry. Automatic publication settings were not changed.')
+        return 1
+    except (httpx.HTTPError, IdentityCheckError):
+        print('BLOCKED: network or dedicated-account authentication check failed. Saved samples retained; no secrets printed.')
         return 1
     finally:
         if headers:

@@ -1,5 +1,23 @@
 # Developer B build log
 
+## P4 evaluation follow-up — 24 October 2026
+
+User reported the evaluation CLI's generic BLOCKED message after a successful live
+connection/cache test. Inspected configuration by presence/booleans only: both keys
+and enabled/free-plan/data flags configured; language review flag remains false.
+Current quota had no active lease or minute usage and was below daily caps. A fresh
+ordinary-account diagnostic passed Auth, authenticated model catalog, SQL reservation,
+Groq structured translation and release. Exact original transient failure could not
+be reproduced; do not claim it was definitively quota rather than provider failure.
+
+Improved evaluate_ai diagnostics to print only normalized HTTP/code/message and
+429 waiting guidance, never provider bodies/headers/keys. Reran the user's exact
+--start 0 --count 2 command: both real Qwen samples generated and saved to ignored
+api/.local/ai-evaluation.json, human review pending. Ruff passes. No key, limit,
+model, publication gate or database schema changed. No paid fallback/retry added.
+Next: user reviews samples 0/1 then continues bounded batches; language/policy and
+P4 native gates remain pending. Earlier missing-key notes are historical.
+
 ## P4 — 24 October 2026, combined A/B implementation
 
 **Implemented:** integrate/p4 descends from accepted P0–P3 main 78e5825. No phase

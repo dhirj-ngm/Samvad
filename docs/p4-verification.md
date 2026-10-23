@@ -1,5 +1,14 @@
 # P4 implementation and verification handoff
 
+**Live follow-up:** keys and enabled/Free-plan/data confirmation flags are now
+configured locally. User supplied a passing live translation/cache checker result;
+agent subsequently verified model-catalog access and generated evaluation samples
+0/1 with actual Qwen inference. The first generic evaluation failure was transient
+and not reproducible; CLI now reports safe normalized diagnostics. Results are in
+ignored api/.local/ai-evaluation.json. Semantic/policy review remains pending and
+AI_LANGUAGE_REVIEW_PASSED stays false. Earlier missing-key statements describe the
+original implementation checkpoint, not the current configuration.
+
 Both mobile and backend implemented on `integrate/p4`, descending from accepted
 P0–P3 main `78e5825`. All previous phases were already merged; no merge conflict
 existed. Existing uncommitted final-verification notes were reviewed/preserved in
