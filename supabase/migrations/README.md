@@ -1,9 +1,10 @@
 # Identity migration and later-phase plan
 
-P1 `202610230001_identity_interests.sql` implements the captain-accepted P0 identity
+P1 `20261023201908_identity_interests.sql` implements the captain-accepted P0 identity
 baseline: profiles, private identities, interests, user_interests, Auth-owned private
-sync, grants/RLS and six seeded topics. SQL has been tested in an isolated in-memory
-PostgreSQL engine, not applied to a full local/shared Supabase project. See
+sync, grants/RLS and six seeded topics. SQL passed 22 isolated PostgreSQL tests
+and is applied to development project `mtgsyjqcoyzijicpydee`. The filename matches
+the hosted MCP migration ledger version; do not reapply the old filename. See
 `../README.md` for setup, real-account checks and migration/recovery steps.
 
 Developer B alone applies reviewed migrations to the agreed development project.

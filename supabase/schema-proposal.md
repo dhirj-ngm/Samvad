@@ -2,7 +2,7 @@
 
 P1 update: the captain accepted this baseline in docs/contracts.md on origin/main
 dbc2d22. Identity/interests are now implemented by
-`migrations/202610230001_identity_interests.sql`; see README.md for exact grants,
+`migrations/20261023201908_identity_interests.sql`; see README.md for exact grants,
 onboarding saves and deployment status. Display name/bio use empty-string defaults;
 no new public RPC/view or schema fields are introduced. All later entities below
 remain design only. No shared Supabase migration or real-account pass is claimed.

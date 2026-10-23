@@ -1,7 +1,8 @@
 # Seed format — P1 interests and later content proposals
 
 P1 update: six stable interest UUID rows are now part of
-`migrations/202610230001_identity_interests.sql`, exercised only in local SQL tests.
+`migrations/20261023201908_identity_interests.sql`, applied to the development
+project and verified through public REST reads on 24 October 2026.
 No news, account or fixture content has been imported; the rest remains a proposal.
 
 No live news, fake engagement, accounts or credentials have been seeded. Later

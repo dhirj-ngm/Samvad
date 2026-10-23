@@ -1,5 +1,28 @@
 # Developer B build log
 
+## 2026-10-24 — Hosted P1 identity deployment
+
+User authorized completing P1 in development project `mtgsyjqcoyzijicpydee`.
+After OAuth access was corrected, verified an empty public schema/migration ledger
+and zero existing Auth users. Applied the reviewed identity migration through
+Supabase MCP; hosted version `20261023201908`, name `identity_interests`.
+Renamed the repository migration to match the hosted ledger and updated references
+and local SQL tests; SQL content is unchanged. Do not reapply the previous filename.
+
+Verified four tables with RLS, seven policies, six seeded interests, denied private
+table SELECT and trigger-function EXECUTE privileges. Real public REST reads
+returned all topics and private reads returned HTTP 401. Hosted public Auth settings
+require email confirmation and enable email/password while disabling anonymous
+and other external providers. Advisors report only intentional private-table
+no-policy and an unused new FK index. Local env files are Git-ignored; no privileged
+key is in mobile. Local SQL tests: 22 passed; backend: 33 passed, 1 live test skipped;
+Ruff, mobile TypeScript and Expo dependency checks passed.
+
+Two local test credentials generated at the user's request await Dashboard Auth
+provisioning. Live password-grant/cross-account checks, signup email delivery and
+Android/iOS acceptance remain pending. See [live evidence](p1-live-verification.md).
+The earlier log below describes initial implementation and its earlier blockers.
+
 ## 2026-10-23 — P1 Identity & onboarding
 
 **Integration audit:** workspace started clean on local main b59e4e5. Fetched the

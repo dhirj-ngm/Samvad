@@ -1,5 +1,21 @@
 # P1 identity backend
 
+## Hosted development status — 24 October 2026
+
+The identity migration is applied to development project `mtgsyjqcoyzijicpydee`.
+Supabase MCP recorded version `20261023201908`; the repository migration filename
+matches that ledger entry so a later CLI push will not attempt a duplicate apply.
+All four tables have RLS, the seven intended policies are present, six topics are
+seeded, and ordinary clients cannot execute the identity trigger or SELECT private
+identities. Public REST topic reads passed; anonymous private-identity reads returned
+HTTP 401. Email/password signup and email confirmation are enabled; anonymous
+signup and other providers are disabled. The advisor's informational no-policy
+notice for `private_identities` is intentional denial of all client access.
+
+Local mobile/API configuration is populated in ignored env files. Two confirmed
+test accounts and Android/iOS P1 observations are still required. The older setup
+notes below describe implementation-time prerequisites, not a second migration.
+
 The captain-approved P0 baseline is in `../docs/contracts.md` (origin/main
 dbc2d22). This directory implements only identity/interests. No posting/feed/AI.
 Credentials stay in Supabase Auth. FastAPI still exposes only P0 liveness; it is
@@ -7,7 +23,7 @@ not an email/password proxy and no API JWT authorization is claimed as deployed.
 
 ## What is implemented
 
-`migrations/202610230001_identity_interests.sql` creates:
+`migrations/20261023201908_identity_interests.sql` creates:
 
 - `profiles`: six intended public columns; case-insensitive unique lowercase
   handles, reserved-name/length checks; `en|hi|ml` language CHECK; owner insert/update.
@@ -54,8 +70,9 @@ a hosted project's Auth settings. For the agreed hosted DEVELOPMENT project:
    `auth.signInWithPassword`, sign out with `auth.signOut`; show Auth errors safely.
    Read own email/confirmation from Auth, never from `private_identities`.
 
-No project or credentials were present during implementation. Hosted Auth setup,
-redirect configuration, email delivery and two real accounts remain BLOCKED.
+No project or credentials were present during initial implementation. The hosted
+status above records the later deployment. Email delivery, confirmation-return
+behavior and two real-account checks still require observation.
 Official references checked 2026-10-23:
 [password Auth](https://supabase.com/docs/guides/auth/passwords),
 [Auth-managed data](https://supabase.com/docs/guides/auth/managing-user-data),
@@ -64,9 +81,9 @@ Official references checked 2026-10-23:
 
 ## Apply only after review, in the agreed development project
 
-Current status: SQL executed only in the in-memory local PostgreSQL test engine.
-No shared/hosted migration has been applied. Supabase CLI/Docker/project access
-were absent; do not substitute a production project to obtain a passing check.
+The reviewed migration has now been applied to the development project through
+Supabase MCP. Do not rerun it manually. These instructions remain for future
+development environments; inspect the ledger before any CLI deployment.
 
 Database captain B performs the following once the migration is reviewed:
 
@@ -86,7 +103,7 @@ Database captain B performs the following once the migration is reviewed:
    `supabase db push --linked`. Never put passwords/tokens in command arguments or
    paste command output containing local keys into logs. Check CLI help for the
    installed version. Only B applies; A does not race the migration.
-4. Confirm recorded migration version `202610230001`, table grants/RLS, seeded
+4. Confirm recorded migration version `20261023201908`, table grants/RLS, seeded
    topics, signup/verification trigger and real-account checks. Record project
    reference (not credentials), migration result and test evidence in backend log.
 

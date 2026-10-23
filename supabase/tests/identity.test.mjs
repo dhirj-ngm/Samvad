@@ -34,7 +34,7 @@ before(async () => {
     insert into auth.users (id,email) values ('${A}','a@fixture.invalid');
   `);
   const migration = await readFile(
-    new URL('../migrations/202610230001_identity_interests.sql', import.meta.url), 'utf8',
+    new URL('../migrations/20261023201908_identity_interests.sql', import.meta.url), 'utf8',
   );
   await db.exec(migration);
   await db.query('insert into auth.users (id,email) values ($1,$2),($3,$4)',
@@ -249,7 +249,7 @@ test('an email removal clears stale private data; Auth deletion cascades without
 
 test('failed duplicate application rolls back instead of overwriting existing schema/data', async () => {
   const migration = await readFile(
-    new URL('../migrations/202610230001_identity_interests.sql', import.meta.url), 'utf8',
+    new URL('../migrations/20261023201908_identity_interests.sql', import.meta.url), 'utf8',
   );
   try {
     await assert.rejects(db.exec(migration), { code: '42P07' });
