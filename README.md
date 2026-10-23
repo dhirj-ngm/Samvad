@@ -1,6 +1,6 @@
 # Samvad
 
-Samvad is an Expo/React Native app for Android and iOS with a shared Supabase backend and FastAPI service. P0/P1 are integrated and accepted. P2 adds sourced discovery, original-post submission, retry-safe saves and owner removal. New posts remain private pending trusted review; replies and AI translation are later phases. The development database has the P1/P2 migrations and labeled demo posts.
+Samvad is an Expo/React Native app for Android and iOS with a shared Supabase backend and FastAPI service. P0–P2 are integrated and accepted on both platforms. P3 adds threaded replies, private reports, saved retry-safe drafts and account write limits. New posts/replies remain private pending trusted review. The development database has P1–P3 migrations and labeled demo content. Translation/AI remains P4.
 
 **Current handoff:** [PROJECT_TRACKER.md](PROJECT_TRACKER.md) shows each owner's progress, open gates, and next actions.
 
@@ -25,7 +25,7 @@ with `npx expo start --clear`. If the phone cannot reach Metro over Wi-Fi, try
 
 The product scope, technical specification, and implementation plan are the three `Samvad_*.md` files at the repository root. The proposed shared contract is in `docs/contracts.md`; Developer B's proposal is in `api/docs/contracts-proposal.md`. Developer A owns `mobile/**`, while Developer B owns `api/**` and `supabase/**`.
 
-FastAPI still exposes only `GET /health`; see [api/README.md](api/README.md). Auth, onboarding and P2 content use Supabase directly. P0/P1 acceptance is recorded in [integration gates](docs/integration-checklist.md). P2 automated/live backend and SDK checks pass; actual P2 Android/iPhone interactions still require the [next verification checklist](docs/p2-verification.md). Bundle exports do not prove a device launch.
+FastAPI still exposes only `GET /health`; see [api/README.md](api/README.md). Auth, onboarding and content use Supabase directly. P0–P2 acceptance is recorded in [integration gates](docs/integration-checklist.md). P3 automated/live backend and SDK checks pass; its Android/iPhone interaction gate requires the [P3 verification checklist](docs/p3-verification.md). Bundle exports do not prove a device launch.
 
 ### If Expo Go buffers on a phone
 

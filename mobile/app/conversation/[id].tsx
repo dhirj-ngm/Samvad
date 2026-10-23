@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 import { FeedCard } from '../../components/FeedCard';
 import { Screen } from '../../components/Screen';
+import { ConversationThread } from '../../components/ConversationThread';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../lib/auth';
 import type { FeedItem, NewsItem, PublicPost, PublicProfile } from '../../types/contracts';
@@ -10,6 +11,10 @@ import { colors, spacing, type } from '../../theme/tokens';
 
 export default function Conversation() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { session } = useAuth();
+  return <ConversationContext key={`${id}:${session?.user.id ?? 'anon'}`} id={id} />;
+}
+function ConversationContext({ id }: { id: string }) {
   const router = useRouter();
   const { session } = useAuth();
   const [item, setItem] = useState<FeedItem | null>(null);
@@ -44,14 +49,17 @@ export default function Conversation() {
     })().catch(() => { if (mounted) setMessage('This context is unavailable or could not be loaded. Refresh to retry.'); });
     return () => { mounted = false; };
   }, [id, session?.user.id, attempt]));
-  return <Screen title="Source and post context" subtitle="Original text and publisher attribution">
-    <ScrollView contentContainerStyle={styles.content}>
+  return <Screen title="Conversation" subtitle="Original text, public handles and sourced context">
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
       <Pressable onPress={() => router.back()} accessibilityRole="button"><Text style={styles.link}>Back</Text></Pressable>
       {item ? <FeedCard item={item} onOpen={() => setAttempt(n => n + 1)} /> : <Text style={styles.body}>{message}</Text>}
       {item?.kind === 'post' && item.post.moderation_state !== 'allowed' ? <Text style={styles.body}>Pending or held for trusted review. This post is visible only to its author.</Text> : null}
-      <Text style={styles.body}>Replies, reports and translation are not available yet.</Text>
+      {item ? <ConversationThread key={`${id}:${session?.user.id ?? 'anon'}`} conversation={id} root={item} /> : null}
+      <Text style={styles.body}>Translation will be added in P4. Original text is preserved.</Text>
       <Pressable onPress={() => setAttempt(n => n + 1)} accessibilityRole="button"><Text style={styles.link}>Refresh context</Text></Pressable>
     </ScrollView>
+    </KeyboardAvoidingView>
   </Screen>;
 }
 const styles = StyleSheet.create({

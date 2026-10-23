@@ -1,5 +1,67 @@
 # Developer B build log
 
+## 2026-10-24 — Device reply visibility diagnosis
+
+User reported replies missing from the other account during P3 device testing.
+Read current visibility contract and hosted rows: five nondeleted device replies
+were pending; news/original-post roots were accessible. No RLS bypass or policy
+change needed. Operator reviewed the five benign test replies individually and
+approved only exact IDs/content matches: e53b0ec1-bee0-482c-aa5a-a871dcfac60d,
+f702c02e-1dc2-4fb9-b724-c5183ea8c874, d422a809-20c3-4ba8-a536-691819e780fb,
+f8420297-bbdd-4cf4-8a34-4444a9582d7d, 80cb03c5-9aa1-4ccb-b838-089d3f3aae1f.
+One trailing-newline content match initially failed; checked exact UTF-8 bytes and
+approved that reviewed record without changing its original text. No bulk/default
+approval or AI screening added. These are user device submissions, not fixtures.
+
+**Tested:** ordinary dedicated Auth sessions A and B each retrieved all five IDs
+through get_replies on the two affected conversations after review. Both passed;
+test sessions logged out locally. Privileged operator updates are not RLS evidence.
+**Next:** user taps Refresh replies/reopens the same conversation on both phones.
+New replies continue pending until reviewed. Joint P3 phone gate remains pending;
+no claim of observed UI recovery or permission to start P4.
+
+## 2026-10-24 — P3 conversation/safety, combined A/B ownership
+
+**Implemented:** started from merged P2 a4a7623 on integrate/p3, preserved unrelated
+.agents/ and skills-lock.json. User confirmed Android/iOS through P2 complete and
+working. Read scope/DPR/playbook/contracts/prior logs, Supabase/Postgres skills,
+current changelog and official docs. CLI-created migration
+20261023213814_conversation_safety applied to agreed project mtgsyjqcoyzijicpydee;
+ledger matches. No reset or destructive migration. Indexed same-thread replies,
+private pending visibility and deletion tombstones, invoker read RPC, internal
+actor-checked submit/delete helpers, exact retry fingerprints and private reports.
+Reports deduplicate per reporter/target and never trigger bans/content action.
+Account-serialized fixed budgets: 5 posts/min, 10 replies/min, 5 reports/min/30/hour;
+exact retries do not spend quota. Direct mutation/privileged helper bypass denied.
+No P4/Auth/AI endpoint or paid inference added.
+
+Ordinary dedicated accounts created two benign ML/HI demo replies in the technology
+discussion, B nested under A. Operator read/reviewed exact IDs/bodies and labeled
+is_fixture before approval. Authorization checks always used public key + ordinary
+sessions. Report retained for test evidence explicitly says verification only/no
+misconduct; no personal account content accessed. Temporary test reply bodies removed
+through owner RPC. Contract and review/device instructions: docs/p3-verification.md.
+
+**Tested:** 63 local SQL tests pass (actual migrations, minimal Auth shim/SET ROLE);
+36 configured Python tests pass, zero skips, one existing Starlette warning. Hosted
+P3 harness: two real logins, eight concurrent retry calls share one ID, changed retry
+409, Unicode preservation, author-only held visibility, parent/anonymous/forgery/
+self-publication/cross-delete denial, reviewed two-user nested thread, private report
+persist/retry/read denial, cursor pagination, deletion and no resurrection. Shared
+mobile SDK two-account verification passes. Minute and hourly quotas tested in isolated SQL;
+hosted quotas were not deliberately exhausted. Ruff and pip check pass. Mobile
+TypeScript/8 model tests/dependency compatibility/both platform exports pass.
+
+Advisors: intentional deny-all RLS INFO on private identity/internal budgets;
+existing disabled leaked-password protection WARN; unused-index performance INFO
+only. No new security WARN/ERROR. No cloud credentials or secrets added to Git.
+
+**Blocked / next:** Android/iPhone P3 interaction gate pending; P2 accepted per user
+report. Review exact new device reply IDs before cross-account reads. Run two-account
+reply/report/draft/offline/removal/account-switch/keyboard checklist on both devices.
+Push tested integrate/p3; retain main at accepted P2 until P3 device gate passes,
+per playbook. No new MCP needed. Stop after P3, no P4 work.
+
 ## 2026-10-24 — P2 discovery/publishing, combined A/B ownership
 
 User authorized both workstreams and phase integration. Inspected main 7e6d25d,

@@ -1,6 +1,6 @@
 # Samvad project tracker
 
-**Snapshot:** 24 October 2026 (IST), P0/P1 accepted; P2 code and development backend implemented, new phone acceptance pending
+**Snapshot:** 24 October 2026 (IST), P0–P3 accepted and integrated for main; P4 has not started
 
 **Source of truth for scope:** [Product Scope](Samvad_Product_Scope.md), [technical specification](Samvad_Detailed_Project_Report_Codex.md), and [implementation plan](Samvad_Implementation.md).
 **Working branches:** `main` is the integrated handoff; Developer A uses `dev/mobile`, Developer B uses `dev/backend`. Pull `main` before starting new phase work. Keep owner changes on their branches and coordinate shared contracts through the integration captain.
@@ -12,8 +12,12 @@ archive/source links, topic filters, durable composer, account-scoped drafts,
 pending status and owner removal are connected to Supabase. The development
 migrations and six source records are deployed; three benign demo posts were
 individually reviewed and labeled. Automated evidence and the remaining device
-checks are in [P2 verification](docs/p2-verification.md). No replies or AI features
-were added. Public visibility still requires trusted review.
+checks are in [P2 verification](docs/p2-verification.md). User confirmed both platforms
+working through P2. P3 now adds threaded replies, private reporting, durable drafts,
+ownership/visibility rules and account write limits. Database migration is deployed;
+63 SQL, 36 Python, 8 mobile model tests, hosted two-account and shared SDK checks pass.
+See [P3 verification](docs/p3-verification.md). No AI features added; public visibility
+still requires trusted review.
 
 | Workstream | Current state | Evidence and next gate |
 |---|---|---|
@@ -26,10 +30,10 @@ were added. Public visibility still requires trusted review.
 
 ## Next handoff
 
-1. Start the merged mobile checkout's Metro server and run the P2 checklist separately on Android and iPhone.
-2. Confirm sources/topics/refresh, draft recovery, double-tap/offline retry and Unicode input on both devices.
-3. Submit a benign real test post, verify it is author-only pending, have a trusted operator review that exact ID, then confirm both accounts see one public original and owner removal works.
-4. Record device outcomes in the integration checklist before passing the joint P2 gate. P3/P4 have not started.
+1. Developers A and B sync from `main`, which integrates accepted P0–P3.
+2. P3 is PASS based on the recorded automated/live evidence and the user's confirmation that testing is complete and it works. No additional per-device traces were supplied at closeout.
+3. Preserve trusted review, private reports, retry-safe writes and ownership rules in later work. Test harnesses mutate dedicated accounts only.
+4. Next planned phase is P4 AI; agree provider/model access and shared contracts before starting it. No P4 implementation is included in this merge.
 
 ## Updating this tracker
 

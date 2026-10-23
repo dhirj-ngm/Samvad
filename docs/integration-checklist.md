@@ -1,5 +1,40 @@
 # Integration gates
 
+## P3 acceptance and main integration — 24 October 2026
+
+User confirmation: "p3 is tested and completed and it works" with an explicit
+request to merge all phases. **P3 PASS by user acceptance**, alongside the recorded
+hosted/live evidence below. No new per-device traces or runtime versions were
+provided. This supersedes the earlier pending P3 status; P0–P2 remain accepted.
+
+Merge preparation checks: mobile TypeScript and 8 model tests passed; 63 SQL tests
+passed; backend local suite 33 passed and 3 live tests skipped without loading
+dedicated live configuration; Ruff passed. The earlier configured 36-test live
+result below is retained as earlier evidence, not a fresh live rerun. Both P3
+workstreams are integrated together with P0–P2. P4 has not started.
+
+## P2 acceptance and P3 handoff — 24 October 2026
+
+User confirmation: "verfication of andriod and ios is complete uptill p2 and they
+are working properly". This supersedes the pending P2 status below. **Android P2:
+PASS by user acceptance. iOS P2: PASS by user acceptance. Joint P2: PASS.** No new
+individual device traces or runtime versions were supplied; this is user evidence.
+
+P3 now implements both workstreams on `integrate/p3`. Migration
+`20261023213814_conversation_safety` is applied to the agreed development project.
+Automated evidence: 63 local PostgreSQL checks, 36 configured Python tests (no
+skips), 8 mobile model tests, real two-account HTTP and shared SDK checks, TypeScript,
+Expo dependency compatibility and Android/iOS exports pass. Trusted operator
+reviewed only two exact benign labeled demo reply IDs; ordinary users performed
+all authorization assertions. Security advisor has intentional no-client-policy
+INFO for private identity and internal budgets, plus the existing disabled leaked
+password protection WARN; no new P3 security warning.
+
+**Android P3: PENDING. iOS P3: PENDING. Joint P3: PENDING** until the
+[P3 device checklist](p3-verification.md) is exercised. P0–P2 remain accepted.
+Publish tested P3 branch for review; keep main at accepted P2 until this gate passes.
+No P4 implementation or inference is included.
+
 ## P2 — implementation and pending device acceptance (24 October 2026)
 
 P0/P1 closeouts below remain accepted. P2 was implemented for both developers and

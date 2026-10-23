@@ -63,6 +63,12 @@ Locks were resolved on Windows/Python 3.13; other platforms need their own insta
 verification. Root configuration belongs to the captain; local `.gitignore` protects
 the API venv, `.env` and caches. Review staged paths before any later commit.
 
+P3 conversation/reports and write limits are implemented in Supabase, shared by
+both mobile platforms. FastAPI still exposes health only; no P4 AI feature is live.
+Run `tools.check_conversation` with the same dedicated .env.p1 config as identity
+checks. The two labeled demo replies require individual trusted review when setting
+up another development project. See [P3 setup and tests](../docs/p3-verification.md).
+
 See [contract proposals](docs/contracts-proposal.md),
 [device checklist](docs/connectivity-checklist.md) and
-[schema baseline](../supabase/schema-proposal.md). Stop after P1; P2/P4 are not implemented.
+[schema baseline](../supabase/schema-proposal.md). Stop after P3; P4 is not implemented.
