@@ -2,7 +2,10 @@
 
 | Gate | Android | iOS | Other dependencies | Overall |
 |---|---|---|---|---|
-| P0 | **PASS**: SDK 58 Expo Go launch, five tabs and sample conversation on iQOO Z7 Pro 5G / Android 15; phone Chrome `/health` passed | **BLOCKED**: iPhone 17 Pro / iOS 27.0.1 available, no observed launch or browser `/health` | Combined-tree checks passed (API 33 passed, 1 live test skipped; SQL 22 passed); no in-app API call or hosted Supabase connection in P0 | **BLOCKED**: iOS device evidence missing; browser API reachability is not in-app connectivity |
+| P0 | **PASS**: SDK 58 Expo Go launch, five tabs and sample conversation on iQOO Z7 Pro 5G / Android 15; phone Chrome `/health` passed | **PASS by user report**: Expo Go opened on iPhone 17 Pro / iOS 27.0.1; five tabs, sample conversation, Safari `/health` worked; Expo Go version not reported | Combined-tree checks passed (API 33 passed, 1 live test skipped; SQL 22 passed); P0 `/health` reachable in both phone browsers; no in-app API call exists in P0 | **PASS** for P0 bootstrap/navigation/phone health evidence. Browser health is not an in-app API test. |
+| P1 | **BLOCKED**: auth/onboarding code added, no configured project or Android P1 device run | **BLOCKED**: auth/onboarding code added, no configured project or iOS P1 device run | Local identity SQL tests 22 passed; hosted migration, two real accounts and live RLS test not run | **BLOCKED**: real Auth, onboarding, private-data denial and session restoration unverified |
+
+P0 closeout on 24 October 2026: The user confirmed that all six P0 views and Safari `/health` worked on the previously identified iPhone 17 Pro / iOS 27.0.1, with no error reported. The Expo Go version was not provided. This updates the earlier blocked iOS attempt below; it does not retroactively make the P0 app-to-API path exist.
 
 P0 checks on 23 October 2026: `npm ci`, `npm run typecheck`, and `npx expo export --platform android|ios` passed; `api/.venv/bin/python -m pytest -q` passed 28 tests, Ruff and pip check passed; an actual local Uvicorn `/health` request returned HTTP 200 with Supabase `not_configured` and AI `disabled_p0`. Bundle exports do not prove a device launch. No authenticated flow, database migration, or app-to-API connection was tested.
 
