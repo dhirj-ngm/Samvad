@@ -1,5 +1,25 @@
 # Developer B build log
 
+## 2026-10-24 — Device reply visibility diagnosis
+
+User reported replies missing from the other account during P3 device testing.
+Read current visibility contract and hosted rows: five nondeleted device replies
+were pending; news/original-post roots were accessible. No RLS bypass or policy
+change needed. Operator reviewed the five benign test replies individually and
+approved only exact IDs/content matches: e53b0ec1-bee0-482c-aa5a-a871dcfac60d,
+f702c02e-1dc2-4fb9-b724-c5183ea8c874, d422a809-20c3-4ba8-a536-691819e780fb,
+f8420297-bbdd-4cf4-8a34-4444a9582d7d, 80cb03c5-9aa1-4ccb-b838-089d3f3aae1f.
+One trailing-newline content match initially failed; checked exact UTF-8 bytes and
+approved that reviewed record without changing its original text. No bulk/default
+approval or AI screening added. These are user device submissions, not fixtures.
+
+**Tested:** ordinary dedicated Auth sessions A and B each retrieved all five IDs
+through get_replies on the two affected conversations after review. Both passed;
+test sessions logged out locally. Privileged operator updates are not RLS evidence.
+**Next:** user taps Refresh replies/reopens the same conversation on both phones.
+New replies continue pending until reviewed. Joint P3 phone gate remains pending;
+no claim of observed UI recovery or permission to start P4.
+
 ## 2026-10-24 — P3 conversation/safety, combined A/B ownership
 
 **Implemented:** started from merged P2 a4a7623 on integrate/p3, preserved unrelated
