@@ -6,6 +6,7 @@ import { actorRpc, loadReplies, submitReply, submitReport } from '../lib/convers
 import { appendReplies, replyCursor, replyDraftKey, reportDraftKey, type ReportTarget } from '../lib/conversation-model';
 import type { FeedItem, Reply } from '../types/contracts';
 import { ConversationComposer } from './ConversationComposer';
+import { AIText, ScreeningRetry } from './AIText';
 import { colors, radius, spacing, type } from '../theme/tokens';
 
 export function ConversationThread({ conversation, root }: { conversation: string; root: FeedItem }) {
@@ -53,7 +54,8 @@ export function ConversationThread({ conversation, root }: { conversation: strin
         <Text style={styles.author}>@{reply.author.handle}{reply.is_fixture?' · Demo fixture':''}</Text>
         <Text style={styles.note}>{new Date(reply.created_at).toLocaleString()} · {reply.language}{reply.moderation_state!=='allowed'?` · ${reply.moderation_state} — only visible to you`:''}</Text>
         {reply.parent_reply_id?<Text style={styles.note}>{parentRow?`Reply to @${parentRow.author.handle}`:'Reply to an earlier or unavailable reply'}</Text>:null}
-        <Text selectable style={styles.body}>{reply.deleted_at?'Reply removed by its author':reply.body}</Text>
+        {reply.deleted_at?<Text style={styles.body}>Reply removed by its author</Text>:<AIText entityType="reply" id={reply.id} original={reply.body} language={reply.language}/>}
+        {!reply.deleted_at&&reply.moderation_state==='pending'&&actor===reply.author.user_id?<ScreeningRetry actor={actor} entityType="reply" id={reply.id} onDone={()=>void refresh()}/>:null}
         {!reply.deleted_at?<View style={styles.actions}>
           <Pressable accessibilityRole="button" onPress={()=>{if(canWrite)setParent({id:reply.id,handle:reply.author.handle});else setMessage('Sign in and finish onboarding to reply.');}}><Text style={styles.link}>Reply</Text></Pressable>
           <Pressable accessibilityRole="button" onPress={()=>report({type:'reply',id:reply.id})}><Text style={styles.link}>Report reply</Text></Pressable>

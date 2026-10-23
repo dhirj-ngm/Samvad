@@ -1,3 +1,11 @@
+# P4 update
+
+The following P0 proposal is historical. Both owners' P4 implementation now follows
+[agreed contracts](../../docs/contracts.md) and [P4 verification](../../docs/p4-verification.md).
+Authenticated routes exist; private cache/shared reservations and controlled
+publication are deployed. Actual provider/account/language/device gates remain
+pending, rather than claimed by the original catalog proposal.
+
 # Samvad P0 contract proposal — captain/A review required
 
 P1 update: the integration captain accepted the P0 design baseline in shared

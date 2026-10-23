@@ -1,5 +1,44 @@
 # Integration gates
 
+## P0–P4 main integration — 24 October 2026
+
+User requested pushing all phases through P4 and resolving any conflicts. P4
+descends from accepted P0–P3 main `78e5825`; the integration is conflict-free and
+preserves all six P4 commits through `3eafd66`, including the Malayalam correction.
+Fresh checks: Python **70 passed, 3 live tests skipped** without loading dedicated
+live configuration; SQL **74 passed**; mobile **11 passed**; TypeScript, Ruff and
+pip dependency validation passed. No live provider inference was triggered by this
+merge check. Earlier configured/live results remain recorded below.
+
+Provider configuration and bounded live samples are now available per the P4
+follow-up. Human language/policy review under the revised prompt and Android/iOS
+P4 acceptance remain **PENDING**. Main integration does not mark P4 complete.
+P0–P3 user acceptance remains intact; no P5/P6 implementation is included.
+
+## P4 combined implementation — 24 October 2026
+
+Started integrate/p4 from accepted main 78e5825 (P0–P3 already merged, no conflicts).
+Preserved preexisting final-verification notes separately in b2fa66d. Both mobile
+and backend P4 code implemented; migration 20261023225554 applied non-destructively
+to agreed development project. Python 69 configured tests/zero skips, SQL 74,
+mobile 11, TypeScript, Expo compatibility, both exports, Ruff/pip and both real
+shared SDK regressions pass. Actual two-account P4 JWKS/JWT/RLS/original check passes.
+Provider-output tests use explicit mocks; no live language-quality pass inferred.
+
+**P4 provider/account/live inference: BLOCKED on server keys/configuration.**
+**Language/policy review: PENDING. Android P4: PENDING. iOS P4: PENDING.**
+No main merge or joint P4 gate pass claimed. P0–P3 acceptance remains intact.
+Use [P4 setup and verification](p4-verification.md); no P5/P6 or paid AI initiated.
+
+## Final merged-code live rerun — 24 October 2026, 03:39 IST
+
+Main `78e5825` freshly passed **36 configured Python tests with zero skips**,
+including all three P1/P2/P3 live suites, plus both shared mobile SDK live checks.
+SQL **63 passed**, mobile **8 passed**, TypeScript, Ruff and pip check passed.
+This closes the live rerun gap from merge preparation below. No fresh phone run,
+bundle export or security-advisor scan is claimed. P0–P3 remain accepted; existing
+audit warnings remain documented. [Full result](final-live-verification-2026-10-24.md).
+
 ## P3 acceptance and main integration — 24 October 2026
 
 User confirmation: "p3 is tested and completed and it works" with an explicit

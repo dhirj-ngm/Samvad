@@ -1,5 +1,10 @@
 # P1 identity backend
 
+**P4:** private AI cache/shared reservations/moderation event migration is deployed.
+Client access denied; source reads stay caller-RLS. Server configuration/live and
+device gates: [P4 verification](../docs/p4-verification.md). Older status notes below
+are historical. Do not reapply hosted migrations or reset shared data.
+
 **Current phase: P3.** Identity, discovery, replies, private reports and write
 budgets are deployed. [P3 setup/tests](../docs/p3-verification.md) supersede earlier
 phase status notes below. P0–P2 Android/iOS accepted; P3 device gate pending.

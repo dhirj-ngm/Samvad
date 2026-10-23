@@ -1,5 +1,12 @@
 # Samvad
 
+**P4 branch handoff:** `integrate/p4` adds authenticated translation/Show original,
+headline-based three-line briefs, protected caching/quotas and moderation screening
+to the accepted P0–P3 code. Database migration is deployed; local/regression checks
+pass. Live inference awaits server-only Groq/Supabase keys and Free-plan/data
+configuration; language review and Android/iPhone P4 acceptance remain pending.
+Follow [P4 setup and verification](docs/p4-verification.md). Main remains accepted P3.
+
 Samvad is an Expo/React Native app for Android and iOS with a shared Supabase backend and FastAPI service. P0–P2 are integrated and accepted on both platforms. P3 adds threaded replies, private reports, saved retry-safe drafts and account write limits. New posts/replies remain private pending trusted review. The development database has P1–P3 migrations and labeled demo content. Translation/AI remains P4.
 
 **Current handoff:** [PROJECT_TRACKER.md](PROJECT_TRACKER.md) shows each owner's progress, open gates, and next actions.

@@ -24,10 +24,10 @@ def test_health_without_credentials():
         response = client.get("/health")
         assert response.status_code == 200
         assert response.json() == {
-            "status": "ok", "service": "samvad-api", "phase": "P0",
-            "checks": {"settings": "valid", "supabase": "not_configured", "ai": "disabled_p0"},
+            "status": "ok", "service": "samvad-api", "phase": "P4",
+            "checks": {"settings": "valid", "supabase": "not_configured", "ai": "disabled_or_missing_configuration"},
         }
-        assert client.post("/v1/translate", json={}).status_code == 404
+        assert client.post("/v1/translate", json={}).status_code == 401
 
 
 def test_configured_is_not_ready_and_secrets_are_not_exposed():

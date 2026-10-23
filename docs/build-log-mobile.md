@@ -1,5 +1,61 @@
 # Developer A build log
 
+## P4 — 24 October 2026, combined A/B implementation
+
+**Implemented:** preferred-language translation and Show original on posts and
+replies; exact original text retained, target-language/AI/cache/experimental labels,
+processing disclosure, in-flight guards, timeout/errors and account/source/target
+remount isolation. Optional three-statement headline-based brief with source link
+retained. Shared authenticated API adapter pins initiating session and rejects
+account mismatch; HTTPS-origin configuration only. Post/reply creation attempts
+screening only after durable ID confirmation; outage does not undo save/duplicate.
+Owner-only pending screening retry in replies and My submissions. Submission copy
+discloses Groq text processing; private reports are never sent to AI. No new mobile
+runtime package, no provider/private key in EXPO_PUBLIC configuration.
+
+**Tested:** TypeScript, 11 mobile tests, Expo dependencies and Android/iOS exports
+pass. Actual shared discovery/conversation SDK regressions pass against development
+backend with ordinary accounts; temporary verification rows cleaned by owners.
+Backend 69 configured Python/74 SQL pass. Actual P4 JWT/RLS/source-original checks
+pass for both accounts without inference. No actual P4 provider output or phone
+gesture pass claimed. Existing Node/Expo warnings and P2 audit debt remain.
+
+Correct checkout's Metro restarted with local reachable P4 HTTPS API configuration;
+existing temporary Expo URL retained. API returns honest disabled AI health while
+server keys/confirmation are missing. No upgrade/fallback or fabricated translation.
+
+**Blocked / next:** live key/model/quality gates and Android/iPhone translation,
+Show original, briefs, screening, quota/outage, private-data/account/keyboard checks
+listed in docs/p4-verification.md. Keep P0–P3 accepted, P4 feature branch pending
+native/provider acceptance before main merge. Stop after P4.
+
+## Final merged-code live rerun — 24 October 2026, 03:39 IST
+
+At main `78e5825`, both shared mobile discovery/conversation SDK adapters freshly
+passed against the development backend using ordinary dedicated account sessions.
+Mobile **8 model tests** and TypeScript passed; backend **36 tests, zero skips**
+and SQL **63 tests** passed. No new phone operation or native build was performed;
+existing user-reported Android/iOS acceptance remains the device evidence.
+See [final live verification](final-live-verification-2026-10-24.md).
+
+## Current closeout — P0–P3 accepted, 24 October 2026
+
+P0, P1, P2 and P3 are accepted for Developer A and integrated with Developer B's
+work on main at `78e5825`. Android/iOS acceptance is based on the user confirmations
+recorded in the integration checklist, rather than newly captured per-device traces.
+This supersedes the pending/blocked statuses in the historical entries below.
+
+P3 evidence includes mobile TypeScript, 8 model tests, Expo compatibility,
+Android/iOS exports and the hosted shared SDK checks. Combined backend evidence
+records 63 SQL tests and an earlier configured 36-test Python run with zero skips.
+Final merge checks ran 33 Python tests with 3 live tests skipped because live
+configuration was not loaded; this was not a fresh all-live rerun.
+
+Existing dependency audit/advisor warnings remain documented; acceptance does not
+mean a clean security audit. P4 has not started. This note reconciles the existing
+records and does not claim a new test run. See [integration checklist](integration-checklist.md)
+and [P3 evidence](p3-verification.md).
+
 ## P3 — 24 October 2026, combined A/B implementation
 
 **Implemented:** user assigned both P3 owners to one agent and confirmed Android/iOS

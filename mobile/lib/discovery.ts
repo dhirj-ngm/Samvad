@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { DiscoveryRow, FeedCursor, FeedItem, OwnPost } from '../types/contracts';
 import type { PostDraft } from './post-model';
+import { screenSubmission } from './ai-client.ts';
 
 export async function loadFeed(client: SupabaseClient, topic: string | null, after: FeedCursor | null) {
   const { data, error } = await client.rpc('get_discovery_feed', { p_topic: topic, p_limit: 20, p_after: after });
@@ -32,6 +33,10 @@ export async function submitPost(client: SupabaseClient, draft: PostDraft, actor
   if (!data || typeof data.id !== 'string' || typeof data.conversation_id !== 'string' ||
       typeof data.deleted !== 'boolean' || !['pending', 'allowed', 'flagged', 'blocked'].includes(data.moderation_state)) {
     throw new Error('Your save was not confirmed. Your draft is kept; retry the same submission.');
+  }
+  if (!data.deleted && data.moderation_state === 'pending') {
+    const state = await screenSubmission(client, actor, 'post', data.id);
+    if (state) data.moderation_state = state;
   }
   return data as { id: string; conversation_id: string; moderation_state: string; deleted: boolean };
 }

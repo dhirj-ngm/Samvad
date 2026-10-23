@@ -1,3 +1,5 @@
 fastapi
 pydantic-settings
 uvicorn
+httpx
+PyJWT[crypto]

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import type { FeedItem } from '../types/contracts';
 import { colors, radius, spacing, type } from '../theme/tokens';
+import { AIText, NewsBrief } from './AIText';
 
 export function FeedCard({ item, onOpen }: { item: FeedItem; onOpen: () => void }) {
   const news = item.kind === 'news';
@@ -16,10 +17,12 @@ export function FeedCard({ item, onOpen }: { item: FeedItem; onOpen: () => void 
   return <View style={styles.card}>
     <Text style={styles.kicker}>{news ? 'CURATED SOURCE ARCHIVE' : item.post.is_fixture ? 'DEMO FIXTURE · ORIGINAL POST' : 'ORIGINAL POST'}</Text>
     <Pressable onPress={onOpen} accessibilityRole="button" accessibilityLabel={`Open ${news ? 'story' : 'post'}`}>
-      <Text style={styles.title}>{news ? item.news.title : item.post.body}</Text>
+      <Text style={styles.title}>{news ? item.news.title : `@${item.post.author.handle}`}</Text>
     </Pressable>
+    {!news ? <AIText entityType="post" id={item.post.id} original={item.post.body} language={item.post.language}/> : null}
     <Text style={styles.meta}>{news ? `${item.news.source_name} · ${item.news.topic} · ${new Date(item.news.published_at).toLocaleDateString()}` : `@${item.post.author.handle} · ${item.post.language.toUpperCase()} · ${new Date(item.post.created_at).toLocaleDateString()}`}</Text>
     {news && item.news.excerpt ? <Text style={styles.description}>{item.news.excerpt}</Text> : null}
+    {news ? <NewsBrief id={item.news.id}/> : null}
     <View style={styles.footer}>
       {news ? <Pressable onPress={() => void openSource()} accessibilityRole="link"><Text style={styles.link}>Read publisher ↗</Text></Pressable> : null}
       <Pressable onPress={onOpen} accessibilityRole="button"><Text style={styles.link}>View context →</Text></Pressable>

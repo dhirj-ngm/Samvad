@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Reply } from '../types/contracts';
 import type { ConversationDraft, ReportTarget } from './conversation-model';
+import { screenSubmission } from './ai-client.ts';
 
 export async function loadReplies(client: SupabaseClient, conversation: string, after: { at: string; id: string } | null) {
   const { data, error } = await client.rpc('get_replies', { p_conversation_id: conversation, p_limit: 30, p_after: after });
@@ -27,6 +28,10 @@ export async function submitReply(client: SupabaseClient, actor: string, convers
   if (!data || typeof data.id !== 'string' || data.conversation_id !== conversation ||
       typeof data.deleted !== 'boolean' || !['pending','allowed','flagged','blocked'].includes(data.moderation_state))
     throw new Error('Save was not confirmed. Retry the same draft.');
+  if (!data.deleted && data.moderation_state === 'pending') {
+    const state = await screenSubmission(client, actor, 'reply', data.id);
+    if (state) data.moderation_state = state;
+  }
   return data as { id: string; deleted: boolean; moderation_state: string };
 }
 export async function submitReport(client: SupabaseClient, actor: string, target: ReportTarget, draft: ConversationDraft) {

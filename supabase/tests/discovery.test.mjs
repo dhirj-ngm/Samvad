@@ -11,7 +11,7 @@ const KEY = '40000000-0000-4000-8000-000000000003';
 const fixtures = [];
 
 before(async () => {
-  await db.exec(`create role anon nologin; create role authenticated nologin;
+  await db.exec(`create role service_role nologin; create role anon nologin; create role authenticated nologin;
     create schema auth;
     create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
     create function auth.uid() returns uuid language sql stable as $$

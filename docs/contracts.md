@@ -1,6 +1,6 @@
 # Samvad shared contracts — P0 draft
 
-**Status:** P0–P2 are integrated and accepted. The user confirmed Android and iOS verification through P2 on 24 October, then assigned both P3 workstreams to the same agent. The P2/P3 contracts below are the shared implementation baseline. Authenticated FastAPI/AI routes remain deferred.
+**Status:** P0–P3 are integrated and accepted on main `78e5825`. The user assigned both P4 workstreams and conflict resolution to one agent. P4 adds the authenticated AI routes below; live provider/account/language and Android/iOS P4 acceptance remain separate gates.
 
 ## Identity and transport
 
@@ -114,6 +114,54 @@ contracts are implemented together by the mobile and backend owners:
   account's session and reject an account mismatch. Storage failure prevents send.
 - Trusted review remains necessary before another account can read a new reply.
   No automatic moderation, bans, translation or AI provider calls are added in P3.
+
+## P4 implementation boundaries — 24 October 2026
+
+- FastAPI P4 implements all three `/v1` routes below. Bearer JWTs are verified with
+  the configured project's JWKS, ES256/RS256 allowlist, issuer, audience, expiry,
+  UUID subject and authenticated role. Unknown signing keys refresh once. HS256,
+  unsigned, expired, wrong-project/audience/role tokens are rejected. Routes never
+  accept caller-supplied source text or actor IDs. Public-key + caller-token source
+  reads enforce RLS; server service-role reads are not used to obtain source text.
+- Migration `20261023225554_multilingual_ai` adds private `samvad_internal.ai_cache`,
+  `ai_reservations` and `moderation_events`, with no ordinary client read/write or
+  RPC execution. The service-role-only `ai_control` invoker wrapper calls the
+  protected internal implementation. Public translations table remains proposed;
+  P4 actually uses this server-only cache rather than exposing translated held text.
+- Cache key hashes entity type/ID, original content, target language, configured
+  model and prompt version; provider is fixed Groq. Entries expire after seven days.
+  Authorization/source rechecked on every cache hit and again before returning.
+  Changed/deleted/hidden sources cannot retrieve old cached results. Originals are
+  never overwritten. Same-language requests return exact original, provenance original.
+- Shared transactional database reservations span translation/briefs/moderation and
+  all workers: caps 10 requests/minute, 100/day UTC, 4000 tokens/minute, 50000/day,
+  one leased concurrent call and five reservations/user/minute. Config may lower
+  ceilings only. Full prompt UTF-8 bytes + output cap + overhead are conservatively
+  charged; failed/truncated calls remain charged. No automatic retry/fallback.
+  Briefs leave request headroom for core tasks; a busy lease returns 429. External
+  provider use by other applications is not tracked locally; provider 429 is honored.
+- Groq adapter verifies configured models against authenticated `/models` before
+  first inference per service instance. Official docs/catalog/Free-plan limits were
+  rechecked, but actual account availability is unverified until keys are configured.
+  Mandatory enabled/free-plan/data-policy flags default false; none can upgrade billing.
+- Translation JSON is validated; UI labels target language, AI, cache and experimental
+  status when language review is pending. Show original restores the exact body.
+  Briefs require three nonempty single-line strings, use headline/excerpt only and
+  include source URL. Automated shape checks do not prove linguistic/factual quality.
+- Only the author may request moderation. New posts/replies remain pending until
+  successful validated screening plus the explicit language/policy review gate.
+  Missing credentials/quota, timeout, unknown model, malformed/truncated output or
+  failed evaluation leaves pending. Ambiguity/low confidence flags for review; only
+  clear high-severity threat/hate/doxxing can block. Ordinary disagreement/political
+  criticism is permitted. Reports never auto-ban. No account bans are implemented.
+- Publication and a private moderation event are committed atomically by service-only
+  RPC using actor, original body hash, pending state and deletion checks. Concurrent
+  delete/state changes reject stale decisions. Direct client writes remain denied.
+  Existing reviewed decisions return provenance original, never fabricated live AI.
+- Mobile attempts screening after confirmed durable creation; failure does not undo
+  the saved post/reply or create another submission. Pending owners have Retry AI
+  screening; held decisions require trusted review. Text processing disclosures
+  appear before submission/translation/brief actions. Reports are never sent to AI.
 
 ## AI HTTP endpoints from DPR §7
 

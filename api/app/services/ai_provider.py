@@ -1,4 +1,8 @@
-"""Future adapter boundary. P0 cannot make inference calls, even with a key."""
+"""Legacy disabled P0 adapter, retained for bootstrap regressions.
+
+P4 uses app.ai.AIService with authenticated source reads, shared SQL quotas and
+the Groq HTTP boundary. This legacy adapter never produces inference results.
+"""
 
 from dataclasses import dataclass
 from typing import Literal, Protocol

@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 import { loadOwnPosts } from '../lib/discovery';
 import type { OwnPost } from '../types/contracts';
 import { colors, radius, spacing, type } from '../theme/tokens';
+import { ScreeningRetry } from './AIText';
 
 export function OwnPosts({ actor }: { actor: string }) {
   const [posts, setPosts] = useState<OwnPost[]>([]);
@@ -47,6 +48,7 @@ export function OwnPosts({ actor }: { actor: string }) {
       <Text style={styles.status}>{post.moderation_state === 'allowed' ? 'Public' : post.moderation_state === 'pending' ? 'Pending review · only you' : 'Held for review · only you'}{post.is_fixture ? ' · Demo fixture' : ''}</Text>
       <Text style={styles.body}>{post.body}</Text>
       <Text style={styles.note}>{post.language.toUpperCase()} · {new Date(post.created_at).toLocaleDateString()}</Text>
+      {post.moderation_state==='pending'?<ScreeningRetry actor={actor} entityType="post" id={post.id} onDone={()=>void refresh()}/>:null}
       <Pressable accessibilityRole="button" disabled={busy !== null} onPress={() => Alert.alert('Remove this post?', 'Its text will be removed from the conversation.', [
         { text: 'Keep', style: 'cancel' }, { text: 'Remove', style: 'destructive', onPress: () => void remove(post.id) },
       ])}><Text style={styles.link}>{busy === post.id ? 'Removing…' : 'Remove my post'}</Text></Pressable>

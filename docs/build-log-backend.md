@@ -1,5 +1,113 @@
 # Developer B build log
 
+## P4 Malayalam output correction — 24 October 2026
+
+User's evaluation samples 2/3 were generated but failed target language: romanized
+unrelated text and unchanged English despite target ml. The initial prompt used
+ISO code alone. Updated translation/brief prompts with full language names and
+explicit native script, plus conservative script checks that reject obvious
+wrong-script output before returning/caching. This check does not prove semantic
+quality. Prompt/cache version bumped to samvad-p4-v2-native-script, preventing
+reuse of prior outputs. Original source text and language review gate unchanged.
+
+Actual bounded Groq rerun of samples 2/3 succeeded with Malayalam-script outputs;
+human meaning/tone review still pending. Restarted the correct local API. Added
+four focused regressions for wrong-script rejection and explicit Malayalam prompt;
+focused AI/bootstrap suite 65 passed, full configured Python suite 73 passed
+(zero skips), and Ruff passed. Evaluation artifacts now
+record prompt_version for future generations. P4 remains on integrate/p4; no
+provider switch, quota increase, automatic retry, paid fallback or gate override.
+
+## P4 evaluation follow-up — 24 October 2026
+
+User reported the evaluation CLI's generic BLOCKED message after a successful live
+connection/cache test. Inspected configuration by presence/booleans only: both keys
+and enabled/free-plan/data flags configured; language review flag remains false.
+Current quota had no active lease or minute usage and was below daily caps. A fresh
+ordinary-account diagnostic passed Auth, authenticated model catalog, SQL reservation,
+Groq structured translation and release. Exact original transient failure could not
+be reproduced; do not claim it was definitively quota rather than provider failure.
+
+Improved evaluate_ai diagnostics to print only normalized HTTP/code/message and
+429 waiting guidance, never provider bodies/headers/keys. Reran the user's exact
+--start 0 --count 2 command: both real Qwen samples generated and saved to ignored
+api/.local/ai-evaluation.json, human review pending. Ruff passes. No key, limit,
+model, publication gate or database schema changed. No paid fallback/retry added.
+Next: user reviews samples 0/1 then continues bounded batches; language/policy and
+P4 native gates remain pending. Earlier missing-key notes are historical.
+
+## P4 — 24 October 2026, combined A/B implementation
+
+**Implemented:** integrate/p4 descends from accepted P0–P3 main 78e5825. No phase
+merge conflicts existed; reviewed/preserved existing final-verification notes in
+b2fa66d first. Supabase/Postgres skills and current official provider/Auth docs
+consulted. P4 authenticated translate/summary/moderate routes, ES256/RS256 JWKS
+issuer/audience/expiry/role/subject checks, strict schemas and normalized errors.
+Source reads use public key + caller token and RLS, never service-role source reads.
+Private content/model/prompt cache reauthorized per request; originals never mutated.
+Server-only atomic publication with body hash/actor/state guards and audit events.
+Migration 20261023225554_multilingual_ai applied to agreed development project;
+CLI-generated file aligned to hosted ledger without rewriting applied SQL.
+
+Shared transactional request/token/day/concurrency/user budgets; conservative UTF-8
+prompt/output reservations remain charged on failure; brief request headroom.
+Groq/Qwen only, configurable IDs, account catalog lookup before first inference,
+no retries or paid fallback. Explicit enable/Free-plan/data flags default false;
+language/policy review separately gates publication. Uncertain/malformed/outage
+results keep pending; reports never ban users. Hash-locked runtime dependencies
+include httpx/PyJWT/cryptography. Evaluation batch tool has 12 all-direction
+translation examples plus policy/threat/negation/injection/brief samples.
+
+**Tested:** configured Python 69 passed, zero skips (includes live P1–P3 regressions),
+SQL 74 passed, mobile 11 passed, TypeScript, Expo dependency compatibility and both
+platform exports passed. New AI unit tests explicitly mock upstream output; they
+do not prove live inference or language quality. Separate P4 actual two-account
+JWT/JWKS/RLS/original checks passed with no inference. Both actual shared mobile
+SDK regression checks passed; temporary rows cleaned by owners. Ruff/pip pass.
+Hosted advisor has intentional private deny-all INFO and existing disabled leaked
+password protection WARN; unused-index performance INFO only. No new security WARN.
+Temporary HTTPS API passed real-token original read and expected unavailable-AI
+503 over the public tunnel; this is host HTTP evidence, not phone/live inference.
+Temporary reachable HTTPS API serves honest P4 health with AI disabled; mobile
+points to it locally. No private keys in mobile or Git, no paid inference called.
+
+**Blocked / next:** GROQ_API_KEY and SUPABASE_SERVICE_ROLE_KEY still absent locally;
+user intends to configure them. Free-plan/data confirmation, account model check,
+live inference/cache/atomic publication, bilingual quality and Android/iPhone P4
+interaction gates remain pending. Keep language review flag false until reviewed;
+no fake success. docs/p4-verification.md has exact setup/repro/device checks.
+Publish tested integrate/p4; main stays accepted P3 until P4 external gates pass.
+Unrelated .agents/ and skills-lock.json preserved. No P5/P6 work.
+
+## Final merged-code live rerun — 24 October 2026, 03:39 IST
+
+At main `78e5825`, freshly configured Python suite **36 passed, zero skips**,
+including P1/P2/P3 hosted two-account tests. Both actual shared mobile SDK live
+checks passed; SQL **63 passed**, mobile **8 passed**, TypeScript, Ruff and pip
+check passed. The earlier final-merge live skip gap is now closed. No database
+schema or moderation changes were made. Dedicated-account test data was updated
+by the existing harnesses, with owner cleanup and local session logout.
+See [final live verification](final-live-verification-2026-10-24.md) for commands,
+test effects and remaining historical security/device evidence limitations.
+
+## Current closeout — P0–P3 accepted, 24 October 2026
+
+P0, P1, P2 and P3 are accepted for Developer B and integrated with Developer A's
+work on main at `78e5825`. The user's P3 completion confirmation supersedes the
+pending device/reply-visibility follow-up statuses in the historical entries below.
+
+P3 evidence records 63 local SQL tests, an earlier configured 36-test Python run
+with zero skips, hosted two-account HTTP/SDK checks, Ruff and dependency checks.
+Final merge checks ran 33 Python tests with 3 live tests skipped because live
+configuration was not loaded; the earlier configured result remains historical
+evidence. Android/iOS acceptance is user-reported, without new per-device traces.
+
+Existing Expo dependency audit findings and disabled leaked-password protection
+remain documented; acceptance does not mean all security warnings are resolved.
+P4 has not started. This note reconciles the existing records and does not claim
+a new test run. See [integration checklist](integration-checklist.md) and
+[P3 evidence](p3-verification.md).
+
 ## 2026-10-24 — Device reply visibility diagnosis
 
 User reported replies missing from the other account during P3 device testing.
