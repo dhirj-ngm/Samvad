@@ -1,6 +1,7 @@
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+markers = ["integration: opt-in real Supabase development-account checks (mutates onboarding)"]
 
 [tool.ruff]
 target-version = "py313"

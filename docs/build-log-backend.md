@@ -1,5 +1,108 @@
 # Developer B build log
 
+## 2026-10-23 — P1 Identity & onboarding
+
+**Integration audit:** workspace started clean on local main b59e4e5. Fetched the
+configured origin (`https://github.com/dhirj-ngm/Samvad.git`); origin/main dbc2d22
+contains both P0 workstreams. Shared docs/contracts.md and docs/decisions.md record
+captain acceptance of B's schema/API baseline. Joint P0 device gate remains blocked
+in docs/integration-checklist.md, which is distinct from code/contract integration.
+Created dev/backend from the existing local history and fast-forwarded it to
+origin/main dbc2d22. No discards, rebases, force pushes or edits to main/mobile/shared
+files. A final fetch confirmed origin/main unchanged. Remote dev/mobile subsequently
+recorded additional blocked P0 device evidence; it was inspected read-only.
+
+**Implemented (local P1):**
+- supabase/migrations/202610230001_identity_interests.sql: transactional additive
+  identity migration. Public profiles have Auth-owned UUID PKs, CITEXT unique
+  lowercase handles, reserved-name/length/language constraints, immutable IDs and
+  server timestamps. RLS + column grants restrict creation/edits to the owner.
+- Private identities are mirrored/backfilled only from Auth-owned email and
+  email_confirmed_at. No ordinary client can read/write them, including the owner.
+  Restricted trigger execution, fixed search_path; user metadata cannot forge email
+  verification. No custom credential store, signup-generated handles or legal-ID claim.
+- Six stable UUID interests seeded in the migration; public taxonomy read, no client
+  writes. Owner-only user_interests read/insert/delete; composite PK prevents retry
+  duplicates. Profile upsert uses user_id; creation timestamp survives retry.
+- supabase/config.toml: local email/password Auth configuration, email confirmation,
+  refresh rotation, no anonymous/SMS signup. Exact device redirects remain unset.
+  Local config does not apply hosted project settings.
+- supabase/tests/identity.test.mjs and locked PGlite dev dependency: execute actual
+  SQL in isolated PostgreSQL/WASM. Auth catalog/uid are explicit test shims; ordinary
+  SET ROLE anon/authenticated for authorization assertions. Owner privilege is used
+  only for fixture setup/cleanup and Auth-trigger/migration inspection, never to
+  claim user authorization. These are not real Supabase account tests.
+- api/tools/check_identity.py: opt-in real-account Auth/password-grant + PostgREST
+  verifier using public client key and ordinary access tokens only. Rejects privileged
+  keys; logs no passwords/tokens/response bodies. Dedicated-account mutations require
+  explicit opt-in; test data is retained and harness sessions logged out locally.
+  api/docs/p1-test.env.example documents ignored local test configuration.
+- api/tests/test_identity_harness.py and test_identity_live.py: verifier guards and
+  actual external acceptance path; external test skips without credentials.
+- supabase/README.md: migration/recovery, hosted/local Auth settings, two-account
+  verification, Android/iOS handoff and retry-safe onboarding operations. No new
+  public view/RPC, schema column or app/server env contract. Updated owned P0 docs
+  to reflect accepted baseline/P1 status. Later-phase entities remain proposals.
+
+**Tested:**
+- `cd supabase; npm.cmd ci --ignore-scripts --no-audit --no-fund`: passed, one
+  pinned dev dependency installed from package-lock.json (Node v24.16.0).
+- `npm.cmd test`: **22 passed / 0 failed**. Clean migration execution; two ordinary
+  owner roles; Unicode; case-variant duplicate handle rejection; reserved/invalid
+  handles and unsupported language rejection; retry-safe profile and interest
+  writes; created_at preserved across separate transactions; immutable ownership;
+  cross-user updates/inserts blocked or affect zero rows; private identity reads/
+  writes/function access denied; public shape only; anon policy behavior; Auth-owned
+  backfill/verification changes/email removal; deletion cascades; duplicate migration
+  attempt rolls back without overwriting existing data. No network Auth/JWT or
+  multi-connection concurrency claim is made by these local tests.
+- `cd api; .venv/Scripts/python -m pytest -q`: **33 passed / 1 skipped**, one
+  preexisting Starlette httpx TestClient deprecation warning. Skip is the required
+  two-real-development-account test, not a passing RLS claim.
+- `.venv/Scripts/python -m ruff check app tools tests`: all checks passed.
+- `.venv/Scripts/python -m pip check`: no broken requirements found; no Python
+  dependency changes required.
+- `.venv/Scripts/python -m tools.check_identity`: exit **2 / BLOCKED**, missing
+  development project/public client key and two account credentials; no live requests.
+- Python tomllib parsed supabase/config.toml and verified email confirmations enabled,
+  anonymous Auth disabled. dotenv CLI is available from existing locked environment.
+- Git diff whitespace review passed; owned changes only, runtime env/test secrets,
+  node_modules and Python caches are ignored. Public/secret-key credential-pattern
+  review of staged content records no real credentials.
+
+Checks corrected during work: PowerShell blocked npm.ps1; used npm.cmd without
+changing execution policy. A read command used an incorrect package-lock path from
+api/; reread the correct root-relative file. No implementation test failures occurred.
+Official Supabase Auth/data/RLS/config/CLI documentation was consulted; links are
+in supabase/README.md. No AI inference or provider changes made.
+
+**Migration status:** implemented and executed in local in-memory SQL checks only.
+No full local Supabase stack or hosted development migration applied. Existing
+tables are never silently adopted/overwritten; preflight checks require unused
+identity table/trigger names and citext absent or installed in extensions. Actual
+apply requires reviewed SQL, agreed development project and B's secure project access.
+
+**Blocked / gate status:** no Supabase URL/client key/account credentials in the
+workspace environment or api/.env; Supabase CLI, Docker and psql unavailable. No
+agreed development project reference/access, email delivery, Auth redirect setup or
+two real confirmed accounts were supplied. Required real-account auth/onboarding,
+PostgREST/public field/RLS checks are NOT RUN. Local SQL passing is not backend P1
+external acceptance. Android/iOS integrated onboarding/session/redirect verification
+is NOT RUN. Backend external acceptance and joint P1 gate remain BLOCKED.
+
+**Next / Developer A handoff:** see supabase/README.md. Captain reviews this branch;
+B applies the reviewed migration only to the agreed development project, then runs
+the opt-in real-user harness and logs actual evidence. A uses the same Supabase
+project on both platforms: signUp/confirm/signInWithPassword/session restore;
+profile upsert by session user_id; add missing/remove deselected interest pairs and
+reread before reporting saved. Each operation is retry-safe; no cross-table atomic
+save is claimed. Agree exact platform callback URLs and record Android/iOS outcomes.
+Do not start P2/P4. P1 local work is ready for review; external gates are not passed.
+
+**Git:** only owned paths are staged/committed on dev/backend. Commit SHA and push
+result are reported in the task handoff (a commit cannot contain its own SHA).
+No push to main or changes to captain/mobile files.
+
 ## 2026-10-23 — P0 Bootstrap & contracts
 
 Scope: backend P0 only, Android and iOS share backend. Read all three root planning
