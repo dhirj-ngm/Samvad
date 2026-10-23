@@ -62,4 +62,16 @@
 
 **Blocked:** Neither platform launch nor a phone browser request to `/health` was observed. SDK 57-compatible Expo Go runtime on a phone is also unverified. No P0 launch defect can be confirmed or fixed without a device observation. The host LAN address may change; check it again before testing.
 
-**Next:** On each phone, open `exp://10.122.228.35:8081` in an SDK 57-compatible Expo Go runtime, visit all five tabs and open a sample feed conversation; record model, OS, navigation result, and errors. Separately open `http://10.122.228.35:8765/health` in that phone's browser and record the HTTP body. This HTTP LAN check is diagnostic only; Developer B's checklist calls for a trusted HTTPS address before future in-app API integration. Coordinate the final device-reachable HTTPS URL and P1 auth redirect settings with Developer B. Keep P0 gate blocked until actual Android and iOS observations are recorded.
+**Next at that checkpoint:** Test the five tabs, sample conversation, and phone-browser `/health` on each device, recording model, OS, and errors. This SDK 57 test path was superseded by the SDK 58 update below. Developer B's checklist still calls for a trusted HTTPS address before future in-app API integration. Keep P0 gate blocked until actual Android and iOS observations are recorded.
+
+### P0 SDK 58 runtime alignment — 23 October 2026
+
+**Reason:** User reported that the attempted SDK 57 Expo Go APK would not install and requested the newer SDK line available to them. No device model, OS, or installer error was supplied, so the original installation failure is not diagnosed.
+
+**Implemented:** Updated `mobile/package.json` and lockfile from Expo SDK 57 to 58, including React 19.3, React Native 0.88, Expo Router 58, and compatible Expo packages. No `api/**` or `supabase/**` change. The first `npx expo install expo@^58.0.0 --fix` stopped at npm `ERESOLVE` because the existing SDK 57 `node_modules` contained older optional Router peers. Moved the old install/lock to `/tmp` and completed a fresh npm install without `--force` or `--legacy-peer-deps`.
+
+**Tested:** Fresh `npm install --no-audit --no-fund` passed (517 packages); `npm ci --no-audit --no-fund` passed (517 packages); `npm run typecheck` passed; `npx expo install --check` reported dependencies up to date; `npx expo-doctor@latest` passed 20/20 checks; `npx expo export --platform android` and `--platform ios` both passed; `npx expo config --json` reported `sdkVersion: 58.0.0`. Restarted Metro using `npx expo start --host lan --clear`; the host returned HTTP 200 and `packager-status:running` at `http://10.122.228.35:8081/status`.
+
+**Blocked:** Android and iOS device launches, five-tab navigation, sample conversation, and phone-browser `/health` remain unobserved. SDK 58 bundle exports and host Metro status do not prove a Play Store Expo Go runtime or either phone launched the app. API connectivity in-app is still outside P0 implementation.
+
+**Next:** Open the fresh SDK 58 session on both phones and record model, OS, exact result/error and each P0 screen separately. Check `/health` in each phone's browser separately. The LAN address can change; confirm it before testing. Keep the P0 integration gate blocked until observed evidence exists.
