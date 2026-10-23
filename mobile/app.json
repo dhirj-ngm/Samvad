@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "Samvad",
+    "slug": "samvad",
+    "scheme": "samvad",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": { "supportsTablet": true },
+    "android": { "edgeToEdgeEnabled": true },
+    "plugins": ["expo-router"]
+  }
+}

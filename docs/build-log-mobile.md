@@ -1,0 +1,43 @@
+# Developer A build log
+
+## P0 — 23 October 2026
+
+### Implemented
+
+- Read product scope, DPR, and implementation playbook in order; confirmed the starting workspace had only those three files and no initialized Git repository or app scaffold.
+- Added repository docs/config skeleton; copied authoritative source documents into `docs/`; drafted `docs/contracts.md` with explicit Developer B agreement points.
+- Added one Expo SDK 57 / TypeScript / Expo Router app in `mobile/`, with Home, Explore, Compose, Activity, Profile tabs and a sample conversation route; design tokens, safe-area wrapper, typed DTOs and client port.
+- Sample story/post/profile/topics are visibly labeled as fictional P0 layout fixtures. Publishing, auth, translation, reporting, live news and notifications are not claimed functional.
+
+### Tested
+
+| Check | Result | Evidence |
+|---|---|---|
+| Workspace audit | Pass | Only three root project documents; `.git` exists as an unwritable placeholder; no app scaffold |
+| JSON configuration and route presence | Pass | `node -e` parsed `mobile/package.json`, `mobile/app.json`, `mobile/tsconfig.json` and found eight route files |
+| Dependency install | Blocked | `npm install --prefer-offline --fetch-retries=0 --fetch-timeout=10000` failed `EAI_AGAIN` resolving `registry.npmjs.org/@types/react` |
+| TypeScript | Blocked | `npm run typecheck` → `tsc: command not found` because dependencies could not be installed |
+| Metro/Expo launch | Blocked | `npm run start -- --offline --non-interactive` → `expo: command not found` |
+| Android device/emulator launch | Blocked | No `adb`, `emulator`, Android SDK directory, or USB device access found; no Android device/simulator used |
+| iOS device/simulator launch | Blocked | Linux host; no `xcrun` or `xcodebuild`, iPhone connection, or iOS simulator; no iOS device/simulator used |
+| Git initialization | Blocked | `git init -b main` → `.git/hooks/: Read-only file system`; no remote or commit available |
+
+### Blocked / pending
+
+- Platform status: **Android BLOCKED, iOS BLOCKED. Neither platform passed.** Bundling and typechecking also remain unverified.
+- Developer B must review contract questions in `docs/contracts.md`; backend `/health`, Supabase connectivity, migration plan, and joint API checks are pending B's P0 work.
+- No configured Git remote; no push attempted.
+
+### Next for P0 integration gate
+
+1. Provide npm registry access or an approved package cache, install dependencies, run `npm run typecheck` and Expo bundling.
+2. Launch the same app in Expo Go on an Android device/emulator and an iPhone/iOS simulator; record device names, OS versions, and actual navigation results separately.
+3. Make `.git` writable or create a fresh checkout, initialize `main`, review and commit the scaffold; configure a remote only when supplied.
+4. Agree `docs/contracts.md` with Developer B, verify B's `/health` and schema plan, then run the joint P0 gate. Do not start P1 before that checkpoint.
+
+### GitHub branch preparation (23 October 2026)
+
+- Created `dev/mobile` from the existing GitHub `main`, retaining Developer B's `api/**`, `supabase/**`, and backend log.
+- Installed mobile dependencies with `npm install --no-audit --no-fund`; generated `mobile/package-lock.json`.
+- Fixed the tab icon helper's `ColorValue` type after the first TypeScript run identified five matching errors. `npm run typecheck` then passed.
+- Android and iOS device launches remain unverified. The shared contracts remain drafts pending agreement with Developer B.
