@@ -3,6 +3,30 @@
 Project: `mtgsyjqcoyzijicpydee` (development). P1 remains BLOCKED until the
 real-account and Android/iOS checks below pass.
 
+## Latest combined recheck
+
+Fetched GitHub and confirmed both `origin/dev/mobile` (`0de54e0`) and
+`origin/dev/backend` (`d107843`) are ancestors of integrated main (`1dc10a3`
+at verification). No developer branch work is missing from that integration.
+
+- Full backend suite with dedicated live configuration: **34 passed**, no skips.
+  One preexisting Starlette/httpx dependency deprecation warning is non-failing.
+- Local SQL migration suite: **22 passed**, 0 failed.
+- Configured mobile TypeScript and Android/iOS exports: **PASS**.
+- Actual temporary Uvicorn HTTP `/health`: **200**, status `ok`, settings `valid`,
+  Supabase `not_checked`, AI `disabled_p0`. The health route deliberately does not
+  test Supabase; the live account suite independently verifies Auth/PostgREST.
+- Android Expo Go showed its generic load-failure screen; the user reported that
+  the phone browser could not reach the preview's LAN `/status` address. The host
+  successfully fetched that status, SDK 58 manifest, and Android bundle (HTTP 200).
+- Windows Firewall has enabled explicit inbound Node.js TCP/UDP block rules for
+  Public networks, and current Wi-Fi `Conference` is classified Public. This is a
+  confirmed host firewall obstacle; Wi-Fi client isolation has not been ruled out.
+  This process is not elevated. No firewall rules were changed.
+
+The code/build/backend checks pass; current phone P1 runtime acceptance remains
+blocked on preview reachability and subsequent UI/session checks.
+
 ## Completed
 
 - Supabase MCP access verified; initial public schema, migration ledger and Auth
