@@ -7,7 +7,6 @@
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "ios": { "supportsTablet": true },
-    "android": { "edgeToEdgeEnabled": true },
     "plugins": ["expo-router"]
   }
 }
