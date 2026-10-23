@@ -1,5 +1,47 @@
 # Developer B build log
 
+## 2026-10-24 — P3 conversation/safety, combined A/B ownership
+
+**Implemented:** started from merged P2 a4a7623 on integrate/p3, preserved unrelated
+.agents/ and skills-lock.json. User confirmed Android/iOS through P2 complete and
+working. Read scope/DPR/playbook/contracts/prior logs, Supabase/Postgres skills,
+current changelog and official docs. CLI-created migration
+20261023213814_conversation_safety applied to agreed project mtgsyjqcoyzijicpydee;
+ledger matches. No reset or destructive migration. Indexed same-thread replies,
+private pending visibility and deletion tombstones, invoker read RPC, internal
+actor-checked submit/delete helpers, exact retry fingerprints and private reports.
+Reports deduplicate per reporter/target and never trigger bans/content action.
+Account-serialized fixed budgets: 5 posts/min, 10 replies/min, 5 reports/min/30/hour;
+exact retries do not spend quota. Direct mutation/privileged helper bypass denied.
+No P4/Auth/AI endpoint or paid inference added.
+
+Ordinary dedicated accounts created two benign ML/HI demo replies in the technology
+discussion, B nested under A. Operator read/reviewed exact IDs/bodies and labeled
+is_fixture before approval. Authorization checks always used public key + ordinary
+sessions. Report retained for test evidence explicitly says verification only/no
+misconduct; no personal account content accessed. Temporary test reply bodies removed
+through owner RPC. Contract and review/device instructions: docs/p3-verification.md.
+
+**Tested:** 62 local SQL tests pass (actual migrations, minimal Auth shim/SET ROLE);
+36 configured Python tests pass, zero skips, one existing Starlette warning. Hosted
+P3 harness: two real logins, eight concurrent retry calls share one ID, changed retry
+409, Unicode preservation, author-only held visibility, parent/anonymous/forgery/
+self-publication/cross-delete denial, reviewed two-user nested thread, private report
+persist/retry/read denial, cursor pagination, deletion and no resurrection. Shared
+mobile SDK two-account verification passes. Minute quotas tested in isolated SQL;
+hosted quotas were not deliberately exhausted. Ruff and pip check pass. Mobile
+TypeScript/8 model tests/dependency compatibility/both platform exports pass.
+
+Advisors: intentional deny-all RLS INFO on private identity/internal budgets;
+existing disabled leaked-password protection WARN; unused-index performance INFO
+only. No new security WARN/ERROR. No cloud credentials or secrets added to Git.
+
+**Blocked / next:** Android/iPhone P3 interaction gate pending; P2 accepted per user
+report. Review exact new device reply IDs before cross-account reads. Run two-account
+reply/report/draft/offline/removal/account-switch/keyboard checklist on both devices.
+Push tested integrate/p3; retain main at accepted P2 until P3 device gate passes,
+per playbook. No new MCP needed. Stop after P3, no P4 work.
+
 ## 2026-10-24 — P2 discovery/publishing, combined A/B ownership
 
 User authorized both workstreams and phase integration. Inspected main 7e6d25d,

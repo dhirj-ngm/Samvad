@@ -1,5 +1,12 @@
 # Identity migration and later-phase plan
 
+P3 deployment (24 October): `20261023213814_conversation_safety.sql` is applied to
+the agreed development project. Adds replies, private reports, controlled RPCs and
+account write budgets; preserves all P1/P2 data. File created by CLI then aligned
+with hosted ledger. No reset or destructive rollback. Forward fixes use a new
+migration; do not drop populated tables or rewrite applied SQL. Restore only with
+an explicitly agreed backup/recovery procedure. See docs/p3-verification.md.
+
 P2 deployment (24 October): `20261023210206_discovery_posts.sql` and
 `20261023210636_consolidate_post_read_policy.sql` are applied to the agreed
 development project. Filenames match the hosted ledger. The first creates P2
@@ -15,7 +22,7 @@ the hosted MCP migration ledger version; do not reapply the old filename. See
 `../README.md` for setup, real-account checks and migration/recovery steps.
 
 Developer B alone applies reviewed migrations to the agreed development project.
-Future files below are planning only and do not exist:
+P1–P3 files now exist; only AI below remains future work:
 
 1. News/posts (P2): news, posts, root conversations, visibility and
    request-id uniqueness, controlled write boundaries.

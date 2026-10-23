@@ -1,5 +1,9 @@
 # P1 identity backend
 
+**Current phase: P3.** Identity, discovery, replies, private reports and write
+budgets are deployed. [P3 setup/tests](../docs/p3-verification.md) supersede earlier
+phase status notes below. P0–P2 Android/iOS accepted; P3 device gate pending.
+
 ## Current P2 handoff — 24 October 2026
 
 P1 and both P2 migrations are deployed to development project
@@ -224,3 +228,14 @@ credential tests. User sessions test auth, retries, handles/case collisions, pub
 shape, private identity denial, cross-user ownership and anonymous policy behavior.
 Record the actual results before marking backend P1 complete. Integrated mobile
 login/onboarding/session/redirect checks on Android AND iOS remain a separate joint gate.
+# P3 conversation/safety deployment
+
+`20261023213814_conversation_safety.sql` is applied to development project
+`mtgsyjqcoyzijicpydee`. Replies/reports RLS, controlled writes, parent validation,
+retry fingerprints, tombstones and internal budgets are implemented. No direct
+client mutation or publication. Reports are reporter-only and never auto-ban.
+See [P3 contracts](../docs/contracts.md) and [setup, review and verification](../docs/p3-verification.md).
+Do not reapply migrations already in the hosted ledger or reset shared data.
+All local SQL checks run with `npm.cmd test`; live checks use dedicated accounts
+with the existing ignored api/.env.p1 configuration. No privileged key is used to
+claim RLS success. Native P3 acceptance remains pending on both platforms.
