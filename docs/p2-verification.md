@@ -2,7 +2,9 @@
 
 24 October 2026. Both workstreams implemented together at the user's request.
 P0/P1 are already integrated and accepted; their evidence remains in the logs.
-P2 backend/SDK checks pass. Actual P2 Android/iOS interaction checks are pending.
+P2 backend/SDK checks pass. On 24 October the user confirmed Android and iOS
+verification complete through P2 and working properly. Joint P2 is accepted;
+earlier pending steps below are retained as historical verification instructions.
 
 ## Deployed development backend
 
@@ -144,3 +146,8 @@ the repository, so no GitHub MCP is required for merging/pushing. No additional 
 is needed to finish P2. Actual native verification needs Android/iPhone access with
 Expo Go (or appropriate emulators), not a browser-only MCP. Browser automation may
 help web previews but cannot substitute for the two platform checks above.
+# P2 closeout — 24 October 2026
+
+The user confirmed Android and iOS verification complete through P2 and working
+properly. P2 is accepted on that user report plus the automated evidence above.
+Earlier pending device statements are historical. Next: [P3 verification](p3-verification.md).

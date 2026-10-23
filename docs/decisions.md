@@ -1,5 +1,20 @@
 # P0 decisions — 23 October 2026
 
+## P3 combined ownership — 24 October 2026
+
+- User assigned both P3 workstreams to one agent and confirmed Android/iOS complete
+  through P2. P2 accepted by user report; earlier pending device entries superseded.
+- Replies keep P2's conservative pending/trusted-review boundary; P3 does not bypass
+  screening to produce an apparent two-user demo. Two individually reviewed benign
+  ML/HI fixtures are visibly labeled. No AI or paid inference introduced.
+- Reports deduplicate per reporter/target, are private, and never affect publication
+  or account status by count. Trusted SQL/MCP review only, no new admin client role.
+- SQL account budgets serialize new writes; exact retries remain free. No IP/Sybil
+  protection or full public-launch moderation promise. Shared P3 contracts updated
+  before handoff; exact checklist/evidence in p3-verification.md.
+- P3 stays on integrate/p3 until Android and iPhone device gate passes, following
+  the playbook. No P4 work begins in this task.
+
 ## P2 takeover and integration — 24 October 2026
 
 - The user authorized one agent to own both Developer A/B P2 work and merge P0/P1/P2.

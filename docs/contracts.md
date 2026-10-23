@@ -1,6 +1,6 @@
 # Samvad shared contracts — P0 draft
 
-**Status:** P0/P1 are integrated and accepted; P1 migration is deployed to the agreed development project. On 24 October the user assigned both P2 workstreams and integration to one agent. The P2 contracts below are the shared implementation baseline. Authenticated FastAPI/AI routes remain deferred.
+**Status:** P0–P2 are integrated and accepted. The user confirmed Android and iOS verification through P2 on 24 October, then assigned both P3 workstreams to the same agent. The P2/P3 contracts below are the shared implementation baseline. Authenticated FastAPI/AI routes remain deferred.
 
 ## Identity and transport
 
@@ -69,6 +69,51 @@ contracts are implemented together by the mobile and backend owners:
   locked. Double taps share one in-flight attempt. Success clears a draft only
   after confirmation of the persisted ID. Starting a different draft after an
   unresolved save is an explicit action with a duplicate warning.
+
+## P3 conversation and safety — 24 October 2026
+
+- Migration `20261023213814_conversation_safety` adds replies, private reports and
+  internal write budgets. All author/reporter identities derive from `auth.uid()`.
+  No direct client INSERT/UPDATE/DELETE or control of moderation/fixture/timestamp.
+- `submit_reply(p_request_id uuid,p_conversation_id uuid,p_parent_reply_id uuid|null,
+  p_body text,p_language text)` returns `{id,conversation_id,moderation_state,deleted}`.
+  Pending by default; 1–2000 original Unicode code points, en/hi/ml. Exact retries
+  return the same record, including a deletion tombstone; changed payload is 409.
+  Parent must belong to the same visible conversation and be nondeleted and
+  allowed or owned by the actor. Parent references are immutable and acyclic.
+- `get_replies(p_conversation_id uuid,p_limit int=30,p_after jsonb|null)` returns
+  `{id,conversation_id,parent_reply_id,body,language,created_at,deleted_at,
+  moderation_state,is_fixture,author}`. Author contains only PublicProfile fields.
+  Sort `(created_at,id)` ASC; cursor `{at:string,id:uuid}`, max 50. Preserve exact
+  server timestamp precision. Refresh resets pagination. An unavailable root
+  hides its complete thread. Approved replies are public, held replies owner-only.
+  A hidden/unloaded parent is shown as unavailable without exposing its text.
+- `delete_own_reply(p_reply_id uuid)` returns bool, owner only, clears the body.
+  Allowed deleted replies retain blank tombstones so children keep their place.
+- `submit_report(p_request_id uuid,p_entity_type text,p_entity_id uuid,p_reason text,
+  p_details text='')` returns `{id,status,already_reported}`. Targets: post, reply,
+  profile, news. Reasons: threat, harassment, hate, doxxing, impersonation, scam,
+  spam, other. Details max 1000 code points; empty permitted. Target must be visible.
+  Reports start submitted. One record per reporter/target; an alternate request key
+  returns the existing report (first reason/details retained), already_reported=true.
+  Original-key payload changes fail 409. Exact retries work after target removal.
+- Reporter can SELECT only own report's id/target/reason/details/status/created_at.
+  No client receives reporter_id, request_id or fingerprint columns. Other users,
+  reported authors and anonymous sessions cannot read those reports. Trusted review
+  currently uses the development operator's SQL/MCP access; no reviewer client role
+  or review UI is claimed. Report counts never modify content or account status.
+- Fixed server-clock budgets per account: 5 new posts/minute, 10 new replies/minute,
+  5 new reports/minute and 30/hour. Account advisory locks serialize checks; exact
+  retries and duplicate-target reports consume no budget. Exceeding a budget is
+  HTTP 429/PT429; rejected transactions roll back. These are prototype account
+  controls, not IP/Sybil protection. A window boundary can allow a short burst.
+- Mobile persists reply drafts per account/conversation/parent and reports per
+  account/target, including reason, original text/language and request UUID before
+  networking. Ambiguous writes lock editing and retain the exact retry payload;
+  double taps share one in-flight operation. Outgoing writes pin the initiating
+  account's session and reject an account mismatch. Storage failure prevents send.
+- Trusted review remains necessary before another account can read a new reply.
+  No automatic moderation, bans, translation or AI provider calls are added in P3.
 
 ## AI HTTP endpoints from DPR §7
 
