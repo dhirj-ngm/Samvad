@@ -46,6 +46,7 @@ export interface OwnPost {
 export interface Reply extends Omit<PublicPost, 'conversation_id'> {
   conversation_id: UUID;
   parent_reply_id: UUID | null;
+  deleted_at: string | null;
 }
 export type FeedItem =
   | { kind: 'news'; id: UUID; news: NewsItem; conversation_id: UUID }

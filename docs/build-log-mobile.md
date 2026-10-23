@@ -1,5 +1,37 @@
 # Developer A build log
 
+## P3 — 24 October 2026, combined A/B implementation
+
+**Implemented:** user assigned both P3 owners to one agent and confirmed Android/iOS
+working through P2. integrate/p3 starts at main a4a7623. Conversation screen retains
+real source/original root and adds chronological paginated replies with public
+handles, original Unicode, parent context, fixture/review labels, owner removal
+and refresh/error/empty states. Reply controls on news and original posts; root,
+reply and author private report controls. Private reason/details report composer
+shows actual saved reference and does not claim automatic moderation or removal.
+
+Reply drafts scoped to account/conversation/parent; report drafts to account/target.
+Original text/language/reason/key persisted before networking, storage failure stops
+send, ambiguous submission locks content for exact retry, in-flight guard prevents
+double taps. Account-pinned SDK writes reject mismatches. Switching targets preserves
+drafts; root/account changes remount to discard stale held data. Keyboard avoidance,
+safe-area screen and Unicode counters retained. No new runtime dependency or P4 AI.
+
+**Tested:** TypeScript, 8 mobile model tests, Expo dependency check and Android/iOS
+exports pass. Shared SDK two-real-account checks pass for nested Unicode saves,
+four concurrent retries, account mismatch, held reply isolation and private report
+read denial. Temporary SDK reply bodies removed by ordinary owners. Backend 63 SQL
+and 36 configured Python tests pass. Node module-type/Expo color warnings unchanged;
+P2 dependency audit findings remain logged P5 debt. No native P3 screen pass claimed.
+
+**Blocked / next:** Android/iPhone P3 device acceptance pending. Reload preview from
+this checkout, open technology conversation (reviewed labeled ML/HI demo thread),
+then follow docs/p3-verification.md with two actual accounts. New replies remain
+pending until trusted review. Test offline/relaunch/double-tap, parent selection,
+report reason restoration/privacy, account isolation, owner removal, keyboard/Indic
+text on both platforms. Publish tested feature branch; main stays at accepted P2
+until the P3 gate passes. User's P2 acceptance supersedes earlier pending P2 logs.
+
 ## P2 — 24 October 2026, combined A/B takeover
 
 User authorized one agent to own both workstreams and merge P0/P1/P2. Existing SDK
