@@ -1,6 +1,6 @@
 # Samvad project tracker
 
-**Snapshot:** 24 October 2026 (IST), P0–P2 accepted on Android and iOS; P3 mobile/backend implemented on integrate/p3, new phone acceptance pending
+**Snapshot:** 24 October 2026 (IST), P0–P3 accepted and integrated for main; P4 has not started
 
 **Source of truth for scope:** [Product Scope](Samvad_Product_Scope.md), [technical specification](Samvad_Detailed_Project_Report_Codex.md), and [implementation plan](Samvad_Implementation.md).
 **Working branches:** `main` is the integrated handoff; Developer A uses `dev/mobile`, Developer B uses `dev/backend`. Pull `main` before starting new phase work. Keep owner changes on their branches and coordinate shared contracts through the integration captain.
@@ -30,10 +30,10 @@ still requires trusted review.
 
 ## Next handoff
 
-1. Reload the integrate/p3 mobile preview and run the P3 checklist separately on Android and iPhone.
-2. Confirm a two-account parent/child reply exchange after individual trusted review.
-3. Check private report persistence, saved offline drafts, exact retries, account switching, owner removal and keyboard/Indic text.
-4. Record outcomes before passing the joint P3 gate and merging P3 to main. Main remains at accepted P2. P4 has not started.
+1. Developers A and B sync from `main`, which integrates accepted P0–P3.
+2. P3 is PASS based on the recorded automated/live evidence and the user's confirmation that testing is complete and it works. No additional per-device traces were supplied at closeout.
+3. Preserve trusted review, private reports, retry-safe writes and ownership rules in later work. Test harnesses mutate dedicated accounts only.
+4. Next planned phase is P4 AI; agree provider/model access and shared contracts before starting it. No P4 implementation is included in this merge.
 
 ## Updating this tracker
 

@@ -1,5 +1,18 @@
 # Integration gates
 
+## P3 acceptance and main integration — 24 October 2026
+
+User confirmation: "p3 is tested and completed and it works" with an explicit
+request to merge all phases. **P3 PASS by user acceptance**, alongside the recorded
+hosted/live evidence below. No new per-device traces or runtime versions were
+provided. This supersedes the earlier pending P3 status; P0–P2 remain accepted.
+
+Merge preparation checks: mobile TypeScript and 8 model tests passed; 63 SQL tests
+passed; backend local suite 33 passed and 3 live tests skipped without loading
+dedicated live configuration; Ruff passed. The earlier configured 36-test live
+result below is retained as earlier evidence, not a fresh live rerun. Both P3
+workstreams are integrated together with P0–P2. P4 has not started.
+
 ## P2 acceptance and P3 handoff — 24 October 2026
 
 User confirmation: "verfication of andriod and ios is complete uptill p2 and they

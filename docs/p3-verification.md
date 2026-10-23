@@ -2,8 +2,11 @@
 
 Both A/mobile and B/backend implemented together at the user's request, starting
 from merged P2 `a4a7623`. User confirmed Android/iOS complete through P2 on
-24 October 2026. P3 is implemented on `integrate/p3`; **its joint device gate is
-pending**, independent of the accepted P2 gate. No P4 work or AI inference.
+24 October 2026. **P3 joint gate PASS by user acceptance**: the user confirmed P3
+testing is complete and it works, then requested integration of all phases into
+main. This closeout supplements the recorded automated/live evidence below; no
+new per-device logs or runtime versions were supplied. Earlier pending statuses
+in the historical handoff are superseded. No P4 work or AI inference is included.
 
 ## Deployed backend and actual evidence
 
