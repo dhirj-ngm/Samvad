@@ -12,8 +12,9 @@ HTTP 401. Email/password signup and email confirmation are enabled; anonymous
 signup and other providers are disabled. The advisor's informational no-policy
 notice for `private_identities` is intentional denial of all client access.
 
-Local mobile/API configuration is populated in ignored env files. Two confirmed
-test accounts and Android/iOS P1 observations are still required. The older setup
+Local mobile/API configuration is populated in ignored env files. Two dedicated
+admin-confirmed accounts passed the live Auth/PostgREST onboarding and privacy
+harness. Signup email delivery and Android/iOS P1 observations are still required. The older setup
 notes below describe implementation-time prerequisites, not a second migration.
 
 The captain-approved P0 baseline is in `../docs/contracts.md` (origin/main
@@ -71,8 +72,8 @@ a hosted project's Auth settings. For the agreed hosted DEVELOPMENT project:
    Read own email/confirmation from Auth, never from `private_identities`.
 
 No project or credentials were present during initial implementation. The hosted
-status above records the later deployment. Email delivery, confirmation-return
-behavior and two real-account checks still require observation.
+status above records the later deployment and passing dedicated-account checks.
+Email delivery and confirmation-return behavior still require observation.
 Official references checked 2026-10-23:
 [password Auth](https://supabase.com/docs/guides/auth/passwords),
 [Auth-managed data](https://supabase.com/docs/guides/auth/managing-user-data),

@@ -4,7 +4,8 @@ FastAPI implements only unauthenticated `GET /health`. P1 identity and onboardin
 use Supabase Auth and RLS-protected tables, not custom FastAPI password endpoints.
 The [P1 setup/handoff](../supabase/README.md) covers the migration, Auth configuration,
 retry-safe onboarding and real-account checks. The development migration is applied;
-two confirmed test accounts and live device/account acceptance remain pending.
+live Auth/onboarding/privacy checks passed with two dedicated admin-confirmed
+accounts. Signup email delivery and mobile device acceptance remain pending.
 No AI or publishing is implemented.
 No cloud credentials are required to start FastAPI.
 Run commands from `api/` using Python 3.13 (verified on Windows 3.13.5).

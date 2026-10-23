@@ -28,17 +28,34 @@ real-account and Android/iOS checks below pass.
 - Backend checks with configured project origin: 33 passed, 1 live test skipped;
   Ruff passed. Mobile TypeScript and Expo dependency compatibility passed with
   the public configuration loaded.
+- The user provisioned both dedicated test users through Dashboard Auth and also
+  added a personal test account. The live harness used only the dedicated A/B
+  credentials. It did not read or modify the personal account's profile/interests.
+- Live `tools.check_identity`: all eight result groups PASS. Both users obtained
+  real password-grant sessions and passed Auth `/user` validation; onboarding and
+  retry-safe writes persisted through PostgREST; duplicate/case-variant handles
+  were rejected; anon/A/B private-identity reads were denied; public profiles
+  exposed only intended fields; cross-user profile/interest writes and private
+  interest reads were denied or affected zero rows; anonymous writes were denied.
+- Live pytest integration marker: 1 passed, 33 deselected (no live-test skip).
+  One preexisting Starlette/httpx deprecation warning was non-failing.
+- Additional ordinary-user HTTP session checks passed for both dedicated accounts:
+  password login, refresh-token grant, server validation of the refreshed session,
+  local logout, and refusal to refresh after that logout. This verifies backend
+  refresh revocation, not immediate expiry of already-issued access tokens or
+  mobile session persistence across app restarts.
+- A fresh Metro preview serves the configured P1 checkout on port 8083. The older
+  port 8081 serves a separate P0 checkout and is not the P1 test preview. Host-side
+  LAN manifest verified the correct project root and Android bundle URL. Phone
+  reachability is unobserved; LAN addresses may change with the network.
 
 ## Remaining
 
-1. Two dedicated test identities and random passwords were generated locally in
-   ignored `api/.env.p1` at the user's request. They use reserved `example.com`
-   addresses without inboxes. The user must provision them with Dashboard
-   Auth > Users > Add user > Create new user and Auto Confirm enabled. They are
-   not yet created. No Auth rows were fabricated through SQL. This exercises real
-   Auth/password grants and RLS after provisioning, but does not validate signup
-   email delivery or confirmation. Those checks need a real tester-owned inbox.
-2. Fill ignored `api/.env.p1`; enable its dedicated-account write opt-in and run:
+1. Verify real signup email delivery/confirmation using a tester-owned inbox.
+   The dedicated `example.com` users are admin-confirmed test accounts without
+   inboxes; successful password grants do not establish signup email delivery.
+2. To repeat the already-passing live checks, run only with the dedicated test
+   accounts configured in ignored `api/.env.p1`:
 
    ```powershell
    cd api

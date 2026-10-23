@@ -1,5 +1,23 @@
 # Developer B build log
 
+## 2026-10-24 — Live dedicated-account acceptance
+
+User created both generated dedicated accounts in Dashboard Auth and reported an
+additional personal test account. The harness used only dedicated credentials in
+ignored `api/.env.p1`; personal profile/interests were not read or changed.
+`tools.check_identity` passed all eight result groups against real Supabase Auth
+and PostgREST: password login/server validation, onboarding/retry persistence,
+duplicate and case-variant handle rejection, intended public fields, private
+identity denial, cross-owner profile/interest read/write denial, and anonymous
+write denial. Live pytest integration selection: **1 passed, 33 deselected**.
+Additional HTTP checks for both users passed session refresh, server validation,
+local logout and rejection of refresh after logout. Dedicated accounts were
+admin-confirmed; signup email delivery/confirmation was not verified by these tests.
+
+Fresh configured P1 Metro preview is running from Documents/Samvad/mobile on 8083;
+8081 belongs to an older P0 checkout. Host-side LAN manifest passed. Android/iOS
+P1 UI/session restoration/logout and real signup confirmation are still pending.
+
 ## 2026-10-24 — Hosted P1 identity deployment
 
 User authorized completing P1 in development project `mtgsyjqcoyzijicpydee`.
