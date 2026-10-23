@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Screen } from '../../components/Screen';
-import { SampleBanner } from '../../components/SampleBanner';
+import { OwnPosts } from '../../components/OwnPosts';
 import { useAuth } from '../../lib/auth';
 import { loadPendingDraft } from '../../lib/onboarding';
 import { supabase } from '../../lib/supabase';
@@ -38,13 +38,14 @@ export default function Profile() {
         <Pressable style={styles.button} onPress={() => router.push('/onboarding')} accessibilityRole="button"><Text style={styles.buttonText}>{profile && !pending ? 'Edit profile and interests' : 'Resume setup'}</Text></Pressable>
         {message ? <Text style={styles.error} accessibilityLiveRegion="polite">{message}</Text> : null}
         <Pressable onPress={signOut} disabled={busy} accessibilityRole="button"><Text style={styles.link}>{busy ? 'Signing out…' : 'Sign out'}</Text></Pressable>
-      </View> : <><SampleBanner /><View style={styles.card}>
-        <Text style={styles.handle}>@sample_voice</Text>
-        <Text style={styles.body}>This is a sample profile. Create an account to choose your own public handle.</Text>
+      </View> : <><View style={styles.card}>
+        <Text style={styles.handle}>Your public profile</Text>
+        <Text style={styles.body}>Create an account to choose your public handle and start posting.</Text>
         {!supabase ? <Text style={styles.privacy}>Live accounts are waiting for development Supabase configuration.</Text> : null}
         <Pressable style={styles.button} onPress={() => router.push('/sign-in')} accessibilityRole="button"><Text style={styles.buttonText}>Sign in</Text></Pressable>
         <Pressable onPress={() => router.push('/sign-up')} accessibilityRole="link"><Text style={styles.link}>Create account</Text></Pressable>
       </View></>}
+      {session && profile ? <OwnPosts key={session.user.id} actor={session.user.id} /> : null}
     </ScrollView>
   </Screen>;
 }

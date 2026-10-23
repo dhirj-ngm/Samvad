@@ -1,5 +1,40 @@
 # Developer A build log
 
+## P2 — 24 October 2026, combined A/B takeover
+
+User authorized one agent to own both workstreams and merge P0/P1/P2. Existing SDK
+58 app, accepted P0/P1 code and public Supabase configuration retained.
+
+**Implemented:** Home/Explore load real mixed Supabase discovery; virtualized list,
+topic filters, keyset load-more, refresh/loading/empty/error states, dated archive
+attribution, actual publisher links and visible demo labels. Context loads an
+authorized source/root and defers replies/reports/translation. Composer accepts
+en/hi/ml original Unicode, counts code points, validates length, shows progress,
+and persists account-scoped draft/request key before sending. Ambiguous attempts
+keep locked text for exact retry; double taps share one attempt. Sessions are
+pinned for outgoing writes. Profile shows real own submissions with public/private
+review labels and owner removal. No fake live feed or automatic publication.
+
+**Tested:** TypeScript and Expo dependency checks passed; **5 mobile model tests
+passed**; actual shared SDK adapter passed live mixed-feed/Unicode/four-concurrent-
+retry/account-mismatch checks with a dedicated account. Its temporary post was
+removed by the owner. Fresh npm ci passed; both Android/iOS bundle exports passed.
+These checks do not establish native UI/device behavior. Backend SQL 41 and full
+configured Python 35 tests also passed; see docs/p2-verification.md.
+
+Corrections: fixed footer null/undefined TypeScript error; removed a Node flag
+unsupported by this installation. Tests pass with a non-failing module-type warning;
+Expo exports emit NO_COLOR/FORCE_COLOR warnings. npm audit found five existing high
+Expo CLI-tree advisories (node-forge/zod/dependants); no forced SDK downgrade was
+made. Supported upstream fixes remain P5 debt, recorded in the P2 verification doc.
+
+**Blocked / next:** observe P2 on Android and iPhone separately: topics/refresh and
+links, Unicode compose/counter, keyboard/safe areas, offline/relaunch/double-tap
+retry, account-separated drafts, author-only pending, trusted review then one
+public original visible to both, owner removal. Joint P2 remains pending until
+that evidence is supplied. P0/P1 are still accepted. No P3/P4 feature work. Exact
+Git integration SHA is in the final handoff; unrelated local skills are preserved.
+
 ## P1 mobile identity and onboarding — 24 October 2026
 
 **P0 closeout:** The user reported that Samvad opened in Expo Go on an iPhone 17 Pro running iOS 27.0.1. Home, Explore, Compose, Activity, Profile, and a sample conversation all worked, and Safari loaded the P0 API `/health` JSON. No error was reported. The Expo Go app version was not supplied. This is user-observed iPhone evidence, separate from the prior iQOO Z7 Pro 5G / Android 15 observation. Android and iOS P0 navigation and phone-browser `/health` checks now **PASS**. The P0 app had no in-app API call; browser reachability does not prove that later integration. The overall P0 bootstrap gate is **PASS** on the stated device evidence and code checks.
