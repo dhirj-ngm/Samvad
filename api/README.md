@@ -1,7 +1,11 @@
-# Samvad backend — P0
+# Samvad backend — P0 service and P1 identity database
 
-Only unauthenticated `GET /health` is implemented. No auth, database connection,
-AI calls, seed loading or publishing is implemented. No cloud credentials required.
+FastAPI implements only unauthenticated `GET /health`. P1 identity and onboarding
+use Supabase Auth and RLS-protected tables, not custom FastAPI password endpoints.
+The [P1 setup/handoff](../supabase/README.md) covers the migration, Auth configuration,
+retry-safe onboarding and real-account checks. Hosted setup/testing is still blocked
+without development project access. No AI or publishing is implemented.
+No cloud credentials are required to start FastAPI.
 Run commands from `api/` using Python 3.13 (verified on Windows 3.13.5).
 
 ```powershell
@@ -29,7 +33,7 @@ Health never echoes secrets or attempts external calls.
 
 ```powershell
 .venv/Scripts/python -m pytest -q
-.venv/Scripts/python -m ruff check app tests
+.venv/Scripts/python -m ruff check app tools tests
 .venv/Scripts/python -m pip check
 ```
 
@@ -54,4 +58,4 @@ the API venv, `.env` and caches. Review staged paths before any later commit.
 
 See [contract proposals](docs/contracts-proposal.md),
 [device checklist](docs/connectivity-checklist.md) and
-[schema proposal](../supabase/schema-proposal.md). None authorizes later phases.
+[schema baseline](../supabase/schema-proposal.md). Stop after P1; P2/P4 are not implemented.

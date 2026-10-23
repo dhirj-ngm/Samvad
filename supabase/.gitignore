@@ -1,0 +1,7 @@
+node_modules/
+.temp/
+.branches/
+.env
+.env.*
+!.env.example
+coverage/

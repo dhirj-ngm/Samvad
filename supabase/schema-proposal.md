@@ -1,6 +1,13 @@
-# Proposed schema and RLS — P0, awaiting joint review
+# Database baseline — P1 identity and later-phase schema proposals
 
-This is design, not an applied migration. Exact proposed names below align with
+P1 update: the captain accepted this baseline in docs/contracts.md on origin/main
+dbc2d22. Identity/interests are now implemented by
+`migrations/202610230001_identity_interests.sql`; see README.md for exact grants,
+onboarding saves and deployment status. Display name/bio use empty-string defaults;
+no new public RPC/view or schema fields are introduced. All later entities below
+remain design only. No shared Supabase migration or real-account pass is claimed.
+
+Later-phase tables remain design, not applied migrations. Exact names below align with
 DPR §6. `uuid` primary IDs default `gen_random_uuid()`; foreign keys explicitly
 reference listed keys. All times use UTC `timestamptz`, server default `now()`.
 Required fields are non-null unless `?` is shown. Languages: `en|hi|ml` CHECK.

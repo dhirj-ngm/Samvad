@@ -1,6 +1,18 @@
 # Samvad P0 contract proposal — captain/A review required
 
-Status: PROPOSED, not `docs/contracts.md`. Root docs/config are untouched. No API
+P1 update: the integration captain accepted the P0 design baseline in shared
+docs/contracts.md (origin/main dbc2d22). P1 uses the agreed direct profile/interest
+tables and Supabase Auth, so no new onboarding RPC/view, schema field or server env
+name is required. Private identities deny all ordinary client reads as accepted.
+Implementation/handoff: ../../supabase/README.md. Email confirmation is enabled in
+local Auth defaults; exact hosted/device redirect paths still require A/project
+configuration. The SAMVAD_P1_* names in p1-test.env.example are opt-in test-runner
+inputs only, not shared app/server settings. API JWT verification remains a plan
+for authenticated FastAPI routes; there are no such routes in P1. No new contract
+has been silently finalized and no P2/P4 work is implemented.
+
+Original P0 proposal below (now accepted as the baseline above), not a replacement
+for `docs/contracts.md`. Root docs/config are untouched. No FastAPI
 auth or AI feature exists yet. Implemented API: only GET /health, no bearer token,
 HTTP 200 liveness as documented in `../README.md`. No dependency readiness claim.
 Schema proposal: `../../supabase/schema-proposal.md`; seed and migration plan live
