@@ -1,5 +1,20 @@
 # Integration gates
 
+## P0–P4 main integration — 24 October 2026
+
+User requested pushing all phases through P4 and resolving any conflicts. P4
+descends from accepted P0–P3 main `78e5825`; the integration is conflict-free and
+preserves all six P4 commits through `3eafd66`, including the Malayalam correction.
+Fresh checks: Python **70 passed, 3 live tests skipped** without loading dedicated
+live configuration; SQL **74 passed**; mobile **11 passed**; TypeScript, Ruff and
+pip dependency validation passed. No live provider inference was triggered by this
+merge check. Earlier configured/live results remain recorded below.
+
+Provider configuration and bounded live samples are now available per the P4
+follow-up. Human language/policy review under the revised prompt and Android/iOS
+P4 acceptance remain **PENDING**. Main integration does not mark P4 complete.
+P0–P3 user acceptance remains intact; no P5/P6 implementation is included.
+
 ## P4 combined implementation — 24 October 2026
 
 Started integrate/p4 from accepted main 78e5825 (P0–P3 already merged, no conflicts).

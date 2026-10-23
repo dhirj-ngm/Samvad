@@ -1,5 +1,12 @@
 # P4 implementation and verification handoff
 
+**Main integration (24 October):** User requested publication of all phases through
+P4. P4 includes accepted P0–P3, and merges cleanly. Fresh checks: Python 70 passed,
+3 live tests skipped; SQL 74 passed; mobile 11 passed; TypeScript, Ruff and pip
+check passed. This merge run did not invoke the live AI provider. Recorded prior
+live samples and configured checks below retain their original scope. Human
+language/policy review and Android/iOS P4 acceptance remain pending after merge.
+
 **Malayalam correction:** initial live EN→ML samples 2/3 failed language quality
 (Latin text/unchanged English). Revised prompts name English/Hindi/Malayalam and
 native script explicitly; wrong-script output now fails safely before caching.

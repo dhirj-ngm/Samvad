@@ -1,14 +1,16 @@
 # Samvad project tracker
 
-**Current P4 handoff (24 October):** Both workstreams implemented on integrate/p4,
-based on accepted merged P0–P3 main 78e5825. No previous-phase conflicts existed.
-Preserved the prior uncommitted final verification notes in b2fa66d. Deployed P4
-private cache/quota/moderation migration; 69 Python, 74 SQL and 11 mobile tests,
-both exports, real shared SDK regressions and P4 two-account JWT/RLS checks pass.
-Server keys/Free-plan confirmation, live provider/language review and P4 Android/iOS
-gate remain pending. [Next verification](docs/p4-verification.md). No P5/P6 started.
+**Current P4 integration (24 October):** Both P4 workstreams are integrated with
+accepted P0–P3 for publication to main at the user's request. No merge conflicts.
+Preserved prior verification notes and the native-script Malayalam correction.
+Fresh merge checks: 70 Python passed, 3 live tests skipped; 74 SQL and 11 mobile
+tests, TypeScript, Ruff and pip check passed. Earlier configured live evidence is
+in the logs. Provider keys/Free-plan flags are configured locally and limited live
+samples ran; human language/policy review and P4 Android/iOS acceptance remain
+pending. Code integration does not mark the P4 gate passed.
+[Next verification](docs/p4-verification.md). No P5/P6 started.
 
-**Snapshot:** 24 October 2026 (IST), P0–P3 accepted and integrated for main; P4 has not started
+**Snapshot:** 24 October 2026 (IST), P0–P4 code integrated for main; P0–P3 accepted, P4 acceptance pending
 
 **Source of truth for scope:** [Product Scope](Samvad_Product_Scope.md), [technical specification](Samvad_Detailed_Project_Report_Codex.md), and [implementation plan](Samvad_Implementation.md).
 **Working branches:** `main` is the integrated handoff; Developer A uses `dev/mobile`, Developer B uses `dev/backend`. Pull `main` before starting new phase work. Keep owner changes on their branches and coordinate shared contracts through the integration captain.
@@ -31,8 +33,9 @@ checks are in [P2 verification](docs/p2-verification.md). User confirmed both pl
 working through P2. P3 now adds threaded replies, private reporting, durable drafts,
 ownership/visibility rules and account write limits. Database migration is deployed;
 63 SQL, 36 Python, 8 mobile model tests, hosted two-account and shared SDK checks pass.
-See [P3 verification](docs/p3-verification.md). No AI features added; public visibility
-still requires trusted review.
+See [P3 verification](docs/p3-verification.md). P4 now adds authenticated AI
+translation, briefs and screening. Automatic publication remains gated by human
+language/policy evaluation; the prior trusted review path remains available.
 
 | Workstream | Current state | Evidence and next gate |
 |---|---|---|
@@ -45,10 +48,10 @@ still requires trusted review.
 
 ## Next handoff
 
-1. Developers A and B sync from `main`, which integrates accepted P0–P3.
+1. Developers A and B sync from `main`, which now integrates P0–P4 code.
 2. P3 is PASS based on the recorded automated/live evidence and the user's confirmation that testing is complete and it works. No additional per-device traces were supplied at closeout.
 3. Preserve trusted review, private reports, retry-safe writes and ownership rules in later work. Test harnesses mutate dedicated accounts only.
-4. Next planned phase is P4 AI; agree provider/model access and shared contracts before starting it. No P4 implementation is included in this merge.
+4. Complete the P4 native-script language/policy review and Android/iOS checks before marking its joint gate passed. See the P4 verification handoff; P5/P6 are not started.
 
 ## Updating this tracker
 
