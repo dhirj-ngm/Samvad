@@ -5,3 +5,16 @@
 | P0 | Bundle export passed; device launch not tested | Bundle export passed; device launch not tested | API tests 28 passed, lint and pip check passed, local `/health` returned 200; contract design baseline recorded, Supabase unconfigured | Blocked: device launch and app-to-API connectivity remain unverified |
 
 P0 checks on 23 October 2026: `npm ci`, `npm run typecheck`, and `npx expo export --platform android|ios` passed; `api/.venv/bin/python -m pytest -q` passed 28 tests, Ruff and pip check passed; an actual local Uvicorn `/health` request returned HTTP 200 with Supabase `not_configured` and AI `disabled_p0`. Bundle exports do not prove a device launch. No authenticated flow, database migration, or app-to-API connection was tested.
+
+## P0 device checkpoint attempt — 23 October 2026, 23:04 IST
+
+| Check | Android | iOS |
+|---|---|---|
+| Device and OS | None available; OS unknown | None available; OS unknown |
+| Expo Go runtime / actual launch | **BLOCKED**; no device or emulator observed | **BLOCKED**; no iPhone or simulator observed |
+| Home, Explore, Compose, Activity, Profile | All unobserved | All unobserved |
+| Open sample conversation | Unobserved | Unobserved |
+| Phone browser `GET /health` | Unobserved | Unobserved |
+| In-app API call | Not implemented in P0; not tested | Not implemented in P0; not tested |
+
+Host-only diagnostics: Expo returned HTTP 200 and `packager-status:running` at `http://10.122.228.35:8081/status`. Developer B's existing API, temporarily bound to `0.0.0.0:8765`, returned HTTP 200 at the host LAN address `http://10.122.228.35:8765/health` with `settings=valid`, `supabase=not_configured`, and `ai=disabled_p0`. Both requests originated on the development computer and do **not** prove phone reachability. This HTTP LAN endpoint is for P0 browser diagnostics; a trusted HTTPS URL is still needed for later in-app API use. `npm run typecheck`, `npx expo install --check`, and `git diff --check` passed during this checkpoint attempt. Android ADB/emulator tools were absent; the Linux host has no iOS Simulator and `idevice_id -l` returned a device-list error. Overall P0 remains **BLOCKED** pending observed launches on both platforms and phone network checks.

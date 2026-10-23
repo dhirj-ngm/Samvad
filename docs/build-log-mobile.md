@@ -48,3 +48,18 @@
 - Expo compatibility check expected TypeScript `~6.0.3`; updated the development dependency. Clean `npm ci`, `npx expo install --check`, and `npm run typecheck` passed.
 - `npx expo export --platform android` and `--platform ios` both produced bundles. These exports do not prove either app launched on a device.
 - The integration captain adopted Developer B's proposed P1 schema/API shapes into `docs/contracts.md` and aligned the mobile draft DTOs. No live adapter, migration, or authenticated endpoint was implemented.
+
+### P0 device checkpoint attempt — 23 October 2026, 23:04 IST
+
+**Implemented:** No mobile feature changes. Reviewed Developer B's P0 handoff and started its existing `/health` app for connectivity diagnostics. No `api/**` or `supabase/**` files were edited.
+
+**Tested:** `npm run typecheck` passed (exit 0); `npx expo install --check` reported dependencies up to date (exit 0); `git diff --check` passed (exit 0). A previously running Expo SDK 57 dev server returned `packager-status:running` with HTTP 200 at `http://10.122.228.35:8081/status`. Uvicorn, bound to `0.0.0.0:8765`, returned HTTP 200 at both `http://127.0.0.1:8765/health` and `http://10.122.228.35:8765/health`: `{"status":"ok","service":"samvad-api","phase":"P0","checks":{"settings":"valid","supabase":"not_configured","ai":"disabled_p0"}}`. These requests ran on the development computer; they are **not phone reachability tests**. The P0 mobile shell has no API call, so no in-app API connectivity was tested.
+
+| Platform | Device and OS used | Home | Explore | Compose | Activity | Profile | Sample conversation | Result / error |
+|---|---|---|---|---|---|---|---|---|
+| Android | None; no connected Android phone or emulator, OS unavailable | Not observed | Not observed | Not observed | Not observed | Not observed | Not observed | **BLOCKED**: `adb` and `emulator` absent; no Android device available to this session |
+| iOS | None; no connected iPhone or macOS simulator, OS unavailable | Not observed | Not observed | Not observed | Not observed | Not observed | Not observed | **BLOCKED**: Linux host has no `xcrun`/Xcode; `idevice_id -l` returned `ERROR: Unable to retrieve device list!` |
+
+**Blocked:** Neither platform launch nor a phone browser request to `/health` was observed. SDK 57-compatible Expo Go runtime on a phone is also unverified. No P0 launch defect can be confirmed or fixed without a device observation. The host LAN address may change; check it again before testing.
+
+**Next:** On each phone, open `exp://10.122.228.35:8081` in an SDK 57-compatible Expo Go runtime, visit all five tabs and open a sample feed conversation; record model, OS, navigation result, and errors. Separately open `http://10.122.228.35:8765/health` in that phone's browser and record the HTTP body. This HTTP LAN check is diagnostic only; Developer B's checklist calls for a trusted HTTPS address before future in-app API integration. Coordinate the final device-reachable HTTPS URL and P1 auth redirect settings with Developer B. Keep P0 gate blocked until actual Android and iOS observations are recorded.
