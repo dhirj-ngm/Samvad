@@ -1,0 +1,54 @@
+{
+  "reviewed_at": "2026-10-24",
+  "provenance": "Curated archive. Historical source dates retained; short descriptions are editorial paraphrases, not article reproductions or AI briefs.",
+  "items": [
+    {
+      "id": "30000000-0000-4000-8000-000000000001",
+      "title": "India seal T20 World Cup glory after epic duel against South Africa",
+      "source_name": "International Cricket Council",
+      "source_url": "https://www.icc-cricket.com/tournaments/t20cricketworldcup/news/live-india-and-south-africa-face-off-in-t20-world-cup-final",
+      "excerpt": "India won the 2024 men's T20 final in Barbados. Revisit the match through the ICC's report.",
+      "language": "en", "published_at": "2024-06-29T00:00:00Z", "topic": "sports"
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000002",
+      "title": "Operationalisation of Central Bank Digital Currency – Retail (e₹-R) Pilot",
+      "source_name": "Reserve Bank of India",
+      "source_url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=54773",
+      "excerpt": "The RBI announced a retail digital rupee pilot beginning on 1 December 2022.",
+      "language": "en", "published_at": "2022-11-29T00:00:00Z", "topic": "business"
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000003",
+      "title": "Chandrayaan-3",
+      "source_name": "Indian Space Research Organisation",
+      "source_url": "https://www.isro.gov.in/ISRO_EN/Chandrayaan3.html",
+      "excerpt": "ISRO's mission archive provides Chandrayaan-3 updates, images and its Moon landing coverage.",
+      "language": "en", "published_at": "2023-08-23T00:00:00Z", "topic": "technology"
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000004",
+      "title": "PM inaugurates Atal Bihari Vajpayee Sewri – Nhava Sheva Atal Setu in Navi Mumbai",
+      "source_name": "Press Information Bureau",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1995650&lang=2&reg=48",
+      "excerpt": "The Mumbai Trans Harbour Link inauguration took place on 12 January 2024.",
+      "language": "en", "published_at": "2024-01-12T00:00:00Z", "topic": "infrastructure"
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000005",
+      "title": "Cabinet Approves National Education Policy 2020, paving way for transformational reforms in school and higher education systems",
+      "source_name": "Press Information Bureau",
+      "source_url": "https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1642061&lang=2&reg=48",
+      "excerpt": "The Union Cabinet approved the education policy on 29 July 2020. Read the original policy announcement.",
+      "language": "en", "published_at": "2020-07-29T00:00:00Z", "topic": "politics"
+    },
+    {
+      "id": "30000000-0000-4000-8000-000000000006",
+      "title": "Santiniketan: New Indian site on the UNESCO World Heritage List",
+      "source_name": "UNESCO",
+      "source_url": "https://www.unesco.org/en/articles/santiniketan-new-indian-site-unesco-world-heritage-list",
+      "excerpt": "Santiniketan in West Bengal was inscribed on the World Heritage List in September 2023.",
+      "language": "en", "published_at": "2023-09-17T00:00:00Z", "topic": "culture"
+    }
+  ]
+}

@@ -1,5 +1,10 @@
 # Samvad backend — P0 service and P1 identity database
 
+P2 update: discovery and publishing use the same Supabase backend directly; the
+new migrations and ordinary-user checks are deployed/passing. FastAPI remains
+health-only. See [P2 verification](../docs/p2-verification.md) for setup, test commands,
+trusted review and the pending Android/iOS acceptance. No AI endpoints were added.
+
 FastAPI implements only unauthenticated `GET /health`. P1 identity and onboarding
 use Supabase Auth and RLS-protected tables, not custom FastAPI password endpoints.
 The [P1 setup/handoff](../supabase/README.md) covers the migration, Auth configuration,

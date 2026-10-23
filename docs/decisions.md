@@ -1,5 +1,19 @@
 # P0 decisions — 23 October 2026
 
+## P2 takeover and integration — 24 October 2026
+
+- The user authorized one agent to own both Developer A/B P2 work and merge P0/P1/P2.
+  Existing P0/P1 main integration and acceptance are preserved. P2 code integration
+  does not automatically pass the new device gate.
+- Use six real historical source records with visible archive/source dates; no
+  unsupported live-news freshness or AI brief claims. Original posts remain first-class.
+- P2 submits content as author-only pending, with trusted manual review for public
+  visibility until later screening. No paid inference or automatic publication.
+- Shared contracts define submit/delete/feed RPCs, exact retry/cursor semantics and
+  owner-only status display. Internal privileged helpers live outside exposed schemas;
+  clients cannot control author/status/time. No P3/P4 feature implementation.
+- P2 verification and remaining Android/iOS checklist: [p2-verification.md](p2-verification.md).
+
 - Product scope is authoritative. One Expo/TypeScript/Expo Router app targets Android and iOS. The university-sized group is a pilot, not app branding.
 - P0 UI is visibly labeled sample content; actions that need auth, storage, or AI are shown as unavailable rather than appearing functional.
 - Developer A owns `mobile/**` and shared integration files as integration captain. Developer B owns `api/**` and `supabase/**`; both P0 workstreams are now present in the repository.

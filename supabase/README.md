@@ -1,5 +1,15 @@
 # P1 identity backend
 
+## Current P2 handoff — 24 October 2026
+
+P1 and both P2 migrations are deployed to development project
+mtgsyjqcoyzijicpydee. The older P1 setup notes below are retained for reproducibility;
+their original missing-project status is superseded by the live evidence.
+P2 adds news_items/posts/conversations, six real dated archive sources, scoped
+submit/delete functions and an invoker feed. See
+[P2 verification and operator review](../docs/p2-verification.md). Do not reapply
+the identity migration or reset the shared project. All new posts remain pending.
+
 ## Hosted development status — 24 October 2026
 
 The identity migration is applied to development project `mtgsyjqcoyzijicpydee`.

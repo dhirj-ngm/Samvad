@@ -1,18 +1,10 @@
-import { useRouter } from 'expo-router';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { FeedCard } from '../../components/FeedCard';
-import { SampleBanner } from '../../components/SampleBanner';
 import { Screen } from '../../components/Screen';
-import { sampleFeed } from '../../data/sample';
-import { spacing } from '../../theme/tokens';
+import { DiscoveryFeed } from '../../components/DiscoveryFeed';
+import { useAuth } from '../../lib/auth';
 
 export default function Home() {
-  const router = useRouter();
+  const { session, profile } = useAuth();
   return <Screen title="Home" subtitle="Open conversations across India">
-    <FlatList data={sampleFeed} keyExtractor={item => item.id} contentContainerStyle={styles.list}
-      ListHeaderComponent={<SampleBanner />}
-      renderItem={({ item }) => <FeedCard item={item} onOpen={() => router.push({ pathname: '/conversation/[id]', params: { id: item.kind === 'news' ? item.conversation_id : item.post.conversation_id } })} />}
-    />
+    <DiscoveryFeed key={`${session?.user.id ?? 'public'}:${profile?.preferred_language ?? 'en'}`} />
   </Screen>;
 }
-const styles = StyleSheet.create({ list: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl } });

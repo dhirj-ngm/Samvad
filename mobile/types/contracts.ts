@@ -32,6 +32,16 @@ export interface PublicPost {
   created_at: string;
   moderation_state: ModerationState;
   conversation_id: UUID;
+  is_fixture?: boolean;
+}
+export interface FeedCursor { matched: boolean; at: string; id: UUID; kind: 'news' | 'post' }
+export interface DiscoveryRow {
+  kind: 'news' | 'post'; id: UUID; sort_at: string; interest_match: boolean;
+  conversation_id: UUID; news: NewsItem | null; post: PublicPost | null;
+}
+export interface OwnPost {
+  id: UUID; body: string; language: LanguageCode; created_at: string;
+  moderation_state: ModerationState; is_fixture: boolean;
 }
 export interface Reply extends Omit<PublicPost, 'conversation_id'> {
   conversation_id: UUID;
