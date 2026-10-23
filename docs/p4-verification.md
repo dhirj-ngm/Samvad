@@ -1,5 +1,13 @@
 # P4 implementation and verification handoff
 
+**Malayalam correction:** initial live EN→ML samples 2/3 failed language quality
+(Latin text/unchanged English). Revised prompts name English/Hindi/Malayalam and
+native script explicitly; wrong-script output now fails safely before caching.
+Prompt/cache version is samvad-p4-v2-native-script. A real rerun generated Malayalam
+for both samples, still requiring human semantic review. Review all directions
+under the revised prompt before setting the publication gate; old v1 reviews do
+not establish v2 quality. Evaluation records now include prompt_version.
+
 **Live follow-up:** keys and enabled/Free-plan/data confirmation flags are now
 configured locally. User supplied a passing live translation/cache checker result;
 agent subsequently verified model-catalog access and generated evaluation samples

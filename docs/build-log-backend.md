@@ -1,5 +1,23 @@
 # Developer B build log
 
+## P4 Malayalam output correction — 24 October 2026
+
+User's evaluation samples 2/3 were generated but failed target language: romanized
+unrelated text and unchanged English despite target ml. The initial prompt used
+ISO code alone. Updated translation/brief prompts with full language names and
+explicit native script, plus conservative script checks that reject obvious
+wrong-script output before returning/caching. This check does not prove semantic
+quality. Prompt/cache version bumped to samvad-p4-v2-native-script, preventing
+reuse of prior outputs. Original source text and language review gate unchanged.
+
+Actual bounded Groq rerun of samples 2/3 succeeded with Malayalam-script outputs;
+human meaning/tone review still pending. Restarted the correct local API. Added
+four focused regressions for wrong-script rejection and explicit Malayalam prompt;
+focused AI/bootstrap suite 65 passed, full configured Python suite 73 passed
+(zero skips), and Ruff passed. Evaluation artifacts now
+record prompt_version for future generations. P4 remains on integrate/p4; no
+provider switch, quota increase, automatic retry, paid fallback or gate override.
+
 ## P4 evaluation follow-up — 24 October 2026
 
 User reported the evaluation CLI's generic BLOCKED message after a successful live

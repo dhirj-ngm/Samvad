@@ -7,7 +7,7 @@ from pathlib import Path
 
 import httpx
 
-from app.ai import AIService, Failure
+from app.ai import PROMPT_VERSION, AIService, Failure
 from app.config import Settings
 from tools.check_identity import IdentityCheckError, checked_json, load_config
 
@@ -59,6 +59,7 @@ async def evaluate(start, count):
             records = [row for row in records if row['index'] != index]
             records.append({'index': index, 'task': task, 'source': text, 'target_language': language,
                             'result': result, 'model': getattr(settings, 'ai_'+task+'_model'),
+                            'prompt_version': PROMPT_VERSION,
                             'review': 'PENDING: native-language meaning/tone/names/numbers/script/policy check'})
             output_file.write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding='utf-8')
             print(f'Generated evaluation sample {index}; human review pending')

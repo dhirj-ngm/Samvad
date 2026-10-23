@@ -29,6 +29,7 @@ class Upstreams:
                        'author_id': ACTOR, 'moderation_state': 'pending', 'deleted_at': None}
         self.hidden = False
         self.quota_status = 200
+        self.last_prompt = ''
 
     def handle(self, request):
         path = request.url.path
@@ -56,6 +57,7 @@ class Upstreams:
             return httpx.Response(200, json={'data': [{'id': MODEL}]})
         if path.endswith('/chat/completions'):
             self.calls.append('provider')
+            self.last_prompt = json.loads(request.content)['messages'][0]['content']
             assert 'author_id' not in request.content.decode()
             return httpx.Response(self.provider_status, json={'choices': [{'finish_reason': self.finish_reason, 'message': {'content': json.dumps(self.body)}}]})
         raise AssertionError('Unexpected request route')
@@ -230,3 +232,25 @@ def test_deleted_content_never_returns_cached_translation(setup):
     upstream.source['deleted_at'] = '2026-10-24T00:00:00Z'
     upstream.source['body'] = ''
     assert translate(client).status_code == 404
+
+
+@pytest.mark.parametrize('language,body', [('ml', 'Anu yajje 5-ta. Choychay'), ('ml', 'Great match, yaar! India played well'), ('hi', 'This is still English')])
+def test_wrong_script_output_is_rejected_not_cached(setup, language, body):
+    client, upstream = setup
+    upstream.source['language'] = 'en'
+    upstream.body = {'translated_text': body}
+    response = translate(client, target_language=language)
+    assert response.status_code == 503
+    assert response.json()['error']['code'] == 'invalid_ai_output'
+    assert not upstream.cache
+
+
+def test_native_malayalam_output_and_explicit_prompt(setup):
+    client, upstream = setup
+    upstream.source['language'] = 'en'
+    upstream.body = {'translated_text': 'അനു അഞ്ചു മണിക്ക് വരും. ദയവായി കാത്തിരിക്കൂ 🙂'}
+    response = translate(client, target_language='ml')
+    assert response.status_code == 200
+    assert 'അനു' in response.json()['translated_text']
+    assert 'Malayalam (ml)' in upstream.last_prompt
+    assert 'Malayalam script' in upstream.last_prompt
