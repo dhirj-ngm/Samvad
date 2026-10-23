@@ -48,3 +48,46 @@
 - Expo compatibility check expected TypeScript `~6.0.3`; updated the development dependency. Clean `npm ci`, `npx expo install --check`, and `npm run typecheck` passed.
 - `npx expo export --platform android` and `--platform ios` both produced bundles. These exports do not prove either app launched on a device.
 - The integration captain adopted Developer B's proposed P1 schema/API shapes into `docs/contracts.md` and aligned the mobile draft DTOs. No live adapter, migration, or authenticated endpoint was implemented.
+
+### P0 device checkpoint attempt — 23 October 2026, 23:04 IST
+
+**Implemented:** No mobile feature changes. Reviewed Developer B's P0 handoff and started its existing `/health` app for connectivity diagnostics. No `api/**` or `supabase/**` files were edited.
+
+**Tested:** `npm run typecheck` passed (exit 0); `npx expo install --check` reported dependencies up to date (exit 0); `git diff --check` passed (exit 0). A previously running Expo SDK 57 dev server returned `packager-status:running` with HTTP 200 at `http://10.122.228.35:8081/status`. Uvicorn, bound to `0.0.0.0:8765`, returned HTTP 200 at both `http://127.0.0.1:8765/health` and `http://10.122.228.35:8765/health`: `{"status":"ok","service":"samvad-api","phase":"P0","checks":{"settings":"valid","supabase":"not_configured","ai":"disabled_p0"}}`. These requests ran on the development computer; they are **not phone reachability tests**. The P0 mobile shell has no API call, so no in-app API connectivity was tested.
+
+| Platform | Device and OS used | Home | Explore | Compose | Activity | Profile | Sample conversation | Result / error |
+|---|---|---|---|---|---|---|---|---|
+| Android | None; no connected Android phone or emulator, OS unavailable | Not observed | Not observed | Not observed | Not observed | Not observed | Not observed | **BLOCKED**: `adb` and `emulator` absent; no Android device available to this session |
+| iOS | None; no connected iPhone or macOS simulator, OS unavailable | Not observed | Not observed | Not observed | Not observed | Not observed | Not observed | **BLOCKED**: Linux host has no `xcrun`/Xcode; `idevice_id -l` returned `ERROR: Unable to retrieve device list!` |
+
+**Blocked:** Neither platform launch nor a phone browser request to `/health` was observed. SDK 57-compatible Expo Go runtime on a phone is also unverified. No P0 launch defect can be confirmed or fixed without a device observation. The host LAN address may change; check it again before testing.
+
+**Next at that checkpoint:** Test the five tabs, sample conversation, and phone-browser `/health` on each device, recording model, OS, and errors. This SDK 57 test path was superseded by the SDK 58 update below. Developer B's checklist still calls for a trusted HTTPS address before future in-app API integration. Keep P0 gate blocked until actual Android and iOS observations are recorded.
+
+### P0 SDK 58 runtime alignment — 23 October 2026
+
+**Reason:** User reported that the attempted SDK 57 Expo Go APK would not install and requested the newer SDK line available to them. No device model, OS, or installer error was supplied, so the original installation failure is not diagnosed.
+
+**Implemented:** Updated `mobile/package.json` and lockfile from Expo SDK 57 to 58, including React 19.3, React Native 0.88, Expo Router 58, and compatible Expo packages. No `api/**` or `supabase/**` change. The first `npx expo install expo@^58.0.0 --fix` stopped at npm `ERESOLVE` because the existing SDK 57 `node_modules` contained older optional Router peers. Moved the old install/lock to `/tmp` and completed a fresh npm install without `--force` or `--legacy-peer-deps`.
+
+**Tested:** Fresh `npm install --no-audit --no-fund` passed (517 packages); `npm ci --no-audit --no-fund` passed (517 packages); `npm run typecheck` passed; `npx expo install --check` reported dependencies up to date; `npx expo-doctor@latest` passed 20/20 checks; `npx expo export --platform android` and `--platform ios` both passed; `npx expo config --json` reported `sdkVersion: 58.0.0`. Restarted Metro using `npx expo start --host lan --clear`; the host returned HTTP 200 and `packager-status:running` at `http://10.122.228.35:8081/status`.
+
+**Blocked:** Android and iOS device launches, five-tab navigation, sample conversation, and phone-browser `/health` remain unobserved. SDK 58 bundle exports and host Metro status do not prove a Play Store Expo Go runtime or either phone launched the app. API connectivity in-app is still outside P0 implementation.
+
+**Next:** Open the fresh SDK 58 session on both phones and record model, OS, exact result/error and each P0 screen separately. Check `/health` in each phone's browser separately. The LAN address can change; confirm it before testing. Keep the P0 integration gate blocked until observed evidence exists.
+
+### P0 live launch diagnosis — 23 October 2026, 23:50 IST
+
+**Observed failure:** The earlier QR pointed at `10.122.228.35:8081`, but the Metro process from that turn was no longer running. After restarting Metro as a persistent user service, the Android phone's Chrome still could not load `/status` while the laptop got HTTP 200. The phone was hosting the original hotspot. User moved phone and laptop to `EVENTS1_5G`; the laptop obtained `192.168.71.88`, but phone Chrome still could not load `http://192.168.71.88:8081/status`. This establishes a device-to-laptop network block for those LAN paths, not a React Native screen failure.
+
+**Codebase checks:** SDK 58 Android manifest fetched from the laptop LAN returned HTTP 200 and `runtimeVersion=exposdk:58.0.0`; its Android bundle returned HTTP 200 (5,693,545 bytes). Mobile TypeScript and `expo install --check` passed. Backend `pytest -q` passed 28 tests and Ruff passed. Backend P0 exposes only `/health`, so it is not in the mobile launch path. A later Expo Doctor attempt could not finish its remote config check because DNS lookup for `exp.host` failed; this was a network error, not an app-schema finding.
+
+**Tunnel diagnosis and fix:** Expo's unauthenticated tunnel required an Expo CLI login; an ngrok fallback connected but repeatedly closed. A Cloudflare Quick Tunnel reached the development server. The first public manifest incorrectly advertised a bundle URL with the tunnel hostname plus local port `:8081`; restarting Metro with `EXPO_PACKAGER_PROXY_URL` set to the HTTPS tunnel URL removed that port. The persistent P0 preview now uses user services `samvad-p0-expo-stable` and `samvad-p0-cloudflared`; the current temporary app address is `exps://corps-caps-synopsis-him.trycloudflare.com`. Host-side checks of its public `/status`, SDK 58 manifest, and Android bundle all returned HTTP 200 (final bundle 5,693,593 bytes). This public URL can change if the tunnel restarts.
+
+**Android observation:** On an **iQOO Z7 Pro 5G running Android 15**, the user confirmed that, using the final `corps-caps-synopsis-him` HTTPS tunnel, phone Chrome showed `packager-status:running`, Expo Go opened Samvad, and Home, Explore, Compose, Activity, Profile, and a sample card's View conversation all worked. This is user-observed device navigation evidence, not merely a bundle export. No Android runtime error was reported during those six views.
+
+**iOS observation:** An **iPhone 17 Pro running iOS 27.0.1** is available, but the user confirmed it has not run Samvad. Metro logged repeated iOS requests rejected with `You need to be signed in to Expo Go and Expo CLI to open your project`; their source is unidentified and they are **not** treated as iPhone test evidence. Expo CLI browser sign-in was opened, then stopped at the user's request; the CLI remains signed out and the iPhone's Expo Go SDK version is unknown. No iOS screen result exists. iOS remains **BLOCKED**.
+
+**Backend reachability:** The API and a separate temporary HTTPS tunnel are persistent user services. Host-side `GET https://others-changing-closest-record.trycloudflare.com/health` returned HTTP 200 with `settings=valid`, `supabase=not_configured`, `ai=disabled_p0`. The user then confirmed the same JSON appeared in Chrome on the Android phone; Uvicorn also logged a proxied `/health` 200 followed by the browser's `/favicon.ico` request. This proves phone-browser reachability to Developer B's P0 liveness endpoint. It does **not** prove an in-app API call or Supabase connectivity; neither exists in P0.
+
+**Next:** Android P0 navigation and phone browser reachability need no further debugging. If the team resumes iOS verification, confirm an SDK 58-compatible iPhone runtime, sign Expo CLI and Expo Go into the same account, then test all six screens and phone-browser `/health`. The user deferred this sign-in/test now, so keep P0 overall blocked on iOS evidence. Do not infer device access from host-side tunnel checks.
