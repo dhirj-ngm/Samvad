@@ -9,7 +9,7 @@ const A = '50000000-0000-4000-8000-000000000001';
 const B = '50000000-0000-4000-8000-000000000002';
 let thread, other, post, allowed, held, heldThread, hiddenChild, deletedThread;
 before(async () => {
-  await db.exec(`create role anon nologin; create role authenticated nologin; create schema auth;
+  await db.exec(`create role service_role nologin; create role anon nologin; create role authenticated nologin; create schema auth;
     create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
     create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
     grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);

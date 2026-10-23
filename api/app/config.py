@@ -11,9 +11,15 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="forbid", hide_input_in_errors=True)
 
     supabase_url: str = ""
+    supabase_public_key: SecretStr = SecretStr("")
+    supabase_service_role_key: SecretStr = SecretStr("")
     supabase_jwks_url: str = ""
     supabase_jwt_audience: Literal["authenticated"] = "authenticated"
     ai_provider: Literal["groq"] = "groq"
+    ai_enabled: bool = False
+    ai_free_plan_confirmed: bool = False
+    ai_data_policy_confirmed: bool = False
+    ai_language_review_passed: bool = False
     ai_base_url: Literal["https://api.groq.com/openai/v1"] = "https://api.groq.com/openai/v1"
     groq_api_key: SecretStr = SecretStr("")
     # Intentionally unset until the operator selects verified account-visible IDs.

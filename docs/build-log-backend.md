@@ -1,5 +1,46 @@
 # Developer B build log
 
+## P4 — 24 October 2026, combined A/B implementation
+
+**Implemented:** integrate/p4 descends from accepted P0–P3 main 78e5825. No phase
+merge conflicts existed; reviewed/preserved existing final-verification notes in
+b2fa66d first. Supabase/Postgres skills and current official provider/Auth docs
+consulted. P4 authenticated translate/summary/moderate routes, ES256/RS256 JWKS
+issuer/audience/expiry/role/subject checks, strict schemas and normalized errors.
+Source reads use public key + caller token and RLS, never service-role source reads.
+Private content/model/prompt cache reauthorized per request; originals never mutated.
+Server-only atomic publication with body hash/actor/state guards and audit events.
+Migration 20261023225554_multilingual_ai applied to agreed development project;
+CLI-generated file aligned to hosted ledger without rewriting applied SQL.
+
+Shared transactional request/token/day/concurrency/user budgets; conservative UTF-8
+prompt/output reservations remain charged on failure; brief request headroom.
+Groq/Qwen only, configurable IDs, account catalog lookup before first inference,
+no retries or paid fallback. Explicit enable/Free-plan/data flags default false;
+language/policy review separately gates publication. Uncertain/malformed/outage
+results keep pending; reports never ban users. Hash-locked runtime dependencies
+include httpx/PyJWT/cryptography. Evaluation batch tool has 12 all-direction
+translation examples plus policy/threat/negation/injection/brief samples.
+
+**Tested:** configured Python 69 passed, zero skips (includes live P1–P3 regressions),
+SQL 74 passed, mobile 11 passed, TypeScript, Expo dependency compatibility and both
+platform exports passed. New AI unit tests explicitly mock upstream output; they
+do not prove live inference or language quality. Separate P4 actual two-account
+JWT/JWKS/RLS/original checks passed with no inference. Both actual shared mobile
+SDK regression checks passed; temporary rows cleaned by owners. Ruff/pip pass.
+Hosted advisor has intentional private deny-all INFO and existing disabled leaked
+password protection WARN; unused-index performance INFO only. No new security WARN.
+Temporary reachable HTTPS API serves honest P4 health with AI disabled; mobile
+points to it locally. No private keys in mobile or Git, no paid inference called.
+
+**Blocked / next:** GROQ_API_KEY and SUPABASE_SERVICE_ROLE_KEY still absent locally;
+user intends to configure them. Free-plan/data confirmation, account model check,
+live inference/cache/atomic publication, bilingual quality and Android/iPhone P4
+interaction gates remain pending. Keep language review flag false until reviewed;
+no fake success. docs/p4-verification.md has exact setup/repro/device checks.
+Publish tested integrate/p4; main stays accepted P3 until P4 external gates pass.
+Unrelated .agents/ and skills-lock.json preserved. No P5/P6 work.
+
 ## Final merged-code live rerun — 24 October 2026, 03:39 IST
 
 At main `78e5825`, freshly configured Python suite **36 passed, zero skips**,

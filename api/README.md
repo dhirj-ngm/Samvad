@@ -1,3 +1,12 @@
+# P4 current handoff
+
+P4 implements authenticated `/v1/translate`, `/v1/summarize-news`, `/v1/moderate`
+and phase-P4 `/health`. The earlier setup/history below is retained. Runtime locks
+now include httpx/PyJWT/cryptography. Copy missing fields from `.env.example`
+without overwriting existing local keys; never commit `.env`. Keep AI disabled
+until Free-plan/data configuration is verified. Language/policy review gates
+automatic publication separately. See [complete P4 setup/test instructions](../docs/p4-verification.md).
+
 # Samvad backend — P0 service and P1 identity database
 
 P2 update: discovery and publishing use the same Supabase backend directly; the

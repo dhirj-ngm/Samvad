@@ -1,5 +1,11 @@
 # Identity migration and later-phase plan
 
+P4: `20261023225554_multilingual_ai.sql` deployed to agreed development project.
+Creates private server-only cache, global budget reservations and moderation events
+with service-only ai_control operations. Original user tables/policies preserved;
+no reset or destructive migration. SQL role tests verify clients cannot call the
+server operations or read private cache/events. P4 setup and gate: docs/p4-verification.md.
+
 P3 deployment (24 October): `20261023213814_conversation_safety.sql` is applied to
 the agreed development project. Adds replies, private reports, controlled RPCs and
 account write budgets; preserves all P1/P2 data. File created by CLI then aligned
