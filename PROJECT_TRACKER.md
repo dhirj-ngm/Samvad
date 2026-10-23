@@ -1,5 +1,13 @@
 # Samvad project tracker
 
+**Current P4 handoff (24 October):** Both workstreams implemented on integrate/p4,
+based on accepted merged P0–P3 main 78e5825. No previous-phase conflicts existed.
+Preserved the prior uncommitted final verification notes in b2fa66d. Deployed P4
+private cache/quota/moderation migration; 69 Python, 74 SQL and 11 mobile tests,
+both exports, real shared SDK regressions and P4 two-account JWT/RLS checks pass.
+Server keys/Free-plan confirmation, live provider/language review and P4 Android/iOS
+gate remain pending. [Next verification](docs/p4-verification.md). No P5/P6 started.
+
 **Snapshot:** 24 October 2026 (IST), P0–P3 accepted and integrated for main; P4 has not started
 
 **Source of truth for scope:** [Product Scope](Samvad_Product_Scope.md), [technical specification](Samvad_Detailed_Project_Report_Codex.md), and [implementation plan](Samvad_Implementation.md).

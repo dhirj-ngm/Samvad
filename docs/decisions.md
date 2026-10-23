@@ -1,5 +1,19 @@
 # P0 decisions — 23 October 2026
 
+## P4 combined implementation — 24 October 2026
+
+- User assigned both P4 workstreams and previous-phase conflict handling. Main
+  already contains accepted P0–P3; no conflict to resolve. Prior local verification
+  notes preserved separately before new changes. Do not rewrite published history.
+- P4 uses private server-only cache/reservation/event tables and caller-token RLS
+  reads rather than exposing translations from held content in a client table.
+- Actual account plan/access and data acceptance are explicit configuration gates;
+  bilingual/policy review separately gates automated publication. Credentials missing
+  means disabled/blocked, never fixture or paid fallback success.
+- Shared SQL reservations enforce one concurrent inference across workers; failures
+  stay charged. No auto retry. Briefs leave request headroom for core tasks.
+- Main stays at accepted P3 until live/provider/language/native P4 gate passes.
+
 ## P3 combined ownership — 24 October 2026
 
 - User assigned both P3 workstreams to one agent and confirmed Android/iOS complete

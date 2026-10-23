@@ -1,5 +1,20 @@
 # Integration gates
 
+## P4 combined implementation — 24 October 2026
+
+Started integrate/p4 from accepted main 78e5825 (P0–P3 already merged, no conflicts).
+Preserved preexisting final-verification notes separately in b2fa66d. Both mobile
+and backend P4 code implemented; migration 20261023225554 applied non-destructively
+to agreed development project. Python 69 configured tests/zero skips, SQL 74,
+mobile 11, TypeScript, Expo compatibility, both exports, Ruff/pip and both real
+shared SDK regressions pass. Actual two-account P4 JWKS/JWT/RLS/original check passes.
+Provider-output tests use explicit mocks; no live language-quality pass inferred.
+
+**P4 provider/account/live inference: BLOCKED on server keys/configuration.**
+**Language/policy review: PENDING. Android P4: PENDING. iOS P4: PENDING.**
+No main merge or joint P4 gate pass claimed. P0–P3 acceptance remains intact.
+Use [P4 setup and verification](p4-verification.md); no P5/P6 or paid AI initiated.
+
 ## Final merged-code live rerun — 24 October 2026, 03:39 IST
 
 Main `78e5825` freshly passed **36 configured Python tests with zero skips**,

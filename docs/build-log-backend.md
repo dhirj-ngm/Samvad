@@ -30,6 +30,8 @@ JWT/JWKS/RLS/original checks passed with no inference. Both actual shared mobile
 SDK regression checks passed; temporary rows cleaned by owners. Ruff/pip pass.
 Hosted advisor has intentional private deny-all INFO and existing disabled leaked
 password protection WARN; unused-index performance INFO only. No new security WARN.
+Temporary HTTPS API passed real-token original read and expected unavailable-AI
+503 over the public tunnel; this is host HTTP evidence, not phone/live inference.
 Temporary reachable HTTPS API serves honest P4 health with AI disabled; mobile
 points to it locally. No private keys in mobile or Git, no paid inference called.
 
