@@ -1,6 +1,6 @@
 # Samvad shared contracts — P0 draft
 
-**Status:** P0 design baseline accepted by the integration captain from Developer B's `api/docs/contracts-proposal.md` and `supabase/schema-proposal.md`. Developer B's P1 identity/interests migration is committed but has not been applied to a hosted project; authenticated/AI API routes are not implemented. Both owners must review changes to this contract before coding against them. `mobile/types/contracts.ts` reflects the planned client shapes.
+**Status:** P0/P1 are integrated and accepted; P1 migration is deployed to the agreed development project. On 24 October the user assigned both P2 workstreams and integration to one agent. The P2 contracts below are the shared implementation baseline. Authenticated FastAPI/AI routes remain deferred.
 
 ## Identity and transport
 
@@ -27,7 +27,48 @@
 
 All IDs are UUID strings, including interest IDs. Server owns timestamps. Handles are lowercase ASCII `[a-z0-9_]{3,30}` and unique case-insensitively. Post/reply bodies are limited to 2000 Unicode code points. `request_id` is a client-generated UUID reused on retries; the same ID with different content is a conflict. News has one primary `topic` equal to an interest slug. Feed pages default to 20/max 50, sorted by timestamp and UUID descending; replies sort ascending. Reports never reveal reporter identity to reported users. Feed responses exclude held/deleted bodies and private identity records. Full proposed constraints and RLS are in `supabase/schema-proposal.md`.
 
-Pending implementation details: public profile view/RPC, exact feed cursor encoding, restricted soft-delete/reviewer RPCs, and device-tested Auth redirects. These require owner review before their phase is implemented.
+P1 uses direct profile tables; P2 feed cursor and soft-delete contracts are below. A future reviewer UI/API remains deferred. Auth redirects retain the accepted P1 setup.
+
+## P2 discovery and publishing — 24 October 2026
+
+The user assigned both P2 workstreams and integration to one agent. The following
+contracts are implemented together by the mobile and backend owners:
+
+- Six real, attributed source items form a curated historical archive, with visible
+  dates and publisher links. Short descriptions are editorial paraphrases, not AI
+  briefs or full article reproductions. They are not presented as live news.
+- `submit_post(p_request_id uuid,p_body text,p_language text)` returns
+  `{id,conversation_id,moderation_state,deleted}`. Actor comes only from auth.uid().
+  Exact retries return the same ID; changed body/language with the same author/key
+  fails HTTP 409 (`PT409`). Original Unicode is preserved, 1–2000 code points,
+  non-whitespace, en/hi/ml. Clients cannot set author, time, fixture flag or status.
+- Posts start pending. Trusted operator review is required for publication; no AI
+  screening or client-controlled publication is implemented. Public discovery
+  excludes held/deleted posts. Author-only inspection is separate in Profile → My
+  submissions and clearly labeled. A public-post acceptance test requires review.
+- `delete_own_post(p_post_id uuid)` clears the owner's post body and soft-deletes
+  it. No cross-user deletion, direct table mutation or undelete. Private request
+  fingerprints survive deletion; retrying an original deleted submission returns
+  its same ID with deleted=true, without exposing or recreating its body.
+- `get_discovery_feed(p_topic text|null,p_limit int=20,p_after jsonb|null)` is a
+  security-invoker RPC returning rows
+  `{kind,id,sort_at,interest_match,conversation_id,news,post}`. Public news/post
+  objects match the client DTOs; post adds is_fixture. Matching interest news ranks
+  first, then items sort by timestamp, UUID and kind DESC. A topic filters news
+  only; public original posts remain included. No selected interests falls back
+  to all sources and posts, keeping a nonempty cold-start feed.
+- Cursor: last row's exact `{matched:boolean,at:string,id:uuid,kind:'news'|'post'}`.
+  Preserve timestamp microseconds. Keyset order matches these four fields DESC;
+  limit 1–50, invalid cursor/topic/limit fails 400. Reset after topic, preferences
+  or account changes; no snapshot across changing preferences is promised.
+- Conversations are stable root associations only in P2. Source visibility
+  controls their reads; held roots remain author-only. Replies/reports/translation
+  are deferred and do not appear functional.
+- Mobile persists each account's draft and request key before sending. Failed or
+  unresolved saves retain the exact body/language/key for retry, with editing
+  locked. Double taps share one in-flight attempt. Success clears a draft only
+  after confirmation of the persisted ID. Starting a different draft after an
+  unresolved save is an explicit action with a duplicate warning.
 
 ## AI HTTP endpoints from DPR §7
 

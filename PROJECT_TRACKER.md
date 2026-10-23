@@ -1,11 +1,19 @@
 # Samvad project tracker
 
-**Snapshot:** 24 October 2026 (IST), P0/P1 complete; ready for P2
+**Snapshot:** 24 October 2026 (IST), P0/P1 accepted; P2 code and development backend implemented, new phone acceptance pending
 
 **Source of truth for scope:** [Product Scope](Samvad_Product_Scope.md), [technical specification](Samvad_Detailed_Project_Report_Codex.md), and [implementation plan](Samvad_Implementation.md).
 **Working branches:** `main` is the integrated handoff; Developer A uses `dev/mobile`, Developer B uses `dev/backend`. Pull `main` before starting new phase work. Keep owner changes on their branches and coordinate shared contracts through the integration captain.
 
 ## Where the project stands
+
+P2 was implemented for both workstreams at the user's request. The mixed feed,
+archive/source links, topic filters, durable composer, account-scoped drafts,
+pending status and owner removal are connected to Supabase. The development
+migrations and six source records are deployed; three benign demo posts were
+individually reviewed and labeled. Automated evidence and the remaining device
+checks are in [P2 verification](docs/p2-verification.md). No replies or AI features
+were added. Public visibility still requires trusted review.
 
 | Workstream | Current state | Evidence and next gate |
 |---|---|---|
@@ -18,10 +26,10 @@
 
 ## Next handoff
 
-1. **Both:** Sync from `main` before P2. Agree feed/post contracts in [shared contracts](docs/contracts.md), preserving the accepted P1 identity and privacy behavior. P2 is ready to start; it is not implemented by this closeout.
-2. **Developer A — P2 discovery/publishing:** Build the mixed news/post feed, refresh, source links, text composer, character counter, submit progress and error/retry UI.
-3. **Developer B — P2 content/storage:** Curate 6–12 attributed real headlines, add interest/recency feed retrieval, and implement owner-protected persistent posts with retry-safe creation. Do not reapply P1 migrations or run test mutations against personal accounts.
-4. **Joint P2 gate:** A new account sees a useful nonempty feed; source links open publishers; posts survive refresh; rapid retries create no duplicates.
+1. Start the merged mobile checkout's Metro server and run the P2 checklist separately on Android and iPhone.
+2. Confirm sources/topics/refresh, draft recovery, double-tap/offline retry and Unicode input on both devices.
+3. Submit a benign real test post, verify it is author-only pending, have a trusted operator review that exact ID, then confirm both accounts see one public original and owner removal works.
+4. Record device outcomes in the integration checklist before passing the joint P2 gate. P3/P4 have not started.
 
 ## Updating this tracker
 

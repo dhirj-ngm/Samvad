@@ -1,5 +1,18 @@
 # Integration gates
 
+## P2 — implementation and pending device acceptance (24 October 2026)
+
+P0/P1 closeouts below remain accepted. P2 was implemented for both developers and
+deployed to the same development project. Backend live checks, the actual shared
+SDK adapter, 41 SQL checks, 35 configured Python tests, 5 mobile model tests,
+TypeScript and Android/iOS bundle exports passed. This supports code integration,
+not a claim that new P2 screens were exercised on either device.
+
+**Android P2: PENDING. iOS P2: PENDING. Overall joint P2 gate: PENDING.**
+Use [p2-verification.md](p2-verification.md) for the exact per-device steps and
+manual review boundary. New submissions are private pending trusted review.
+No automatic publication, AI moderation, reply or report feature is claimed.
+
 | Gate | Android | iOS | Other dependencies | Overall |
 |---|---|---|---|---|
 | P0 | **PASS**: SDK 58 Expo Go launch, five tabs and sample conversation on iQOO Z7 Pro 5G / Android 15; phone Chrome `/health` passed | **PASS by user report**: Expo Go opened on iPhone 17 Pro / iOS 27.0.1; five tabs, sample conversation, Safari `/health` worked; Expo Go version not reported | Combined-tree checks passed (API 33 passed, 1 live test skipped; SQL 22 passed); P0 `/health` reachable in both phone browsers; no in-app API call exists in P0 | **PASS** for P0 bootstrap/navigation/phone health evidence. Browser health is not an in-app API test. |
