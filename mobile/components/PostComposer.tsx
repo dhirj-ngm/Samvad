@@ -76,7 +76,7 @@ export function PostComposer({ actor, handle, language }: { actor: string; handl
   return <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
     <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.wrap}>
       <Text style={styles.author}>Posting as @{handle}</Text>
-      <Text style={styles.note}>Write in English, Hindi or Malayalam. New posts are held for trusted review before becoming public.</Text>
+      <Text style={styles.note}>Write in English, Hindi or Malayalam. When AI is enabled, submitting sends your post text to Groq Free-plan AI for screening. Unavailable or uncertain screening keeps it private for trusted review.</Text>
       {loadFailed ? <Pressable accessibilityRole="button" onPress={() => setAttempt(n => n + 1)}><Text style={styles.link}>Retry draft recovery</Text></Pressable> : !draft ? <Text style={styles.note}>Restoring draft…</Text> : <>
         <View style={styles.languages}>{languages.map(option => <Pressable key={option.code} accessibilityRole="button"
           accessibilityState={{ selected: draft.language === option.code }} disabled={busy || draft.attempted}

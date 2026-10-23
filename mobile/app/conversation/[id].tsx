@@ -56,7 +56,7 @@ function ConversationContext({ id }: { id: string }) {
       {item ? <FeedCard item={item} onOpen={() => setAttempt(n => n + 1)} /> : <Text style={styles.body}>{message}</Text>}
       {item?.kind === 'post' && item.post.moderation_state !== 'allowed' ? <Text style={styles.body}>Pending or held for trusted review. This post is visible only to its author.</Text> : null}
       {item ? <ConversationThread key={`${id}:${session?.user.id ?? 'anon'}`} conversation={id} root={item} /> : null}
-      <Text style={styles.body}>Translation will be added in P4. Original text is preserved.</Text>
+      <Text style={styles.body}>AI translations may contain mistakes. Show original always restores the author’s text.</Text>
       <Pressable onPress={() => setAttempt(n => n + 1)} accessibilityRole="button"><Text style={styles.link}>Refresh context</Text></Pressable>
     </ScrollView>
     </KeyboardAvoidingView>

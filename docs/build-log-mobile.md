@@ -1,5 +1,34 @@
 # Developer A build log
 
+## P4 — 24 October 2026, combined A/B implementation
+
+**Implemented:** preferred-language translation and Show original on posts and
+replies; exact original text retained, target-language/AI/cache/experimental labels,
+processing disclosure, in-flight guards, timeout/errors and account/source/target
+remount isolation. Optional three-statement headline-based brief with source link
+retained. Shared authenticated API adapter pins initiating session and rejects
+account mismatch; HTTPS-origin configuration only. Post/reply creation attempts
+screening only after durable ID confirmation; outage does not undo save/duplicate.
+Owner-only pending screening retry in replies and My submissions. Submission copy
+discloses Groq text processing; private reports are never sent to AI. No new mobile
+runtime package, no provider/private key in EXPO_PUBLIC configuration.
+
+**Tested:** TypeScript, 11 mobile tests, Expo dependencies and Android/iOS exports
+pass. Actual shared discovery/conversation SDK regressions pass against development
+backend with ordinary accounts; temporary verification rows cleaned by owners.
+Backend 69 configured Python/74 SQL pass. Actual P4 JWT/RLS/source-original checks
+pass for both accounts without inference. No actual P4 provider output or phone
+gesture pass claimed. Existing Node/Expo warnings and P2 audit debt remain.
+
+Correct checkout's Metro restarted with local reachable P4 HTTPS API configuration;
+existing temporary Expo URL retained. API returns honest disabled AI health while
+server keys/confirmation are missing. No upgrade/fallback or fabricated translation.
+
+**Blocked / next:** live key/model/quality gates and Android/iPhone translation,
+Show original, briefs, screening, quota/outage, private-data/account/keyboard checks
+listed in docs/p4-verification.md. Keep P0–P3 accepted, P4 feature branch pending
+native/provider acceptance before main merge. Stop after P4.
+
 ## Final merged-code live rerun — 24 October 2026, 03:39 IST
 
 At main `78e5825`, both shared mobile discovery/conversation SDK adapters freshly
