@@ -1,5 +1,17 @@
 # Developer A build log
 
+### Expo Go SDK 58 compatibility (23 October 2026)
+
+- Upgraded Expo from SDK 57 to 58 and aligned React, React Native, Router,
+  native dependencies and React types with Expo's recommended versions.
+- Regenerated the lockfile with a clean install after npm encountered a conflict
+  with the existing SDK 57 dependency tree; no forced peer resolution was used.
+- Verified on Windows with Node 24.16.0: TypeScript passed, Expo dependency
+  compatibility passed, Expo Doctor passed all 20 checks, and both iOS and
+  Android bundle exports passed. Physical device launches remain unverified.
+- The updated checkout is separate from `C:\Users\Mathews\Documents\Samvad`;
+  launch Metro from the updated checkout to test SDK 58.
+
 ## P0 — 23 October 2026
 
 ### Implemented
