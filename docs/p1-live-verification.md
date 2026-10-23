@@ -1,7 +1,18 @@
 # P1 live verification — 24 October 2026
 
-Project: `mtgsyjqcoyzijicpydee` (development). P1 remains BLOCKED until the
-real-account and Android/iOS checks below pass.
+Project: `mtgsyjqcoyzijicpydee` (development). **P1 PASS**: automated backend/live
+account checks passed and the user confirmed completion of the remaining testing.
+
+## User acceptance closeout
+
+On 24 October 2026, after being asked to complete the remaining Android/iPhone,
+session/profile persistence, logout and signup confirmation checks, the user
+reported: "ok everything is working now the testing verfication is done."
+Record the joint P1 gate as PASS based on that user acceptance plus the automated
+evidence below. No new device versions, per-step results, firewall-change details
+or runtime logs were supplied; do not describe the device checks as agent-observed.
+The earlier phone/network blocker below is historical and superseded by this
+confirmation. Developers A and B can proceed to the planned P2 handoff.
 
 ## Latest combined recheck
 
@@ -24,8 +35,8 @@ at verification). No developer branch work is missing from that integration.
   confirmed host firewall obstacle; Wi-Fi client isolation has not been ruled out.
   This process is not elevated. No firewall rules were changed.
 
-The code/build/backend checks pass; current phone P1 runtime acceptance remains
-blocked on preview reachability and subsequent UI/session checks.
+At the time of this recheck, phone acceptance was blocked. The later user
+acceptance closeout above supersedes that status.
 
 ## Completed
 
@@ -73,7 +84,10 @@ blocked on preview reachability and subsequent UI/session checks.
   LAN manifest verified the correct project root and Android bundle URL. Phone
   reachability is unobserved; LAN addresses may change with the network.
 
-## Remaining
+## Verification procedure and repeat checks
+
+The user has confirmed remaining verification complete. Retain this procedure
+for regression testing; device/email acceptance is user-reported.
 
 1. Verify real signup email delivery/confirmation using a tester-owned inbox.
    The dedicated `example.com` users are admin-confirmed test accounts without
@@ -95,6 +109,6 @@ blocked on preview reachability and subsequent UI/session checks.
    handle/language/interests, retry an interrupted save, reject a taken handle,
    edit selections, restart the app and check session/profile persistence, and
    sign out. Confirmation currently uses the manual return-and-sign-in flow;
-   email delivery and redirect behavior still need observation.
-4. Record exact account-test results and each device outcome before marking P1
-   PASS. Prior P0 navigation and bundle checks do not prove live P1 behavior.
+   email delivery and redirect behavior require observation when repeating tests.
+4. Record exact account-test results and each device outcome on future regression
+   runs. Prior P0 navigation and bundle checks do not prove live P1 behavior.

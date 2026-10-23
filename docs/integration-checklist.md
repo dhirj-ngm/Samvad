@@ -3,7 +3,13 @@
 | Gate | Android | iOS | Other dependencies | Overall |
 |---|---|---|---|---|
 | P0 | **PASS**: SDK 58 Expo Go launch, five tabs and sample conversation on iQOO Z7 Pro 5G / Android 15; phone Chrome `/health` passed | **PASS by user report**: Expo Go opened on iPhone 17 Pro / iOS 27.0.1; five tabs, sample conversation, Safari `/health` worked; Expo Go version not reported | Combined-tree checks passed (API 33 passed, 1 live test skipped; SQL 22 passed); P0 `/health` reachable in both phone browsers; no in-app API call exists in P0 | **PASS** for P0 bootstrap/navigation/phone health evidence. Browser health is not an in-app API test. |
-| P1 | **BLOCKED**: configured P1 preview ready; Android UI/session/logout run pending | **BLOCKED**: configured P1 preview ready; iOS UI/session/logout run pending | Hosted migration, RLS/grants, live password login and PostgREST onboarding/retry/duplicate-handle/cross-account privacy checks PASS with two admin-confirmed test users; SQL 22 passed. Signup email delivery still needs observation. [Evidence](p1-live-verification.md) | **BLOCKED**: mobile onboarding/session restoration/logout and signup confirmation remain unverified |
+| P1 | **PASS by user closeout confirmation** of remaining verification; no new per-device logs supplied | **PASS by user closeout confirmation** of remaining verification; no new per-device logs supplied | Hosted migration; backend 34 passed, no skips; SQL 22 passed; live Auth/onboarding/privacy and refresh/logout checks passed; TypeScript and both bundle exports passed. [Evidence](p1-live-verification.md) | **PASS**: automated evidence plus user acceptance on 24 October 2026. Ready for P2. |
+
+P1 closeout on 24 October 2026: After the remaining Android/iPhone, session,
+logout and signup confirmation checks were requested, the user confirmed that
+everything works and testing/verification is complete. This is user-reported
+acceptance, not direct agent observation of phone steps. Earlier P1 blockers in
+historical logs are superseded. P2 implementation has not started in this closeout.
 
 P0 closeout on 24 October 2026: The user confirmed that all six P0 views and Safari `/health` worked on the previously identified iPhone 17 Pro / iOS 27.0.1, with no error reported. The Expo Go version was not provided. This updates the earlier blocked iOS attempt below; it does not retroactively make the P0 app-to-API path exist.
 
