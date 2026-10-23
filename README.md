@@ -1,6 +1,6 @@
 # Samvad
 
-Samvad is an Expo/React Native app for Android and iOS with a separate FastAPI and Supabase backend. The P0 mobile app has a navigation shell and labeled sample UI; it is not connected to the backend yet. Authentication, publishing, translation, and live content are not available in the app.
+Samvad is an Expo/React Native app for Android and iOS with a separate FastAPI and Supabase backend. The app includes the P0 navigation shell and labeled sample UI alongside P1 authentication and onboarding. Live accounts require development Supabase configuration and the reviewed identity migration. Publishing, translation, and live content remain future phases.
 
 **Current handoff:** [PROJECT_TRACKER.md](PROJECT_TRACKER.md) shows each owner's progress, open gates, and next actions.
 
@@ -25,7 +25,7 @@ with `npx expo start --clear`. If the phone cannot reach Metro over Wi-Fi, try
 
 The product scope, technical specification, and implementation plan are the three `Samvad_*.md` files at the repository root. The proposed shared contract is in `docs/contracts.md`; Developer B's proposal is in `api/docs/contracts-proposal.md`. Developer A owns `mobile/**`, while Developer B owns `api/**` and `supabase/**`.
 
-The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. The user observed all five tabs, a sample conversation, and browser `/health` on both Android and iPhone; the P0 gate passed on this user-reported evidence. P1 Auth/onboarding code is on `dev/mobile`, but its live Supabase and device gate is blocked. No in-app API call exists in P0.
+The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. The user observed all five tabs, a sample conversation, and browser `/health` on both Android and iPhone; the P0 gate passed on this user-reported evidence. P1 Auth/onboarding code is integrated, but its live Supabase and device gate is blocked. P1 uses Supabase directly; no in-app FastAPI call exists in P0.
 
 ### If Expo Go buffers on a phone
 
