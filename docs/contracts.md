@@ -1,6 +1,6 @@
 # Samvad shared contracts — P0 draft
 
-**Status:** P0 design baseline accepted by the integration captain from Developer B's `api/docs/contracts-proposal.md` and `supabase/schema-proposal.md`. No database migration or authenticated/AI API is implemented yet. Both owners must review changes to this contract before coding against them. `mobile/types/contracts.ts` reflects the planned client shapes.
+**Status:** P0 design baseline accepted by the integration captain from Developer B's `api/docs/contracts-proposal.md` and `supabase/schema-proposal.md`. Developer B's P1 identity/interests migration is committed but has not been applied to a hosted project; authenticated/AI API routes are not implemented. Both owners must review changes to this contract before coding against them. `mobile/types/contracts.ts` reflects the planned client shapes.
 
 ## Identity and transport
 

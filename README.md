@@ -2,6 +2,8 @@
 
 Samvad is an Expo/React Native app for Android and iOS with a separate FastAPI and Supabase backend. The P0 mobile app has a navigation shell and labeled sample UI; it is not connected to the backend yet. Authentication, publishing, translation, and live content are not available in the app.
 
+**Current handoff:** [PROJECT_TRACKER.md](PROJECT_TRACKER.md) shows each owner's progress, open gates, and next actions.
+
 ## Mobile setup
 
 ```bash
@@ -15,7 +17,7 @@ The mobile project is on Expo SDK 58. Open the dev-server address shown by Expo 
 
 The product scope, technical specification, and implementation plan are the three `Samvad_*.md` files at the repository root. The proposed shared contract is in `docs/contracts.md`; Developer B's proposal is in `api/docs/contracts-proposal.md`. Developer A owns `mobile/**`, while Developer B owns `api/**` and `supabase/**`.
 
-The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. Both platform bundles can export, and the user has observed the sample app opening on Android; full Android navigation, iOS launch, and phone-to-API connectivity still require device checks.
+The P0 backend exposes only `GET /health`; see [api/README.md](api/README.md) for setup and tests. `docs/integration-checklist.md` records the current gate status. Both platform bundles can export. The user observed all five tabs and a sample conversation on Android, and loaded `/health` in Android Chrome. The iOS launch remains untested; no in-app API call exists in P0.
 
 ### If Expo Go buffers on a phone
 
