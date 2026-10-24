@@ -1,8 +1,11 @@
 # P6 actual verification and release gate
 
 24 October 2026. Branch `release/p6-demo`, based on P0–P5 integration `6bb366a`.
-**Local P6 preparation implemented; final release gate PENDING.** No P6 push,
-main merge, hosted migration, cloud build, deployment or final tag performed.
+**P6 source publication authorized; final release gate PENDING.** The user's latest
+request to push everything supersedes the earlier no-push restriction. P6 source
+and all prior phases are being published to main and `release/p6-demo`. Fresh
+focused verification: 21 P6 tests passed; Ruff passed. No hosted migration,
+cloud build, deployment or final release tag is part of this source publication.
 The user's earlier Android/iOS and P5 functional PASS remains valid user-reported
 evidence; it does not supply a new final venue rehearsal or language-policy sign-off.
 
@@ -61,7 +64,7 @@ ignored. Secrets were not printed, committed or sent to a provider by P6.
 | Four dependency findings | Owner/security reviewer resolves or explicitly records a limited-demo risk disposition. The earlier choice to leave them open is preserved, not treated as security clearance. |
 | Native standalone artifacts | Optional while Expo Go is used. Configure actual app identifiers, signing and approved build target before any later APK/IPA/cloud build. |
 | Hosted/full-time availability | Not deployed. Existing hosted schema is older; explicit reviewed migration, backup/restore rehearsal and HTTPS gateway setup are separate work. |
-| Release main/tag/push | Deferred under the retained no-push instruction and pending sign-off. Do not create `hackathon-demo-v1` yet. |
+| Source push and final release tag | Main/P6 source publication authorized by the latest user request. Final release sign-off/tag remains pending; do not create `hackathon-demo-v1` yet. |
 | Ten consenting participants | Separate observed acceptance. No invitations or pilot PASS claimed. |
 
 Follow [P6 runbook](P6_RELEASE_RUNBOOK.md) for restart, fresh setup, secure accounts,

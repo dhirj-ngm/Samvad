@@ -1,5 +1,12 @@
 # Samvad project tracker
 
+**Latest source publication (24 October):** User explicitly requested pushing
+everything to GitHub, superseding the earlier no-push restriction. P6 preparation
+commit `2e6297e` and its complete P0–P5 ancestry are included in this publication
+to main and `release/p6-demo`. Fresh focused P6 checks: 21 passed; Ruff passed.
+Source publication does not close the final P6 device/language/security acceptance
+gate or create a release tag, hosted deployment or standalone mobile build.
+
 **P6 release preparation (24 October):** Combined Developer A/B local candidate
 on `release/p6-demo`, based on integrated P0–P5 `6bb366a`. Implemented secret-safe
 network/config/migration/Android/iOS manifest preflight and source fingerprint,
