@@ -1,5 +1,15 @@
 # Developer A build log
 
+## 2026-10-24 — Final AI demo and all-phase integration checks
+
+User authorized committing/merging current work with all previous phases and
+pushing to GitHub. Mobile **22 tests**, TypeScript, Expo compatibility and fresh
+Android/iOS exports passed. Combined backend **94 configured tests, zero skips**
+and **105 SQL tests** passed. The demo UI retains originals, provider/cache
+provenance, retryable private saves and protected publication review. These checks
+do not replace actual phone or human language acceptance; those remain pending.
+See [AI demo verification](ai-demo-verification.md) and [runbook](AI_DEMO_RUNBOOK.md).
+
 ## 2026-10-24 - Teammate UI handoff and pre-AI publication
 
 User authorized publishing current P4.5 on feature/p4-5-social for the other

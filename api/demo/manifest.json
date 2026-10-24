@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "description": "Fictional conversations for four dedicated Samvad demo accounts. Actual Auth mappings are private.",
+  "threads": [
+    {
+      "key": "T1",
+      "root": {
+        "actor": "A",
+        "body": "ബസ് എപ്പോൾ എത്തുമെന്ന് അറിയാൻ ഒരു ലളിതമായ സംവിധാനം ഉണ്ടായാൽ യാത്ര എളുപ്പമാകില്ലേ? നിങ്ങൾക്ക് ഏറ്റവും ഉപകാരപ്പെടുന്ന വിവരം എന്താണ്?",
+        "language": "ml"
+      },
+      "replies": [
+        {
+          "actor": "B",
+          "body": "बस आने का अनुमान और आखिरी अपडेट का समय दिखे, तो मेरे लिए काफी मदद होगी।",
+          "language": "hi"
+        },
+        {
+          "actor": "C",
+          "body": "@demo_aarav I agree. Showing when the estimate was updated would help us judge whether it is still useful.",
+          "language": "en"
+        },
+        {
+          "actor": "D",
+          "body": "എല്ലാവർക്കും വേഗമുള്ള ഇന്റർനെറ്റ് ഉണ്ടാകണമെന്നില്ല. കുറച്ച് ഡാറ്റയിൽ പ്രവർത്തിക്കുന്ന രീതിയും വേണം.",
+          "language": "ml"
+        },
+        {
+          "actor": "A",
+          "body": "@demo_faiz ശരിയാണ്. ഏറ്റവും പുതിയ വിവരം എപ്പോഴാണ് ലഭിച്ചതെന്ന് വ്യക്തമായി കാണിക്കാം.",
+          "language": "ml"
+        }
+      ]
+    },
+    {
+      "key": "T2",
+      "root": {
+        "actor": "C",
+        "body": "I would like to test a small bus-information board before proposing a full app. It could show the next expected arrival, the route and when the information was last updated. An estimate should be marked as an estimate, because traffic can change it. The first trial could cover two stops and collect voluntary feedback about whether the information helped people decide when to leave. It should work on a basic phone connection and avoid collecting personal travel histories. A printed timetable could remain available for people who do not want to use a phone. We should compare this approach with a simpler timetable improvement before deciding what to build. A short trial would help us understand which option is easier to maintain, including who updates it when a route changes. This is a proposal for discussion, not a claim that live bus tracking already exists or that arrival estimates would always be accurate.",
+        "language": "en"
+      },
+      "replies": [
+        {
+          "actor": "B",
+          "body": "मैं इस सुझाव से पूरी तरह सहमत नहीं हूँ। पहले मौजूदा समय-सारणी ठीक करना शायद ज्यादा उपयोगी हो।",
+          "language": "hi"
+        },
+        {
+          "actor": "A",
+          "body": "ആദ്യം ചെറിയൊരു പരീക്ഷണം നടത്തി ആളുകളുടെ അഭിപ്രായം കേൾക്കുന്നത് നല്ലതാണ്.",
+          "language": "ml"
+        },
+        {
+          "actor": "D",
+          "body": "Both ideas seem worth testing. Can we compare a clearer timetable with the information board before choosing?",
+          "language": "en"
+        }
+      ]
+    },
+    {
+      "key": "T3",
+      "root": null,
+      "replies": [
+        {
+          "actor": "C",
+          "body": "Before discussing this story, I want to check the publisher and its date. This is an archive item, not breaking news.",
+          "language": "en"
+        },
+        {
+          "actor": "A",
+          "body": "ഉറവിടവും തീയതിയും വ്യക്തമായി കാണിക്കുന്നത് നല്ലതാണ്. പൂർണ്ണവിവരം അറിയാൻ അസൽ വാർത്ത വായിക്കാം.",
+          "language": "ml"
+        },
+        {
+          "actor": "B",
+          "body": "सहमत। संक्षेप में वही जानकारी होनी चाहिए जो दिए गए स्रोत में उपलब्ध है।",
+          "language": "hi"
+        },
+        {
+          "actor": "D",
+          "body": "@demo_meera Let's discuss what the source actually says and keep our opinions separate from its reported facts.",
+          "language": "en"
+        }
+      ]
+    }
+  ],
+  "held_reply": "I will hurt you after class."
+}

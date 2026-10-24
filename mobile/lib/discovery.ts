@@ -6,7 +6,7 @@ import type {
   OwnPost,
 } from "../types/contracts";
 import type { PostDraft } from "./post-model";
-import { screenSubmission } from "./ai-client.ts";
+import { aiDemoEnabled, requestAI, screenSubmission } from "./ai-client.ts";
 
 export async function loadFeed(
   client: SupabaseClient,
@@ -56,7 +56,11 @@ export async function submitPost(
   } = await client.auth.getSession();
   if (sessionError || !session || session.user.id !== actor)
     throw new Error("Sign in again to save your post.");
-  const { data, error } = await client
+  const { data, error } = aiDemoEnabled ? {
+    data: await requestAI(client, actor, 'submit-and-screen', {
+      entity_type: 'post', request_id: draft.requestId, body: draft.body, language: draft.language,
+    }), error: null,
+  } : await client
     .rpc("submit_post", {
       p_request_id: draft.requestId,
       p_body: draft.body,
@@ -85,7 +89,7 @@ export async function submitPost(
       "Your save was not confirmed. Your draft is kept; retry the same submission.",
     );
   }
-  if (!data.deleted && data.moderation_state === "pending") {
+  if (!aiDemoEnabled && !data.deleted && data.moderation_state === "pending") {
     const state = await screenSubmission(client, actor, "post", data.id);
     if (state) data.moderation_state = state;
   }

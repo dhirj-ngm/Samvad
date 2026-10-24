@@ -12,6 +12,8 @@ import {
   View,
 } from "react-native";
 import { Screen } from "../components/Screen";
+import { PublicationReview } from '../components/PublicationReview';
+import { aiDemoEnabled } from '../lib/ai-client';
 import { actionStyle, linkStyle } from "../components/SocialUI";
 import { useAuth } from "../lib/auth";
 import { social } from "../lib/social";
@@ -162,6 +164,7 @@ function ReviewSession() {
           </Pressable>
           {authorized ? (
             <>
+              {aiDemoEnabled?<PublicationReview key={actor}/>:null}
               <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
                 {["submitted", "resolved", "dismissed"].map((s) => (
                   <Pressable

@@ -230,3 +230,19 @@ contracts are implemented together by the mobile and backend owners:
 HTTP status semantics: `400` invalid input, `401` unauthenticated, `403` unauthorized, `404` inaccessible/not found, `409` idempotency conflict, `429` rate limited, `503` AI/auth unavailable. Planned error envelope: `{ "error": { "code": "ai_unavailable", "message": "...", "retryable": true } }`. Translation failure leaves the original visible.
 
 Provenance is `live`, `cache`, `fixture`, or `original` as applicable. Fixtures require explicit demo mode and a visible `Demo fixture` label; they cannot be presented as live inference. API base path is `/v1`; timeout and rate limits remain server-configurable. No live AI claim until provider access is verified. The full planned validation and failure rules are in `api/docs/contracts-proposal.md`.
+# Final bounded AI demo additions
+
+Enabled explicitly with server `AI_DEMO_ENABLED=true` and mobile
+`EXPO_PUBLIC_AI_DEMO=true`. Existing P4 routes remain available.
+
+| Route | Auth / contract |
+|---|---|
+| POST `/v1/submit-and-screen` | Caller JWT; entity_type post/reply, stable request_id, original body, EN/HI/ML language, reply conversation/optional parent. Saves using caller-authorized RPC before screening. HTTP 202 means saved privately with retryable screening; HTTP 200 means confirmed terminal/existing result. IDs remain stable on exact retry. |
+| POST `/v1/summarize` | Caller JWT; entity_type post/news, entity_id, target_language. Returns english_lines (4–5), native_lines/status/language, source basis/URL, independent English/native provenance and overall provenance. Inadequate source returns 400 insufficient_source. |
+| POST `/v1/review-queue` | Caller JWT plus protected DB reviewer membership; returns held nondeleted source/hash/state and fixture provenance, without contact identity. |
+| POST `/v1/review` | Reviewer only; stable request_id, source_hash, expected_state, entity_type/id, approve/reject and reason. Atomic audited idempotent transition; stale source/state conflicts. Does not modify manual_hidden. |
+
+Demo translation uses Sarvam with private persisted lifetime character reservations;
+moderation and English summaries use the configured Groq model. Every cache read
+retains caller source authorization. No client controls actor, model, budgets or
+publication state. See `AI_DEMO_RUNBOOK.md` for limits and human approval gates.

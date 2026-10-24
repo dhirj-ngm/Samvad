@@ -3,7 +3,8 @@ import { useState } from "react";
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import type { FeedItem, InteractionState, Mention } from "../types/contracts";
 import { colors, radius, spacing, type } from "../theme/tokens";
-import { AIText, NewsBrief } from "./AIText";
+import { AIText, ContentSummary, NewsBrief } from "./AIText";
+import { aiDemoEnabled } from '../lib/ai-client';
 
 export function FeedCard({
   item,
@@ -65,6 +66,7 @@ export function FeedCard({
         <Text style={styles.description}>{item.news.excerpt}</Text>
       ) : null}
       {news ? <NewsBrief id={item.news.id} /> : null}
+      {!news && aiDemoEnabled && item.post.body.length>250 ? <ContentSummary id={item.post.id} entityType="post"/> : null}
       <View style={styles.footer}>
         {news ? (
           <Pressable onPress={() => void openSource()} accessibilityRole="link">

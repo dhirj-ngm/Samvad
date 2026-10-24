@@ -1,5 +1,15 @@
 # Samvad project tracker
 
+**Current source integration (24 October):** User authorized merging
+`feature/ai-demo` with all earlier phases onto main and publishing to GitHub.
+Fresh checks: **94 configured Python tests (zero skips), 105 SQL tests, 22 mobile
+tests**, TypeScript, Expo compatibility, Ruff, pip check and Android/iOS exports
+passed. Local Auth/save/review HTTP smoke passed. See
+[AI demo verification](docs/ai-demo-verification.md). P0–P3 acceptance remains;
+P4/AI-demo language review, native device acceptance and venue rehearsal remain
+pending. Hosted social/final AI migrations and gateway deployment are separate
+from source publication. Automatic publication stays disabled.
+
 **P4.5 publication/preflight (24 October):** User authorized sharing current work
 on `feature/p4-5-social` before final AI development. Fresh checks: 96 SQL, 20 mobile,
 79 Python passed / 3 live tests skipped; TypeScript/Ruff/pip check passed. Local

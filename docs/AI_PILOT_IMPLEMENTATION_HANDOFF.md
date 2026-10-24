@@ -1,11 +1,13 @@
 # Samvad AI demo: implementation handoff
 
-**Version 2.0 - 24 October 2026. Status: implementation specification, not a completion claim.**
+**Version 2.1 - 24 October 2026. Local prototype implemented; human/device acceptance pending.**
 
 The current observed setup and outstanding inputs are recorded in
 [AI_DEMO_PREFLIGHT.md](AI_DEMO_PREFLIGHT.md). Stage new Sarvam preparation values
 in ignored `api/.env.ai-demo-inputs` using the supplied preparation template;
-the current strict API Settings model does not accept those new runtime fields yet.
+the final launcher now validates and integrates those fields. See
+[AI_DEMO_RUNBOOK.md](AI_DEMO_RUNBOOK.md) for operation and
+[ai-demo-verification.md](ai-demo-verification.md) for actual evidence.
 
 ## 1. Final decision and authority
 
@@ -445,3 +447,12 @@ Do not push, apply hosted migrations, activate billing, buy credits, send invita
 
 Complete the authorized local build rather than stopping at a plan. Finish with changed files, actual test results, run/seed/rehearsal commands, provider/device status, remaining external requirements and a truthful prepared-demo versus live-AI readiness verdict. Keep incomplete items explicit.
 ```
+# Implementation status — 24 October 2026
+
+The bounded local prototype is implemented on `feature/ai-demo`. Read
+`docs/AI_DEMO_RUNBOOK.md`, `docs/ai-demo-verification.md` and
+`docs/AI_LANGUAGE_REVIEW.md` for current runtime, evidence and remaining acceptance.
+The latest requested account mapping overrides the illustrative persona handles:
+A=dolla, B=nightangel, C=blackman, D=preserved existing account. Personal emails
+and passwords are private local files. Automatic publication is still gated on
+human review; seeded publication is explicitly operator-reviewed fixture content.

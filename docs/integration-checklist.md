@@ -1,5 +1,17 @@
 # Integration gates
 
+## Current-work integration with all prior phases — 24 October 2026
+
+The user requested merging/pushing the P4.5 social and final local AI demo work
+alongside P0–P4. The feature branch descends from existing main `4d6c321`, which
+already includes P0–P4. Fresh verification: **94 configured Python tests, zero
+skips; 105 SQL tests; 22 mobile tests**. Both platform exports, TypeScript, Expo
+compatibility, Ruff, pip check and local Auth/save/retry/reviewer HTTP smoke pass.
+See [AI demo evidence](ai-demo-verification.md). This publishes source only:
+human EN/HI/ML review, new native phone acceptance and venue rehearsal remain
+pending. Hosted social/AI migration deployment remains separate. P0–P3 accepted
+status is preserved; automatic publication is OFF.
+
 ## P0–P4 main integration — 24 October 2026
 
 User requested pushing all phases through P4 and resolving any conflicts. P4

@@ -172,7 +172,7 @@ export function PostComposer({
         <Text style={styles.author}>Posting as @{handle}</Text>
         <Text style={styles.note}>
           Write in English, Hindi or Malayalam. When AI is enabled, submitting
-          sends your post text to Groq Free-plan AI for screening. Unavailable
+          uses Groq for screening and Sarvam for translation. Unavailable
           or uncertain screening keeps it private for trusted review.
         </Text>
         {loadFailed ? (

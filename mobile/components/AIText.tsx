@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../lib/auth';
 import { supabase } from '../lib/supabase';
-import { requestAI } from '../lib/ai-client';
+import { aiDemoEnabled, requestAI } from '../lib/ai-client';
 import type { EntityType, LanguageCode } from '../types/contracts';
 import { colors, spacing, type } from '../theme/tokens';
 
@@ -33,7 +33,7 @@ function Translation({entityType,id,original,language,target,actor}: {entityType
     <Text selectable style={styles.body}>{show?translated:original}</Text>
     {show?<Text style={styles.note}>{originalResult?'Original text':'Translated by AI'} · {target.toUpperCase()}{cached?' · cached':''}{experimental?' · experimental, language review pending':''}</Text>:null}
     {language!==target?<>
-      <Text style={styles.note}>Translation sends this text to Groq Free-plan AI. It may contain mistakes.</Text>
+      <Text style={styles.note}>AI translation may contain mistakes. {aiDemoEnabled?'Processed by Sarvam.':'Processed by Groq.'}</Text>
       <Pressable accessibilityRole="button" disabled={busy} onPress={()=>show?setShow(false):void translate()}><Text style={styles.link}>{busy?'Translating…':show?'Show original':`Read in ${target==='ml'?'മലയാളം':target==='hi'?'हिन्दी':'English'}`}</Text></Pressable>
     </>:null}
     {message?<Text accessibilityLiveRegion="polite" style={styles.note}>{message}</Text>:null}
@@ -41,7 +41,42 @@ function Translation({entityType,id,original,language,target,actor}: {entityType
 }
 export function NewsBrief({id}: {id:string}) {
   const {session,profile}=useAuth();
+  if(aiDemoEnabled)return <ContentSummary id={id} entityType="news"/>;
   return <Brief key={`${session?.user.id}:${id}:${profile?.preferred_language}`} id={id} actor={session?.user.id} language={profile?.preferred_language??'en'}/>;
+}
+export function ContentSummary({id,entityType}:{id:string;entityType:'news'|'post'}) {
+  const {session,profile}=useAuth();
+  const actor=session?.user.id,target=profile?.preferred_language??'en';
+  return <DemoSummary key={`${actor}:${id}:${target}`} id={id} entityType={entityType} actor={actor} target={target}/>;
+}
+function DemoSummary({id,entityType,actor,target}:{id:string;entityType:'news'|'post';actor?:string;target:LanguageCode}){
+  const [english,setEnglish]=useState<string[]>([]),[native,setNative]=useState<string[]>([]),[showNative,setShowNative]=useState(false);
+  const [label,setLabel]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[cached,setCached]=useState(false),[open,setOpen]=useState(false);
+  const alive=useRef(true),lock=useRef(false);
+  useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
+  async function load(){
+    if(!supabase||!actor){setMessage('Sign in to request a summary.');return;}
+    if(lock.current)return;lock.current=true;setBusy(true);setMessage('');
+    try{
+      const d=await requestAI(supabase,actor,'summarize',{entity_type:entityType,entity_id:id,target_language:target});
+      if(!Array.isArray(d.english_lines)||d.english_lines.length<4||d.english_lines.length>5||!d.english_lines.every((s:unknown)=>typeof s==='string'&&s.trim()))throw new Error('Summary unavailable. Read the original.');
+      if(alive.current){setEnglish(d.english_lines);setNative(d.native_status==='available'||target==='en'?d.native_lines:[]);setLabel(d.label);setCached(d.is_cached===true);setOpen(true);if(d.native_status==='unavailable')setMessage('English summary is ready. Retry for your reading language.');}
+    }catch(e){if(alive.current)setMessage(e instanceof Error?e.message:'Summary unavailable.');}
+    finally{lock.current=false;if(alive.current)setBusy(false);}
+  }
+  return <View>
+    <Pressable accessibilityRole="button" disabled={busy} onPress={()=>english.length?setOpen(!open):void load()}><Text style={styles.link}>{busy?'Preparing summary…':open?'Hide summary':'Summarize'}</Text></Pressable>
+    {open&&english.length?<View style={{backgroundColor:colors.accentSoft,padding:16,borderRadius:12}}>
+      <Text style={styles.note}>{label} · AI generated{cached?' · previously generated':''}</Text>
+      {target!=='en'?<View style={{flexDirection:'row',gap:20}}>
+        <Pressable accessibilityRole="button" onPress={()=>setShowNative(false)}><Text style={styles.link}>English</Text></Pressable>
+        <Pressable accessibilityRole="button" onPress={()=>native.length?setShowNative(true):void load()}><Text style={styles.link}>{target==='ml'?'മലയാളം':'हिन्दी'}{!native.length?' · retry':''}</Text></Pressable>
+      </View>:null}
+      {(showNative&&native.length?native:english).map((line,i)=><Text key={i} selectable style={styles.body}>• {line}</Text>)}
+      <Text style={styles.note}>The full original stays above. AI can make mistakes.</Text>
+    </View>:null}
+    {message?<Text accessibilityLiveRegion="polite" style={styles.note}>{message}</Text>:null}
+  </View>;
 }
 function Brief({id,actor,language}: {id:string;actor?:string;language:LanguageCode}) {
   const [lines,setLines]=useState<string[]|null>(null),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[cached,setCached]=useState(false);
@@ -78,5 +113,5 @@ export function ScreeningRetry({actor,entityType,id,onDone}: {actor:string;entit
     catch(error){if(alive.current)setMessage(error instanceof Error?error.message:'Screening unavailable. Content stays pending.');}
     finally{inFlight.current=false;if(alive.current)setBusy(false);}
   }
-  return <View><Text style={styles.note}>Screening sends this text to Groq Free-plan AI. Unavailable or uncertain screening keeps it private.</Text><Pressable disabled={busy} accessibilityRole="button" onPress={()=>void screen()}><Text style={styles.link}>{busy?'Checking screening…':'Retry AI screening'}</Text></Pressable>{message?<Text style={styles.note}>{message}</Text>:null}</View>;
+  return <View><Text style={styles.note}>Screening uses Groq and, when needed, Sarvam. Unavailable or uncertain screening keeps it private.</Text><Pressable disabled={busy} accessibilityRole="button" onPress={()=>void screen()}><Text style={styles.link}>{busy?'Checking screening…':'Retry AI screening'}</Text></Pressable>{message?<Text style={styles.note}>{message}</Text>:null}</View>;
 }

@@ -121,7 +121,7 @@ export function ConversationComposer({
       <Text style={styles.note}>
         {report
           ? "Your report and details are private to you and platform reviewers. Reporting does not automatically remove content."
-          : "Be respectful. Disagreement is allowed; threats, harassment and sharing private information are not. When AI is enabled, submitting sends your reply text to Groq Free-plan AI for screening. Unavailable or uncertain screening keeps it private for review."}
+          : "Be respectful. Disagreement is allowed; threats, harassment and sharing private information are not. When AI is enabled, submitting uses Groq for screening and Sarvam for translation. Unavailable or uncertain screening keeps it private for review."}
       </Text>
       {!draft ? (
         <Pressable

@@ -5,7 +5,21 @@ that the new AI demo is already implemented. No keys/passwords are included.
 The existing P4.5 build is prepared for publication on `feature/p4-5-social`; main is
 not automatically promoted and no hosted migration is performed by this audit.
 
-## Six prerequisites
+## Final implementation update — 24 October 2026
+
+The historical preflight below is superseded for the **local attended demo** by
+`AI_DEMO_RUNBOOK.md` and `ai-demo-verification.md`.
+
+| # | Current local status |
+|---|---|
+| 1 | Local Auth/database/gateway aligned; eighth migration applied locally and linted. Hosted environment unchanged. |
+| 2 | Groq real English summary and moderation smoke succeeded; no paid fallback. |
+| 3 | Saved Sarvam credentials used successfully; authorization ₹50 / 10,000-character maximum enforced by shared persistent reservations. |
+| 4 | dolla, nightangel and blackman created; fourth account/password preserved; exact four-person fixtures and local reviewer prepared. |
+| 5 | New preview on port 8086, gateway 8775; current Wi-Fi address 192.168.29.101. iOS/Android bundles compiled. Actual phone acceptance pending. |
+| 6 | AI feature implementation is on local feature/ai-demo. Human multilingual evaluation and final venue rehearsal remain pending. |
+
+## Historical six-prerequisite audit
 
 | # | Item | Observed status | Remaining action |
 |---|---|---|---|

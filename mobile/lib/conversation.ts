@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Reply } from '../types/contracts';
 import type { ConversationDraft, ReportTarget } from './conversation-model';
-import { screenSubmission } from './ai-client.ts';
+import { aiDemoEnabled, requestAI, screenSubmission } from './ai-client.ts';
 
 export async function loadReplies(client: SupabaseClient, conversation: string, after: { at: string; id: string } | null) {
   const { data, error } = await client.rpc('get_replies', { p_conversation_id: conversation, p_limit: 30, p_after: after });
@@ -21,14 +21,17 @@ export async function actorRpc(client: SupabaseClient, actor: string, name: stri
   return data;
 }
 export async function submitReply(client: SupabaseClient, actor: string, conversation: string, parent: string | null, draft: ConversationDraft) {
-  const data = await actorRpc(client,actor,'submit_reply',{
+  const data = aiDemoEnabled ? await requestAI(client,actor,'submit-and-screen',{
+    entity_type:'reply',request_id:draft.requestId,conversation_id:conversation,
+    parent_reply_id:parent,body:draft.body,language:draft.language,
+  }) : await actorRpc(client,actor,'submit_reply',{
     p_request_id: draft.requestId, p_conversation_id: conversation, p_parent_reply_id: parent,
     p_body: draft.body, p_language: draft.language,
   });
   if (!data || typeof data.id !== 'string' || data.conversation_id !== conversation ||
       typeof data.deleted !== 'boolean' || !['pending','allowed','flagged','blocked'].includes(data.moderation_state))
     throw new Error('Save was not confirmed. Retry the same draft.');
-  if (!data.deleted && data.moderation_state === 'pending') {
+  if (!aiDemoEnabled && !data.deleted && data.moderation_state === 'pending') {
     const state = await screenSubmission(client, actor, 'reply', data.id);
     if (state) data.moderation_state = state;
   }

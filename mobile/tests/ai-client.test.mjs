@@ -6,6 +6,19 @@ test('AI base requires an HTTPS origin without embedded credentials',()=>{
   assert.equal(validAPIBase('https://example.org'),true);
   for(const value of [undefined,'http://localhost:8000','https://user:secret@example.org','https://example.org/?key=secret','https://example.org/v1','bad'])assert.equal(validAPIBase(value),false);
 });
+test('local HTTP requires explicit opt-in and cannot address public hosts or URL paths',()=>{
+  assert.equal(validAPIBase('http://192.168.29.101:8775',true),true);
+  assert.equal(validAPIBase('http://192.168.29.101:8775'),false);
+  for(const value of ['http://example.org','http://8.8.8.8','http://192.168.1.2/v1','http://user:pass@127.0.0.1'])
+    assert.equal(validAPIBase(value,true),false);
+});
+test('a confirmed 202 save is returned intact for pending-screening recovery',async()=>{
+  const previous=globalThis.fetch;let calls=0;
+  const saved={id:'stable-id',saved:true,moderation_state:'pending',retryable:true};
+  globalThis.fetch=async()=>{calls++;return {ok:true,status:202,json:async()=>saved};};
+  try{assert.deepEqual(await requestAI(client,'A','submit-and-screen',{},'https://example.org'),saved);assert.equal(calls,1);}
+  finally{globalThis.fetch=previous;}
+});
 test('account mismatch prevents any network call',async()=>{
   const previous=globalThis.fetch;globalThis.fetch=()=>{throw new Error('Should not send');};
   try{await assert.rejects(()=>requestAI(client,'B','translate',{},'https://example.org'),/Sign in/);}finally{globalThis.fetch=previous;}
