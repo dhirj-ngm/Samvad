@@ -61,10 +61,13 @@ function AccountSettings() {
   async function logout() {
     if (!supabase || busy) return;
     setBusy(true);
-    const { error } = await supabase.auth.signOut();
-    if (error) setMessage("Sign out was not confirmed. Retry.");
-    else router.replace("/(tabs)/profile");
-    setBusy(false);
+    try {
+      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      if (error) throw error;
+      router.replace("/(tabs)/profile");
+    } catch {
+      setMessage("Sign out was not confirmed. Check your connection and retry.");
+    } finally { setBusy(false); }
   }
   return (
     <Screen

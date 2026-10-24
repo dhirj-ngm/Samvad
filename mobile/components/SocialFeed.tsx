@@ -49,11 +49,6 @@ export function SocialFeed({
       lock.current = true;
       setBusy(true);
       setMessage("");
-      if (reset) {
-        setRows([]);
-        setStates({});
-        setMentions([]);
-      }
       try {
         if (!supabase) throw new Error("Backend unavailable.");
         if (mode === "following" && !session)
@@ -83,7 +78,7 @@ export function SocialFeed({
         ]);
         if (current === generation.current) {
           setRows((old) => (reset ? page : appendSocial(old, page)));
-          setStates((old) => ({ ...old, ...counts }));
+          setStates((old) => (reset ? counts : { ...old, ...counts }));
           setMentions((old) => (reset ? tags : [...old, ...tags]));
           setMore(page.length === 20);
         }
@@ -101,6 +96,7 @@ export function SocialFeed({
   );
   useFocusEffect(
     useCallback(() => {
+      // Parents key this component by account/feed; retain data on a same-feed retry.
       void load(true);
       return () => {
         generation.current++;

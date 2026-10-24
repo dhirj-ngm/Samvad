@@ -17,14 +17,17 @@ export function ProfileView({ id }: { id: string }) {
     [pending, setPending] = useState<boolean | null>(null);
   const lock = useRef(false),
     alive = useRef(true);
+  const generation = useRef(0);
   const load = useCallback(async () => {
+    if (lock.current) return;
+    const run = ++generation.current;
     setMessage("");
     try {
       if (!supabase) throw new Error("Backend unavailable.");
       const r = await social<ProfileState>(supabase, "profile", { id });
-      if (alive.current) setState(r);
+      if (alive.current && run === generation.current) setState(r);
     } catch (e) {
-      if (alive.current)
+      if (alive.current && run === generation.current)
         setMessage(e instanceof Error ? e.message : "Profile unavailable.");
     }
   }, [id]);
@@ -34,6 +37,7 @@ export function ProfileView({ id }: { id: string }) {
       void load();
       return () => {
         alive.current = false;
+        generation.current++;
       };
     }, [load]),
   );
@@ -44,6 +48,7 @@ export function ProfileView({ id }: { id: string }) {
       return;
     }
     lock.current = true;
+    generation.current++; // A pre-mutation read must not undo this confirmed desired state.
     setBusy(true);
     setPending(desired);
     setMessage("");
@@ -149,6 +154,7 @@ export function ProfileView({ id }: { id: string }) {
       <Pressable
         style={actionStyle}
         accessibilityRole="button"
+        disabled={busy}
         onPress={() => void load()}
       >
         <Text style={linkStyle}>Refresh profile</Text>

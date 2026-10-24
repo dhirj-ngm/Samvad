@@ -10,7 +10,7 @@ from uuid import UUID
 import httpx
 import jwt
 from fastapi import Request
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 from app.config import Settings
 
@@ -61,10 +61,24 @@ class TranslationOutput(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     translated_text: str = Field(min_length=1, max_length=8000)
 
+    @field_validator('translated_text')
+    @classmethod
+    def nonempty_translation(cls, value):
+        if not value.strip():
+            raise ValueError('Empty translation')
+        return value
+
 
 class SummaryOutput(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     lines: list[str] = Field(min_length=3, max_length=3)
+
+    @field_validator('lines')
+    @classmethod
+    def valid_lines(cls, values):
+        if any(not line.strip() or '\n' in line or '\r' in line or len(line) > 400 for line in values):
+            raise ValueError('Invalid summary lines')
+        return values
 
 
 class ModerationOutput(BaseModel):
@@ -140,7 +154,7 @@ class AIService:
             if not rows or rows[0].get('deleted_at') or (entity_type != 'news' and not rows[0]['body']):
                 raise Failure(404, 'not_found', 'Content is unavailable.')
             return rows[0]
-        except (httpx.HTTPError, ValueError, KeyError):
+        except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError, AttributeError):
             raise Failure() from None
 
     async def control(self, operation, payload):
@@ -280,6 +294,11 @@ class AIService:
             output = schema.model_validate(output).model_dump()
         except ValidationError:
             raise Failure() from None
+        if task == 'translation':
+            validate_language(output['translated_text'], language, text)
+        else:
+            for line in output['lines']:
+                validate_language(line, language, text)
         # Re-authorize even cache hits and recheck after the potentially slow model call.
         current = await self.source(kind, entity_id, token)
         if current != row:

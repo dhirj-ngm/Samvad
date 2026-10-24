@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
+import { createProfileLoader, type ProfileLoadState } from "./profile-loader";
 import type { PublicProfile } from "../types/contracts";
 
 type AuthState = {
@@ -17,6 +18,8 @@ type AuthState = {
   ready: boolean;
   session: Session | null;
   profile: PublicProfile | null;
+  profileLoading: boolean;
+  profileError: string;
   refreshProfile: () => Promise<PublicProfile | null>;
 };
 
@@ -27,31 +30,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [preferenceVersion, setPreferenceVersion] = useState(0);
   const [ready, setReady] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<PublicProfile | null>(null);
+  const [profileState, setProfileState] = useState<ProfileLoadState>({ profile: null, loading: false, error: '' });
+  const loader = useRef<ReturnType<typeof createProfileLoader> | null>(null);
+  if (!loader.current) loader.current = createProfileLoader(supabase, setProfileState);
+  const { profile, loading: profileLoading, error: profileError } = profileState;
 
   const refreshProfile = useCallback(async () => {
-    if (!supabase) {
-      setProfile(null);
-      return null;
-    }
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-    if (authError || !user) {
-      setProfile(null);
-      return null;
-    }
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("user_id,handle,display_name,bio,preferred_language,avatar_path")
-      .eq("user_id", user.id)
-      .maybeSingle();
-    if (error) throw error;
-    const current = data as PublicProfile | null;
-    if (account.current !== user.id) return null;
-    setProfile(current);
-    setPreferenceVersion((n) => n + 1);
+    const current = await loader.current!.load();
+    if (current) setPreferenceVersion((n) => n + 1);
     return current;
   }, []);
 
@@ -61,13 +47,18 @@ export function AuthProvider({ children }: PropsWithChildren) {
       return;
     }
     let mounted = true;
+    let authEventReceived = false;
     supabase.auth
       .getSession()
       .then(({ data, error }) => {
         if (!mounted) return;
         if (error) console.warn("Session restore failed:", error.message);
-        account.current = data.session?.user.id ?? null;
-        setSession(data.session);
+        // An auth event may have arrived while persisted-session loading was pending.
+        if (!authEventReceived) {
+          account.current = data.session?.user.id ?? null;
+          loader.current!.setActor(account.current);
+          setSession(data.session);
+        }
         setReady(true);
       })
       .catch((error) => {
@@ -80,13 +71,16 @@ export function AuthProvider({ children }: PropsWithChildren) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (mounted) {
-        if (account.current !== nextSession?.user.id) setProfile(null);
+        authEventReceived = true;
         account.current = nextSession?.user.id ?? null;
+        loader.current!.setActor(account.current);
         setSession(nextSession);
+        setReady(true);
       }
     });
     return () => {
       mounted = false;
+      loader.current!.invalidate();
       subscription.unsubscribe();
     };
   }, []);
@@ -99,8 +93,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, [ready, session?.user.id, refreshProfile]);
 
   const value = useMemo(
-    () => ({ ready, session, profile, refreshProfile, preferenceVersion }),
-    [ready, session, profile, refreshProfile, preferenceVersion],
+    () => ({ ready, session, profile, profileLoading, profileError, refreshProfile, preferenceVersion }),
+    [ready, session, profile, profileLoading, profileError, refreshProfile, preferenceVersion],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

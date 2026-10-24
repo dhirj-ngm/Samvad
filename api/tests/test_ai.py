@@ -30,6 +30,7 @@ class Upstreams:
         self.hidden = False
         self.quota_status = 200
         self.last_prompt = ''
+        self.source_response = None
 
     def handle(self, request):
         path = request.url.path
@@ -38,7 +39,8 @@ class Upstreams:
         if path == '/rest/v1/posts' or path == '/rest/v1/replies':
             assert request.headers['apikey'] == 'public-test-key'
             assert request.headers['authorization'] != 'Bearer private-service-test-key'
-            return httpx.Response(200, json=[] if self.hidden else [self.source])
+            return httpx.Response(200, json=self.source_response if self.source_response is not None
+                                  else [] if self.hidden else [self.source])
         if path == '/rest/v1/news_items':
             return httpx.Response(200, json=[{'id': ENTITY, 'title': 'Moon mission', 'excerpt': 'The mission landed.', 'source_url': 'https://example.org/source', 'language': 'en'}])
         if path.endswith('/ai_control'):
@@ -254,3 +256,34 @@ def test_native_malayalam_output_and_explicit_prompt(setup):
     assert 'അനു' in response.json()['translated_text']
     assert 'Malayalam (ml)' in upstream.last_prompt
     assert 'Malayalam script' in upstream.last_prompt
+
+
+@pytest.mark.parametrize('malformed', [{'unexpected': True}, [None], [42]])
+def test_malformed_database_source_is_normalized_not_internal_server_error(setup, malformed):
+    client, upstream = setup
+    upstream.source_response = malformed
+    response = translate(client)
+    assert response.status_code == 503
+    assert set(response.json()) == {'error'}
+    assert 'provider' not in upstream.calls
+
+
+@pytest.mark.parametrize('bad', ['   ', 'Wrong language'])
+def test_bad_cached_translation_is_revalidated_without_new_inference(setup, bad):
+    client, upstream = setup
+    assert translate(client).status_code == 200
+    key = next(iter(upstream.cache))
+    upstream.cache[key] = {'translated_text': bad}
+    assert translate(client).status_code == 503
+    assert upstream.calls.count('provider') == 1
+
+
+@pytest.mark.parametrize('bad', [['One', ' ', 'Three'], ['One\rTwo', 'Three', 'Four']])
+def test_bad_cached_brief_is_rejected_without_new_inference(setup, bad):
+    client, upstream = setup
+    upstream.body = {'lines': ['One', 'Two', 'Three']}
+    payload = {'news_item_id': ENTITY, 'target_language': 'en'}
+    assert client.post('/v1/summarize-news', json=payload).status_code == 200
+    upstream.cache[next(iter(upstream.cache))] = {'lines': bad}
+    assert client.post('/v1/summarize-news', json=payload).status_code == 503
+    assert upstream.calls.count('provider') == 1

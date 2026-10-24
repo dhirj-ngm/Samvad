@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Screen } from './Screen';
@@ -15,11 +15,13 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const signingUp = mode === 'sign-up';
+  const inFlight = useRef(false);
 
   async function submit() {
+    if (inFlight.current) return;
     if (!supabase) { setMessage('Supabase is not configured for this build.'); return; }
     if (!email.trim() || password.length < 6) { setMessage('Enter an email and a password of at least 6 characters.'); return; }
-    setBusy(true); setMessage('');
+    inFlight.current = true; setBusy(true); setMessage('');
     try {
       if (signingUp) {
         const { data, error } = await supabase.auth.signUp({ email: email.trim(), password });
@@ -38,12 +40,12 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
       router.replace(profile && !pending ? '/(tabs)/profile' : '/onboarding');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Could not connect. Please retry.');
-    } finally { setBusy(false); }
+    } finally { inFlight.current = false; setBusy(false); }
   }
 
   return <Screen title={signingUp ? 'Create account' : 'Sign in'} subtitle="Your email stays private. Others see your public handle.">
     <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
+      <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={styles.content}>
         {!supabase ? <Text style={styles.notice}>Account setup is waiting for the development Supabase project. The sample app is still available.</Text> : null}
         <Text style={styles.label}>Email</Text>
         <TextInput style={styles.input} autoCapitalize="none" autoCorrect={false} keyboardType="email-address" autoComplete="email" value={email} onChangeText={setEmail} accessibilityLabel="Email" />
@@ -69,5 +71,5 @@ const styles = StyleSheet.create({
   notice: { color: colors.warning, lineHeight: 21, marginVertical: spacing.sm },
   button: { backgroundColor: colors.accent, padding: spacing.md, borderRadius: radius.sm, alignItems: 'center', marginTop: spacing.md },
   disabled: { opacity: 0.45 }, buttonText: { color: colors.surface, fontWeight: '700', fontSize: type.body },
-  link: { color: colors.accent, fontWeight: '600', textAlign: 'center', marginTop: spacing.md },
+  link: { color: colors.accent, fontWeight: '600', textAlign: 'center', marginTop: spacing.md, minHeight: 44, paddingVertical: spacing.md },
 });

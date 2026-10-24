@@ -1,6 +1,6 @@
 import { batchMentions } from "../lib/social";
 import { AuthorLink, MentionLinks } from "./SocialUI";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { useAuth } from "../lib/auth";
 import { supabase } from "../lib/supabase";
@@ -41,6 +41,16 @@ export function ConversationThread({
     null,
   );
   const [target, setTarget] = useState<ReportTarget | null>(null);
+  const byId = useMemo(() => new Map(rows.map((row) => [row.id, row])), [rows]);
+  const mentionsByReply = useMemo(() => {
+    const grouped = new Map<string, Mention[]>();
+    for (const mention of mentions) {
+      const group = grouped.get(mention.entity_id) ?? [];
+      group.push(mention);
+      grouped.set(mention.entity_id, group);
+    }
+    return grouped;
+  }, [mentions]);
   const mounted = useRef(true),
     generation = useRef(0),
     loading = useRef(false);
@@ -175,7 +185,7 @@ export function ConversationThread({
       ) : null}
       {rows.map((reply) => {
         const parentRow = reply.parent_reply_id
-          ? rows.find((row) => row.id === reply.parent_reply_id)
+          ? byId.get(reply.parent_reply_id)
           : null;
         return (
           <View
@@ -211,7 +221,7 @@ export function ConversationThread({
             )}
             {!reply.deleted_at ? (
               <MentionLinks
-                mentions={mentions.filter((m) => m.entity_id === reply.id)}
+                mentions={mentionsByReply.get(reply.id) ?? []}
               />
             ) : null}
             {!reply.deleted_at &&

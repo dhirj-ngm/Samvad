@@ -34,7 +34,7 @@ export function People({
     lock.current = true;
     setBusy(true);
     setMessage("");
-    if (reset) setRows([]);
+    if (reset) setMore(false);
     try {
       if (!supabase) throw new Error("Backend unavailable.");
       const after = reset ? undefined : rows.at(-1)?.user_id;
@@ -61,6 +61,8 @@ export function People({
     }
   }
   useEffect(() => {
+    setRows([]);
+    setMore(false);
     const timer = setTimeout(() => void load(true), 250);
     return () => {
       clearTimeout(timer);
@@ -75,6 +77,7 @@ export function People({
           accessibilityLabel="Search public people"
           placeholder="Search @handle or display name"
           value={query}
+          maxLength={80}
           onChangeText={setQuery}
           autoCapitalize="none"
           style={{

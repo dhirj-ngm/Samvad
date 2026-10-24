@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../lib/auth';
 import { supabase } from '../lib/supabase';
 import { aiDemoEnabled, requestAI } from '../lib/ai-client';
+import { parseDemoSummary } from '../lib/ai-model';
 import type { EntityType, LanguageCode } from '../types/contracts';
 import { colors, spacing, type } from '../theme/tokens';
 
@@ -54,13 +55,12 @@ function DemoSummary({id,entityType,actor,target}:{id:string;entityType:'news'|'
   const [label,setLabel]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[cached,setCached]=useState(false),[open,setOpen]=useState(false);
   const alive=useRef(true),lock=useRef(false);
   useEffect(()=>{alive.current=true;return()=>{alive.current=false;};},[]);
-  async function load(){
+  async function load(preferNative = false){
     if(!supabase||!actor){setMessage('Sign in to request a summary.');return;}
     if(lock.current)return;lock.current=true;setBusy(true);setMessage('');
     try{
-      const d=await requestAI(supabase,actor,'summarize',{entity_type:entityType,entity_id:id,target_language:target});
-      if(!Array.isArray(d.english_lines)||d.english_lines.length<4||d.english_lines.length>5||!d.english_lines.every((s:unknown)=>typeof s==='string'&&s.trim()))throw new Error('Summary unavailable. Read the original.');
-      if(alive.current){setEnglish(d.english_lines);setNative(d.native_status==='available'||target==='en'?d.native_lines:[]);setLabel(d.label);setCached(d.is_cached===true);setOpen(true);if(d.native_status==='unavailable')setMessage('English summary is ready. Retry for your reading language.');}
+      const d=parseDemoSummary(await requestAI(supabase,actor,'summarize',{entity_type:entityType,entity_id:id,target_language:target}),target);
+      if(alive.current){setEnglish(d.english_lines);setNative(d.native_lines);setShowNative(preferNative&&d.native_status==='available');setLabel(d.label);setCached(d.is_cached);setOpen(true);if(d.native_status==='unavailable')setMessage('English summary is ready. Retry for your reading language.');}
     }catch(e){if(alive.current)setMessage(e instanceof Error?e.message:'Summary unavailable.');}
     finally{lock.current=false;if(alive.current)setBusy(false);}
   }
@@ -68,9 +68,9 @@ function DemoSummary({id,entityType,actor,target}:{id:string;entityType:'news'|'
     <Pressable accessibilityRole="button" disabled={busy} onPress={()=>english.length?setOpen(!open):void load()}><Text style={styles.link}>{busy?'Preparing summary…':open?'Hide summary':'Summarize'}</Text></Pressable>
     {open&&english.length?<View style={{backgroundColor:colors.accentSoft,padding:16,borderRadius:12}}>
       <Text style={styles.note}>{label} · AI generated{cached?' · previously generated':''}</Text>
-      {target!=='en'?<View style={{flexDirection:'row',gap:20}}>
-        <Pressable accessibilityRole="button" onPress={()=>setShowNative(false)}><Text style={styles.link}>English</Text></Pressable>
-        <Pressable accessibilityRole="button" onPress={()=>native.length?setShowNative(true):void load()}><Text style={styles.link}>{target==='ml'?'മലയാളം':'हिन्दी'}{!native.length?' · retry':''}</Text></Pressable>
+        {target!=='en'?<View style={{flexDirection:'row',flexWrap:'wrap',gap:20}}>
+        <Pressable accessibilityRole="button" accessibilityState={{selected:!showNative}} onPress={()=>setShowNative(false)}><Text style={styles.link}>English</Text></Pressable>
+        <Pressable accessibilityRole="button" disabled={busy} accessibilityState={{selected:showNative,busy,disabled:busy}} onPress={()=>native.length?setShowNative(true):void load(true)}><Text style={styles.link}>{target==='ml'?'മലയാളം':'हिन्दी'}{!native.length?' · retry':''}</Text></Pressable>
       </View>:null}
       {(showNative&&native.length?native:english).map((line,i)=><Text key={i} selectable style={styles.body}>• {line}</Text>)}
       <Text style={styles.note}>The full original stays above. AI can make mistakes.</Text>

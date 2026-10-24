@@ -1,6 +1,7 @@
 """Exercise local HTTP authorization and durable submission without provider calls."""
 import hashlib
 import json
+from contextlib import nullcontext
 from uuid import uuid4
 
 import httpx
@@ -8,15 +9,16 @@ import httpx
 from tools.demo_accounts import PRIVATE, local_status, session_for
 
 
-def run():
+def run(api_client=None):
     status = local_status()
     people = json.loads(PRIVATE.read_text(encoding='utf-8'))
     admin = {'apikey':status['SERVICE_ROLE_KEY'], 'Authorization':'Bearer '+status['SERVICE_ROLE_KEY']}
     sessions = []
     post = None
     with httpx.Client(base_url=status['API_URL'], headers={'apikey':status['ANON_KEY']},
-                      timeout=25, trust_env=False) as db, httpx.Client(
-                          base_url='http://127.0.0.1:8775', timeout=30, trust_env=False) as api:
+                      timeout=25, trust_env=False) as db, (
+                          nullcontext(api_client) if api_client is not None else httpx.Client(
+                              base_url='http://127.0.0.1:8775', timeout=30, trust_env=False)) as api:
         try:
             author = session_for(db, people['accounts'][0], admin); sessions.append(author)
             reviewer = session_for(db, people['existing'], admin); sessions.append(reviewer)

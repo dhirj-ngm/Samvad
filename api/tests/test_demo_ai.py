@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 from pydantic import ValidationError
 from test_ai import ACTOR, ENTITY, MODEL, Upstreams, token
 
+from app.ai import Failure
 from app.config import Settings
 from app.demo_ai import chunks
 from app.main import create_app
@@ -17,6 +18,7 @@ class DemoUpstreams(Upstreams):
         self.sarvam_status = 200
         self.sarvam_reservations = []
         self.saved = 0
+        self.sarvam_text = None
 
     def handle(self, request):
         path = request.url.path
@@ -25,7 +27,7 @@ class DemoUpstreams(Upstreams):
             assert request.headers['api-subscription-key'] == 'sarvam-test-key'
             data = json.loads(request.content)
             assert len(data['input']) <= 2000
-            text = 'Hello, welcome.' if data['target_language_code'] == 'en-IN' else 'नमस्ते, आपका स्वागत है।'
+            text = self.sarvam_text or ('Hello, welcome.' if data['target_language_code'] == 'en-IN' else 'नमस्ते, आपका स्वागत है।')
             return httpx.Response(self.sarvam_status, json={'translated_text': text, 'request_id': 'test'})
         if path.endswith('/demo_ai_control'):
             assert request.headers['apikey'] == 'private-service-test-key'
@@ -148,3 +150,53 @@ def test_invalid_or_forged_submission_rejected(demo, payload):
     client, upstream, _ = demo
     assert client.post('/v1/submit-and-screen', json=payload).status_code == 400
     assert upstream.saved == 0
+
+
+def test_partial_native_summary_is_cleared_and_english_is_reusable(demo, monkeypatch):
+    client, upstream, _ = demo
+    upstream.source['body'] = ' '.join(['A proposal for a small trial with voluntary feedback.'] * 7)
+    upstream.body = {'lines': ['Try a small trial.', 'Ask for feedback.',
+                               'Keep data private.', 'Compare alternatives.'], 'insufficient_source': False}
+    calls = []
+
+    async def partial(text, source, target, actor, entity):
+        calls.append(entity)
+        if entity.endswith(':summary'):
+            return 'एक पंक्ति', True  # Wrong line count invokes per-line recovery.
+        if entity.endswith(':summary:0'):
+            return 'पहली पंक्ति', True
+        raise Failure(503, 'translation_unavailable')
+
+    monkeypatch.setattr(client.app.state.ai, 'translate_text', partial)
+    payload = {'entity_type': 'post', 'entity_id': ENTITY, 'target_language': 'hi'}
+    first = client.post('/v1/summarize', json=payload).json()
+    assert first['native_status'] == 'unavailable'
+    assert first['native_lines'] == []
+    assert first['english_provenance'] == 'live'
+    repeated = client.post('/v1/summarize', json=payload).json()
+    assert repeated['is_cached'] is True
+    assert repeated['native_lines'] == []
+    assert repeated['provenance'] == 'cache'
+    assert repeated['native_provenance'] == 'unavailable'
+    assert upstream.calls.count('provider') == 1
+
+
+def test_joined_translation_cannot_exceed_output_limit_or_enter_cache(demo):
+    client, upstream, _ = demo
+    upstream.source['body'] = 'Hello ' * 500
+    upstream.source['language'] = 'en'
+    upstream.sarvam_text = 'ह' * 5000
+    response = client.post('/v1/translate', json={
+        'entity_type': 'post', 'entity_id': ENTITY, 'target_language': 'hi'})
+    assert response.status_code == 503
+    assert not upstream.cache
+
+
+def test_blank_review_reason_is_a_normalized_validation_error(demo):
+    client, upstream, _ = demo
+    response = client.post('/v1/review', json={'entity_type': 'post', 'entity_id': ENTITY,
+        'request_id': ENTITY, 'action': 'approve', 'reason': ' \n ',
+        'source_hash': 'a' * 64, 'expected_state': 'pending'})
+    assert response.status_code == 400
+    assert response.json()['error']['code'] == 'invalid_request'
+    assert not upstream.calls

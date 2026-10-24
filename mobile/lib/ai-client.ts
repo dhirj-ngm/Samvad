@@ -29,7 +29,12 @@ export async function requestAI(client: SupabaseClient, actor: string, route: 't
     }
     return await response.json();
   } catch (error) {
-    if (error instanceof Error && error.name==='AbortError') throw new Error('AI took too long. Original text remains available.');
+    if (error instanceof Error && error.name==='AbortError') throw new Error(route==='submit-and-screen'
+      ? 'Save was not confirmed before timeout. Your draft is kept. Retry the same submission; do not start another copy.'
+      : 'AI took too long. Original text remains available. Retry when your connection recovers.');
+    if (error instanceof TypeError) throw new Error(route==='submit-and-screen'
+      ? 'Save was not confirmed. Check your connection. Your draft is kept; retry the same submission.'
+      : 'AI could not be reached. Check your connection and retry. Original text remains available.');
     throw error instanceof Error ? error : new Error('AI could not be reached. Original text remains available.');
   } finally { clearTimeout(timer); }
 }

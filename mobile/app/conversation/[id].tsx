@@ -135,6 +135,7 @@ function ConversationContext({ id }: { id: string }) {
       >
         <ScrollView
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
           contentContainerStyle={styles.content}
         >
           <Pressable onPress={() => router.back()} accessibilityRole="button">

@@ -23,10 +23,6 @@ export function feedCursor(row: DiscoveryRow): FeedCursor {
   return { matched: row.interest_match, at: row.sort_at, id: row.id, kind: row.kind };
 }
 export function appendFeed(previous: DiscoveryRow[], incoming: DiscoveryRow[]) {
-  const seen = new Set(previous.map(row => `${row.kind}:${row.id}`));
-  return [...previous, ...incoming.filter(row => {
-    const key = `${row.kind}:${row.id}`;
-    if (seen.has(key)) return false;
-    seen.add(key); return true;
-  })];
+  // Overlapping pages may contain a newer moderation/body state for an existing row.
+  return [...new Map([...previous, ...incoming].map(row => [`${row.kind}:${row.id}`, row])).values()];
 }

@@ -32,3 +32,20 @@ test('adapter pins bearer, normalizes free-quota failure and sends only entity c
   };
   try{await assert.rejects(()=>requestAI(client,'A','translate',{entity_type:'reply',entity_id:'ID',target_language:'hi'},'https://example.org'),/Free AI quota/);}finally{globalThis.fetch=previous;}
 });
+test('offline submissions retain an explicit uncertain-save warning, without an automatic retry',async()=>{
+  const previous=globalThis.fetch;let calls=0;
+  globalThis.fetch=async()=>{calls++;throw new TypeError('Network request failed');};
+  try{
+    await assert.rejects(()=>requestAI(client,'A','submit-and-screen',{request_id:'same-id'},'https://example.org'),/draft is kept; retry the same submission/);
+    assert.equal(calls,1);
+    await assert.rejects(()=>requestAI(client,'A','translate',{},'https://example.org'),/Original text remains available/);
+  }finally{globalThis.fetch=previous;}
+});
+test('aborted submissions preserve ambiguity while translations retain original and retry guidance',async()=>{
+  const previous=globalThis.fetch;
+  globalThis.fetch=async()=>{const e=new Error('aborted');e.name='AbortError';throw e;};
+  try{
+    await assert.rejects(()=>requestAI(client,'A','submit-and-screen',{},'https://example.org'),/Retry the same submission; do not start another copy/);
+    await assert.rejects(()=>requestAI(client,'A','translate',{},'https://example.org'),/Original text remains available. Retry/);
+  }finally{globalThis.fetch=previous;}
+});

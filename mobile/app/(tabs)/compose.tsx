@@ -7,9 +7,12 @@ import { colors, spacing } from '../../theme/tokens';
 
 export default function Compose() {
   const router = useRouter();
-  const { ready, session, profile } = useAuth();
+  const { ready, session, profile, profileLoading, profileError, refreshProfile } = useAuth();
   return <Screen title="Compose" subtitle="Your words, under your public handle">
-    {!ready || (session && profile && profile.user_id !== session.user.id) ? <Text style={styles.note}>Restoring account...</Text> : !session || !profile ? <View style={styles.wrap}>
+    {!ready || (session && !profile && profileLoading) || (session && profile && profile.user_id !== session.user.id) ? <Text style={styles.note}>Restoring account...</Text> : session && !profile && profileError ? <View style={styles.wrap}>
+      <Text style={styles.note}>{profileError}</Text>
+      <Pressable accessibilityRole="button" onPress={() => void refreshProfile().catch(() => {})}><Text style={styles.link}>Retry loading profile</Text></Pressable>
+    </View> : !session || !profile ? <View style={styles.wrap}>
       <Text style={styles.note}>{!session ? 'Sign in to save a post under your public handle.' : 'Finish your profile before writing a post.'}</Text>
       <Pressable accessibilityRole="button" onPress={() => router.push(session ? '/onboarding' : '/sign-in')}><Text style={styles.link}>{session ? 'Complete profile' : 'Sign in'}</Text></Pressable>
     </View> : <PostComposer key={session.user.id} actor={session.user.id} handle={profile.handle} language={profile.preferred_language} />}

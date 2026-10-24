@@ -1,5 +1,43 @@
 # Samvad
 
+**Latest verification:** [P5 review/results](docs/p5-verification.md): 256 configured
+tests and both native exports pass. Both developers' local code/tooling changes
+are implemented; user confirms Android/iPhone work. Detailed acceptance coverage
+and human language review remain pending. Audit is down to four high findings in
+one unpatched dependency chain.
+Follow [P5 closeout steps](docs/P5_NEXT_STEPS.md) for the short post-fix phone
+regression, prepared human-review sheet and remaining release gates.
+The full social/AI demo requires the local stack in [the current runbook](docs/AI_DEMO_RUNBOOK.md);
+the older hosted schema is incompatible. Older handoff snapshots below are historical.
+
+## Current local demo / P5
+
+Docker/local Supabase and the prepared private local fixtures are required. Do
+not reset the database or overwrite `.env` files. The complete new build must use
+the **local demo launcher**, not plain `npm start` with the old hosted `.env`.
+
+From `api/`, rerun the provider-spend-free local smoke:
+
+```powershell
+.venv/Scripts/python -m tools.smoke_p5
+```
+
+To start services if they are not already running, use your computer's reachable
+private IPv4 address, following the [runbook](docs/AI_DEMO_RUNBOOK.md):
+
+```powershell
+.venv/Scripts/python -m tools.start_ai_demo --host <your-LAN-IPv4>
+.venv/Scripts/python -m tools.start_ai_demo --host <your-LAN-IPv4> --mobile
+```
+
+The launcher refuses occupied ports; reuse existing services rather than killing
+unrelated previews. Use `api/.local/ai-demo-preview.html` and the ignored private
+login sheet for phone testing. Credentials are not part of this README. Record
+Android/iPhone outcomes separately in [the P5 sign-off table](docs/p5-verification.md#phone-sign-off-record--still-unobserved).
+Automatic publication stays disabled until documented human language review.
+
+## Earlier P4.5 handoff (historical)
+
 **Current teammate handoff:** `feature/p4-5-social` contains the integrated P0-P4
 foundation plus P4.5 profiles/avatars, editable preferences, People, follows,
 likes/reposts, mentions and protected manual report review. P4.5 is verified against

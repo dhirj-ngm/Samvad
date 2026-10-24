@@ -1,5 +1,114 @@
 # Integration gates
 
+## P0–P5 GitHub publication — 24 October 2026
+
+User confirmed completion through P5 and requested pushing the combined source.
+P5 functional acceptance is PASS by user report. Final working-tree fixes and
+P5 verification/review tools are included with all earlier main work. Fresh
+publication checks: backend 114 passed and 3 live tests skipped; SQL 105 passed;
+mobile 34 passed; TypeScript, Ruff and pip dependency validation passed.
+Earlier configured/live evidence is preserved. Dependency/security and human
+language-review follow-ups are not erased or waived by this publication; no
+automatic-publication setting, hosted deployment or P6 work is changed.
+
+## Post-fix functional acceptance — user confirmation
+
+User confirms “all test case is passed sucessfully” after the final P5 fix pass
+and account handoff. **Post-fix functional/phone acceptance: PASS by user report.**
+The recorded automated result remains 256 PASS, zero skips; no new automated run
+is claimed. No per-case trace, new device version or language reviewer/model
+metadata was supplied. This closes the requested functional retest by user
+acceptance, not the four unwaived dependency findings or the separate documented
+human language/policy gate. Automatic publication remains OFF. Earlier pending
+post-fix functional-test notes below are historical.
+
+## Final P5 code-review checkpoint
+
+**256 tests PASS, zero skips:** 117 configured API, 105 SQL and 34 mobile.
+Both native exports, TypeScript/Expo/Ruff/pip, local social/Storage/reviewer smoke,
+provider-isolated cache smoke and the SDK regressions pass after the fixes.
+The real gateway and both Metro bundles serve the reviewed working tree.
+[Fixes/evidence](p5-verification.md#final-code-review-pass--latest-evidence).
+
+User-reported Android/iOS working acceptance for the prior baseline is retained.
+The post-fix phone recovery checks, human language/policy evaluation and four
+unwaived node-forge-chain high findings remain open. **Joint P5: not signed off.**
+Follow [these ordered closeout steps](P5_NEXT_STEPS.md); this checkpoint does not
+promote unobserved T01–T19 device/language cases to PASS.
+
+## Latest phone confirmation — 24 October 2026
+
+After the LAN preview correction, user reports “andriod and ios is working
+properly.” **Android working smoke: PASS by user report. iOS working smoke: PASS
+by user report.** No new device/OS/Expo Go details or individual step outcomes were
+supplied; offline recovery, accessibility and the cross-device reviewed exchange
+are not independently established. This supersedes earlier unobserved basic
+phone-working status, not the entire T01–T19 matrix. Human language/policy review
+and unwaived dependency risk remain open; joint P5 is not yet closed.
+
+## P5 hardening follow-up — both workstreams
+
+Developer A's mobile recovery/keyboard/accessibility/performance changes and
+Developer B's repeatable provider-isolated smoke/safety tests are implemented.
+**235 configured tests PASS, zero skips**: 105 Python, 105 SQL, 25 mobile; TypeScript,
+Expo compatibility, Ruff/pip, both native exports, seven local social/Storage
+HTTP groups and the complete new P5 smoke pass. Zod is patched; four high audit
+findings remain in one node-forge chain with no upstream patched release.
+[Evidence and blocker disposition](p5-verification.md#hardening-follow-up--developer-a-and-developer-b).
+
+The T01–T19 matrix below remains scoped to automated evidence. **Developer A phone
+acceptance: BLOCKED; human language review: BLOCKED; joint P5: BLOCKED.** Backend
+local core checks PASS, but upstream dependency risk is not waived. Hosted
+migration/deployment is separate and unchanged. No new device pass is claimed.
+The user confirmed both phones are available for guided testing and explicitly
+chose to keep dependency risk open. The current local preview/bundles are ready;
+actual Android/iPhone observations are still pending.
+
+## P5 smoke checkpoint — 24 October 2026
+
+Source `18b54e4222ef3dce274c795c723b7a593166871f`. **221 configured tests pass**
+(94 Python, 105 database, 22 mobile), with zero skips; TypeScript, Expo compatibility,
+Ruff, pip consistency, separate Android/iOS exports, local Auth/save/review and seven
+social/Storage HTTP check groups pass. Six prepared AI cache results pass with
+inference disabled. [Full evidence and commands](p5-verification.md).
+
+**Android P5: BLOCKED. iOS P5: BLOCKED. Overall P5: BLOCKED.** Neither device was
+operated during this run. Earlier P0–P3 acceptance is preserved, not extended to
+new P4/P4.5/AI interactions. No provider inference, hosted migration/deployment or
+automatic-publication enablement was performed.
+
+### DPR section 14 acceptance matrix (T01–T19)
+
+PASS below is explicitly scoped to the observed automated/backend result; the
+device column is not implied by it. Complete each phone checklist in the report.
+
+| ID | Automated/backend evidence | Android / iOS end-to-end |
+|---|---|---|
+| T01 | PASS: onboarding/interests and discovery regressions; new signup/email delivery not exercised | BLOCKED / BLOCKED |
+| T02 | PASS: distinct accounts, canonical handle uniqueness and duplicate rejection | BLOCKED / BLOCKED |
+| T03 | PASS: cross-account/private identity RLS and exact public profile projection | BLOCKED / BLOCKED |
+| T04 | PASS: Malayalam/Hindi/emoji storage, round-trip and Unicode limits | BLOCKED / BLOCKED: rendering unobserved |
+| T05 | PASS: persisted translation cache, labels/provenance contract and source authorization; meaning review pending | BLOCKED / BLOCKED |
+| T06 | PASS: mocked provider failures and real provider-disabled cache miss; original still readable | BLOCKED / BLOCKED: retry UI unobserved |
+| T07 | PASS: legacy three-line contract and demo four/five-line cached post summary; revised demo behavior documented in runbook | BLOCKED / BLOCKED: source disclosure/UI unobserved |
+| T08 | PASS: seeded source URL/data regressions only | BLOCKED / BLOCKED: external publisher opening unobserved |
+| T09 | PASS: real two-account nested reply SDK regression and local fixture boundaries | BLOCKED / BLOCKED: cross-device exchange unobserved |
+| T10 | PASS: four concurrent SDK submissions, stable retries and database deduplication | BLOCKED / BLOCKED: physical double-tap unobserved |
+| T11 | PASS: private report RLS, report retry and protected reviewer HTTP checks | BLOCKED / BLOCKED |
+| T12 | PASS: automated moderation/gating safety cases and held fixture boundaries; human language/policy evaluation BLOCKED | BLOCKED / BLOCKED |
+| T13 | PASS: standalone mixed-feed database regression and local HTTP human approval/public release | BLOCKED / BLOCKED |
+| T14 | PASS: anonymous cold-start nonempty discovery database test; local SDK mixed feed | BLOCKED / BLOCKED |
+| T15 | PASS: draft/account isolation and confirmed-pending/retry models only | BLOCKED / BLOCKED: unstable-network UI not exercised |
+| T16 | PASS: targeted current-file, reachable Git history and both exported-bundle secret scans; scope in report | No device interaction required |
+| T17 | PASS: both native bundle exports and shared backend/SDK checks only | BLOCKED / BLOCKED: not device acceptance |
+| T18 | PASS: quota/concurrency/failure tests, charged failures, no paid fallback, pending saves and real cache with inference disabled | BLOCKED / BLOCKED: recovery UI unobserved |
+| T19 | BLOCKED: no fresh free-plan/dashboard or human EN/HI/ML/code-mixed evaluation; previous provider evidence retained, fixtures labeled | BLOCKED / BLOCKED |
+
+Open findings: hosted lacks P4.5/final AI schema (`manual_hidden` read returns
+`42703`; hosted discovery SDK fails while local passes); five existing high npm
+audit findings remain; web export is unsupported without `react-native-web`.
+The supported Android/iOS exports pass. See the report before using hosted config.
+
 ## Current-work integration with all prior phases — 24 October 2026
 
 The user requested merging/pushing the P4.5 social and final local AI demo work

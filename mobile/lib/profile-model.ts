@@ -52,3 +52,34 @@ export function parseReviewDraft(raw: string): ReviewDecision {
     );
   return d as ReviewDecision;
 }
+
+export type PublicationDecision = {
+  entity_id: string;
+  entity_type: 'post' | 'reply';
+  request_id: string;
+  action: 'approve' | 'reject';
+  reason: string;
+  source_hash: string;
+  expected_state: 'pending' | 'flagged' | 'blocked';
+};
+const uuid = (value: unknown) => typeof value === 'string' &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+export function parsePublicationDraft(raw: string): PublicationDecision {
+  const d = JSON.parse(raw) as Record<string, unknown> | null;
+  if (!d || !uuid(d.entity_id) || !uuid(d.request_id) ||
+      !['post', 'reply'].includes(String(d.entity_type)) ||
+      !['approve', 'reject'].includes(String(d.action)) ||
+      !['pending', 'flagged', 'blocked'].includes(String(d.expected_state)) ||
+      typeof d.reason !== 'string' || !d.reason.trim() || Array.from(d.reason).length > 500 ||
+      typeof d.source_hash !== 'string' || !/^[a-f0-9]{64}$/.test(d.source_hash) ||
+      Object.keys(d).some(key => !['entity_id', 'entity_type', 'request_id', 'action', 'reason', 'source_hash', 'expected_state'].includes(key))) {
+    throw new Error('Saved publication decision is unreadable. It has been kept for recovery.');
+  }
+  return d as PublicationDecision;
+}
+
+export function confirmPublicationDecision(value: unknown, decision: PublicationDecision) {
+  const result = value as { id?: unknown; status?: unknown } | null;
+  if (!result || !uuid(result.id) || result.status !== (decision.action === 'approve' ? 'allowed' : 'blocked'))
+    throw new Error('Publication decision was not confirmed. Retry the exact saved decision.');
+}

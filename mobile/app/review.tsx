@@ -42,6 +42,7 @@ function ReviewSession() {
   const alive = useRef(true),
     lock = useRef(false),
     gen = useRef(0);
+  const draftGen = useRef(0);
   const actor = session?.user.id,
     key = `samvad-review-pending:${actor}`;
   async function load(reset = true) {
@@ -59,7 +60,7 @@ function ReviewSession() {
       );
       if (alive.current && run === gen.current) {
         setAuthorized(true);
-        setRows((old) => (reset ? page : [...old, ...page]));
+        setRows((old) => (reset ? page : [...new Map([...old, ...page].map(row => [row.id, row])).values()]));
         setMore(page.length === 20);
         setMessage("");
       }
@@ -74,18 +75,19 @@ function ReviewSession() {
     }
   }
   async function restoreDraft() {
+    const run = ++draftGen.current;
     setDraftReady(false);
     await AsyncStorage.getItem(key)
       .then((raw) => {
         const value = raw ? parseReviewDraft(raw) : null;
-        if (alive.current) {
+        if (alive.current && run === draftGen.current) {
           setPending(value);
           if (value) setReason(value.reason);
           setDraftReady(true);
         }
       })
       .catch(() => {
-        if (alive.current)
+        if (alive.current && run === draftGen.current)
           setMessage(
             "Review draft could not be restored. Retry before taking action.",
           );
@@ -94,15 +96,19 @@ function ReviewSession() {
   useEffect(() => {
     alive.current = true;
     void load();
-    void restoreDraft();
     return () => {
       alive.current = false;
       gen.current++;
     };
   }, [actor, status]);
+  useEffect(() => {
+    void restoreDraft();
+    return () => { draftGen.current++; };
+  }, [actor]);
   async function submit(decision: Decision) {
     if (!actor || !supabase || lock.current || !draftReady) return;
     lock.current = true;
+    draftGen.current++; // Ignore any disk read started before this new decision.
     setBusy(true);
     setPending(decision);
     setMessage("");

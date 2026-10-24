@@ -68,7 +68,7 @@ export const searchPeople = (
   client: SupabaseClient,
   query: string,
   after?: string,
-) => social<PublicProfile[]>(client, "people", { query, after, limit: 20 });
+) => social<PublicProfile[]>(client, "people", { query: query.trim().replace(/^@/, ''), after, limit: 20 });
 export const socialCursor = (row: SocialRow) => ({ at: row.at, id: row.id });
 export function appendSocial(old: SocialRow[], next: SocialRow[]) {
   return [...new Map([...old, ...next].map((r) => [r.id, r])).values()];

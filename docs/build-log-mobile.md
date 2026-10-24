@@ -1,5 +1,18 @@
 # Developer A build log
 
+## 2026-10-24 — P5 review and regression fixes
+
+Fixed account/profile refresh races, offline recovery versus onboarding, local
+logout scope, repeated Auth taps, feed refresh retention and stale overlapping
+rows, @handle search, follow refresh races, summary validation/retry selection,
+review draft/queue recovery and narrow-screen wrapping. Added regression tests
+for delayed/out-of-order responses, account switches and malformed output/drafts.
+**34 mobile tests**, TypeScript, Expo compatibility and both exports pass. Combined
+verification: **256 tests**, zero skips. Refreshed real Metro bundles were checked
+after a cleared-cache preview restart. Earlier Android/iOS working acceptance is
+user-reported; the new changes need the short phone regression. Human language
+review and unwaived dependency risk remain. [Next steps](P5_NEXT_STEPS.md).
+
 ## 2026-10-24 — Final AI demo and all-phase integration checks
 
 User authorized committing/merging current work with all previous phases and

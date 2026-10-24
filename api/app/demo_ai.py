@@ -7,7 +7,7 @@ from uuid import UUID
 
 import httpx
 import jwt
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.ai import AIService, EntityRequest, Failure, TranslationOutput, validate_language
 
@@ -54,7 +54,7 @@ class DemoSummaryOutput(BaseModel):
                 raise ValueError('Insufficient source has no invented lines')
         elif not 4 <= len(self.lines) <= 5:
             raise ValueError('Four or five lines required')
-        if any(not s.strip() or '\n' in s or len(s) > 300 for s in self.lines):
+        if any(not s.strip() or '\n' in s or '\r' in s or len(s) > 300 for s in self.lines):
             raise ValueError('Invalid summary line')
         return self
 
@@ -68,6 +68,13 @@ class ReviewRequest(BaseModel):
     reason: str = Field(min_length=1, max_length=500)
     source_hash: str = Field(pattern='^[a-f0-9]{64}$')
     expected_state: Literal['pending', 'flagged', 'blocked']
+
+    @field_validator('reason')
+    @classmethod
+    def nonblank_reason(cls, value):
+        if not value.strip():
+            raise ValueError('Review reason required')
+        return value
 
 
 def chunks(text: str, limit: int = 2000) -> list[str]:
@@ -170,6 +177,9 @@ class DemoAIService(AIService):
                 validate_language(translated, target, part)
                 outputs.append(translated)
             result = ' '.join(outputs)
+            # Validate the combined response too: individually valid chunks can
+            # exceed the output ceiling and otherwise poison the persisted cache.
+            TranslationOutput(translated_text=result)
             await self.control('cache_put', {'key': cache, 'result': {'translated_text': result}})
             return result, False
         except Failure:
@@ -261,6 +271,8 @@ class DemoAIService(AIService):
             await self.control('cache_put', {'key': key, 'result': output.model_dump()})
         if output.insufficient_source:
             raise Failure(400, 'insufficient_source', 'There is not enough source text for a useful summary.')
+        for line in output.lines:
+            validate_language(line, 'en', text)
         native, native_status = [], 'original' if payload.target_language == 'en' else 'unavailable'
         native_cached = True
         if payload.target_language == 'en':
@@ -280,14 +292,16 @@ class DemoAIService(AIService):
                         native.append(translated_line)
                 native_status = 'available'
             except Failure:
-                pass  # English output is retained and cached for a native-only retry.
+                # Do not expose half a summary or call a failed native request cached.
+                native = []
+                native_cached = False
         if await self.source(payload.entity_type, payload.entity_id, token) != row:
             raise Failure(409, 'content_changed', 'Content changed. Refresh and retry.')
         return {'english_lines': output.lines, 'native_lines': native,
                 'native_language': payload.target_language, 'native_status': native_status,
                 'basis': basis, 'source_url': row.get('source_url'),
                 'label': 'Headline-based brief' if basis == 'headline_excerpt' else 'Author post summary',
-                'is_cached': bool(cached) and native_cached,
+                'is_cached': bool(cached) and (native_cached or native_status == 'unavailable'),
                 'provenance': 'cache' if cached and (native_cached or native_status == 'unavailable') else 'live',
                 'native_provenance': ('original' if payload.target_language == 'en' else
                     'unavailable' if native_status != 'available' else 'cache' if native_cached else 'live'),

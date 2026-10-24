@@ -199,6 +199,7 @@ export function ConversationComposer({
           <Pressable
             accessibilityRole="button"
             disabled={busy || !valid}
+            accessibilityState={{ disabled: busy || !valid, busy }}
             onPress={() => void send()}
             style={[styles.button, (busy || !valid) && styles.disabled]}
           >

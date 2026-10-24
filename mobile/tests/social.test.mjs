@@ -7,6 +7,7 @@ import {
   insertMention,
   mentionQuery,
   social,
+  searchPeople,
   socialCursor,
   validateAvatar,
 } from "../lib/social.ts";
@@ -46,6 +47,12 @@ function client(
     },
   };
 }
+test('People accepts the displayed @handle syntax without changing literal wildcard search', async () => {
+  const c = client('A', { data: [], error: null });
+  await searchPeople(c, ' @samvad_reader ');
+  await searchPeople(c, '%_');
+  assert.deepEqual(c.calls.filter(call => call.payload).map(call => call.payload.p_payload.query), ['samvad_reader', '%_']);
+});
 test("desired-state adapter pins initiating actor and sends exact desired state for retries", async () => {
   const c = client();
   for (let i = 0; i < 2; i++)

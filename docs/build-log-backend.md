@@ -1,5 +1,17 @@
 # Developer B build log
 
+## 2026-10-24 — P5 review and API recovery fixes
+
+Normalized malformed source responses, rejected blank/wrong-script/malformed
+cached AI output, bounded joined Sarvam output, cleared partial native summaries
+with accurate English fallback provenance, and validated blank review reasons.
+Added provider-isolated P5 smoke and an offline human-review sheet generator.
+**117 configured Python**, **105 SQL**, Ruff/pip pass; combined **256 tests**, zero
+skips. Local social/Storage, cache and restarted-gateway submission/review smoke
+pass. No hosted migration or provider inference; automatic publication stays OFF.
+Four unpatched node-forge-chain audit findings remain open at the user's choice.
+Human language review is not inferred from automated checks. [Next steps](P5_NEXT_STEPS.md).
+
 ## 2026-10-24 — Final AI demo and all-phase integration checks
 
 User authorized committing/merging current work with all previous phases and

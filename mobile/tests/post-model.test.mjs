@@ -28,3 +28,9 @@ test('overlapping feed pages render each stable kind/ID once', () => {
   const incoming = [{ kind: 'news', id: 'a' }, { kind: 'post', id: 'b' }, { kind: 'post', id: 'b' }];
   assert.deepEqual(appendFeed(previous, incoming), [previous[0], incoming[1]]);
 });
+test('overlapping feed pages replace stale content without moving its position', () => {
+  const original = { kind: 'post', id: 'a', post: { body: 'old' } };
+  const updated = { ...original, post: { body: 'updated', moderation_state: 'allowed' } };
+  const next = { kind: 'news', id: 'b' };
+  assert.deepEqual(appendFeed([original, next], [updated]), [updated, next]);
+});

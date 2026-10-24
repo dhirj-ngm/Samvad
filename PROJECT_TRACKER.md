@@ -1,5 +1,66 @@
 # Samvad project tracker
 
+**P0–P5 publication (24 October):** User confirmed everything is complete through
+P5 and requested pushing all phases. P5 functional acceptance is user-reported;
+the final working-tree fixes and review/smoke tools are being integrated with all
+previous main work. Fresh publication checks: 114 Python passed, 3 live tests
+skipped; 105 SQL and 34 mobile tests passed; TypeScript, Ruff and pip check passed.
+This preserves earlier configured/live evidence and the recorded dependency and
+human language/policy review follow-ups. No automatic-publication setting,
+production deployment or P6 implementation is changed by this Git integration.
+
+**Latest acceptance update (24 October):** User confirms “all test case is passed
+sucessfully” following the final P5 fixes and test-account handoff. **Post-fix
+functional acceptance: PASS by user report**, alongside the recorded 256 automated
+passes. No individual step traces or new device/runtime details were supplied.
+This supersedes the pending post-fix phone-regression status below. It does not
+waive the four dependency findings the user chose to keep open, provide the missing
+human language/policy reviewer/model evidence, or authorize automatic publication.
+Full joint P5/security/language sign-off remains open; P6 preparation may be planned.
+
+**Latest P5 review (24 October):** Concrete account/profile race, offline feed,
+logout scope, People search, native-summary fallback, reviewer recovery and API
+validation defects fixed. **256 configured tests PASS** (117 Python, 105 SQL,
+34 mobile), zero skips; typecheck/Expo/Ruff/pip, both exports and local/legacy SDK
+and HTTP checks pass. Current local gateway and cleared-cache preview serve the
+reviewed code. Offline human-review sheet is prepared. **Joint P5 remains open**
+for the short post-fix phone regression, human language/policy review and unwaived
+node-forge risk. Prior user-confirmed Android/iOS working status is preserved.
+[Ordered next steps](docs/P5_NEXT_STEPS.md) · [review evidence](docs/p5-verification.md).
+
+**Latest phone update (24 October):** User reports “andriod and ios is working
+properly” after the preview-address correction. **Both-platform working smoke:
+PASS by user report**, not direct agent observation or a supplied per-step test
+trace. Device/runtime details and offline/accessibility/cross-device step results
+were not supplied. Remaining P5 closure: human EN/HI/ML/policy review, detailed
+acceptance coverage and the dependency risk the user explicitly kept open.
+Do not mark joint P5 passed or enable automatic publication from this confirmation.
+
+**P5 hardening follow-up (24 October):** Both workstreams' local code/tooling
+changes are implemented. Developer A improves offline/timeout guidance,
+keyboard/accessibility behavior and reply indexing. Developer B adds a repeatable
+provider-isolated P5 smoke with 11 safety tests; Expo CLI Zod is patched with a
+real-schema compatibility test. Fresh **105 configured Python + 105 SQL + 25 mobile
+= 235 tests**, zero skips; TypeScript/Expo/Ruff/pip, both native exports, local
+social/Storage and complete P5 smoke pass. Audit reduced from five to **four high**
+findings in one unpatched node-forge chain, not waived. **Joint P5 stays BLOCKED**
+on actual Android/iPhone observations, human language review and explicit security
+risk disposition. Hosted remains unchanged; local demo is the verified target.
+[Current workstream status and sign-off](docs/p5-verification.md).
+
+**P5 smoke checkpoint (24 October, approximately 09:35 IST):** Source `18b54e4`
+passes **94 configured Python, 105 SQL and 22 mobile tests**, zero skips;
+TypeScript, Expo compatibility, Ruff/pip, separate Android/iOS exports, local
+Auth/save/retry/reviewer HTTP, seven social/Storage HTTP groups and six real AI
+cache results with inference disabled pass. Targeted secret scans have zero
+findings. **P5 overall BLOCKED:** Android/iPhone interaction and human language
+review are unobserved; five existing high dependency audit findings remain.
+Hosted discovery SDK fails on missing `manual_hidden`; local SDK passes. No hosted
+migration/deployment, provider inference or automatic publication was performed.
+This starts P5 verification and supersedes historical “P5 not started” notes,
+without closing P4/P4.5 acceptance. [P5 report](docs/p5-verification.md) and
+[T01–T19 matrix](docs/integration-checklist.md#p5-smoke-checkpoint--24-october-2026).
+
 **Current source integration (24 October):** User authorized merging
 `feature/ai-demo` with all earlier phases onto main and publishing to GitHub.
 Fresh checks: **94 configured Python tests (zero skips), 105 SQL tests, 22 mobile

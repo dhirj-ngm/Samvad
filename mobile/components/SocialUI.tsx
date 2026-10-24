@@ -84,7 +84,7 @@ export function AuthorLink({ profile }: { profile: PublicProfile }) {
       }
     >
       <Avatar profile={profile} size={36} />
-      <View>
+      <View style={{ flex: 1, minWidth: 0 }}>
         <Text style={linkStyle}>
           {profile.display_name || `@${profile.handle}`}
         </Text>

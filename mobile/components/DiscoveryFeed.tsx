@@ -86,7 +86,6 @@ export function DiscoveryFeed({ topic = null }: { topic?: string | null }) {
   );
   useFocusEffect(
     useCallback(() => {
-      setRows([]);
       setMore(true);
       void fetchPage(true);
       return () => {

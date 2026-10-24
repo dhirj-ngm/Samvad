@@ -167,6 +167,7 @@ export function PostComposer({
     >
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         contentContainerStyle={styles.wrap}
       >
         <Text style={styles.author}>Posting as @{handle}</Text>
@@ -239,6 +240,7 @@ export function PostComposer({
             <Pressable
               accessibilityRole="button"
               disabled={busy || !validPost(draft.body)}
+              accessibilityState={{ disabled: busy || !validPost(draft.body), busy }}
               onPress={() => void submit()}
               style={[
                 styles.button,
