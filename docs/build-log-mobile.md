@@ -1,5 +1,26 @@
 # Developer A build log
 
+## 2026-10-24 — P6 demo and release preparation
+
+Implemented: Android/iOS current-address manifest preflight, regenerated local
+Expo Go QR for `192.168.40.199:8086`, three-minute cross-device script, screenshot
+checklist, reproducible setup/reconnect and freeze handoff. Existing UI, AI
+behavior, privacy and original content are preserved. Expo Go is the selected
+playbook-permitted demo route; no signed binary/cloud build was performed.
+
+Tested: 34 mobile tests, TypeScript, Expo dependency compatibility and separate
+Android (1,254 modules) / iOS (1,261 modules) exports pass. Actual shared SDK/local
+Auth checks pass; both manifests advertise the current address. The initial web
+export attempt failed on missing react-native-web; web is outside the two native
+targets, and both corrected native exports pass. Android SDK tools are installed,
+but ADB has no attached device. These checks are not a new phone observation.
+
+Blocked/next: final venue Android/iPhone rehearsal and privacy-safe screenshots,
+named human language/policy evidence, four existing high dependency findings and
+release sign-off. Earlier user-reported both-platform/P5 acceptance remains valid.
+Work is local on `release/p6-demo`; no push/main merge/tag/deploy. See
+[P6 results](p6-verification.md) and [runbook](P6_RELEASE_RUNBOOK.md).
+
 ## 2026-10-24 — P5 review and regression fixes
 
 Fixed account/profile refresh races, offline recovery versus onboarding, local

@@ -1,5 +1,12 @@
 # P4 current handoff
 
+**Current operational handoff is P6:** [release runbook](../docs/P6_RELEASE_RUNBOOK.md)
+and [actual evidence](../docs/p6-verification.md). The P4 and earlier notes below
+are retained history. The current API has the integrated P4/final-demo endpoints;
+health is liveness only. No hosted release is performed. P6 adds local source/
+service/migration preflight, fresh account bootstrap and a no-key cache-only
+launcher; provider behavior is unchanged. Do not overwrite existing `.env` files.
+
 P4 implements authenticated `/v1/translate`, `/v1/summarize-news`, `/v1/moderate`
 and phase-P4 `/health`. The earlier setup/history below is retained. Runtime locks
 now include httpx/PyJWT/cryptography. Copy missing fields from `.env.example`

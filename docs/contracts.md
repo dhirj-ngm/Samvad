@@ -1,5 +1,15 @@
 # Samvad shared contracts
 
+## P6 release candidate — operational update
+
+P6 adds no API/schema/mobile data-contract changes. P0–P5 integrated contracts
+remain intact. Local operator tooling adds `demo_accounts --fresh-local`,
+`start_ai_demo --cache-only` and `prepare_p6 --host`; these are not public API
+endpoints. Automatic publication remains OFF. Eight migrations are verified
+locally; no hosted alignment or final release sign-off is claimed. Current setup
+and gates: [P6 runbook](P6_RELEASE_RUNBOOK.md), [verification](p6-verification.md).
+Earlier phase status notes below are historical.
+
 ## P4.5 additive social contract — combined A/B, 24 October 2026
 
 Local Docker execution now verifies these contracts through actual Auth/Storage

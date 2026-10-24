@@ -1,5 +1,21 @@
 # Samvad project tracker
 
+**P6 release preparation (24 October):** Combined Developer A/B local candidate
+on `release/p6-demo`, based on integrated P0–P5 `6bb366a`. Implemented secret-safe
+network/config/migration/Android/iOS manifest preflight and source fingerprint,
+fresh-local account bootstrap with overwrite protection, no-key cache-only
+launcher, pinned/health-checked Docker packaging and demo/recovery handoff.
+Fresh results: **135 API passed, 3 legacy hosted live suites skipped; 105 SQL and
+34 mobile passed**. TypeScript/Ruff/pip/Expo, both native exports, local ordinary
+Auth/social/Storage/SDK, cache-isolated P5 smoke and temporary four-account
+bootstrap/retry/access checks pass. Existing demo accounts remain intact.
+**P6 gate PENDING:** final venue/device rehearsal/screenshots, named human
+language/policy evidence, disposition of four dependency findings, then approved
+main/tag/publication. Earlier user-reported Android/iPhone/P5 functional PASS is
+preserved. No P6 push, hosted migration, deployment, signed mobile binary or
+automatic-publication change. [Runbook](docs/P6_RELEASE_RUNBOOK.md) ·
+[actual evidence](docs/p6-verification.md). Older snapshots below are history.
+
 **P0–P5 publication (24 October):** User confirmed everything is complete through
 P5 and requested pushing all phases. P5 functional acceptance is user-reported;
 the final working-tree fixes and review/smoke tools are being integrated with all

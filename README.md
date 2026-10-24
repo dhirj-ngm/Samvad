@@ -1,5 +1,24 @@
 # Samvad
 
+**Current handoff: P6 local release candidate.** P0–P5 are integrated; P6 demo,
+restart, fresh-local setup and freeze tooling are on `release/p6-demo`.
+Start with [the P6 runbook](docs/P6_RELEASE_RUNBOOK.md) and
+[actual verification / remaining gates](docs/p6-verification.md).
+Android/iPhone use the shared Expo Go app. No P6 production deployment,
+main push or release tag has been performed.
+
+P6 checks: **135 API passed / 3 legacy live skips, 105 SQL and 34 mobile passed**;
+TypeScript, Ruff, pip, Expo compatibility, both native exports, local Auth/social/
+Storage/SDK and cache-only smoke pass. Backend Docker packaging is verified.
+Your prior both-platform functional acceptance is preserved. Human language/policy
+evidence, four open dependency findings and final venue rehearsal remain release
+gates; automatic publication stays OFF. A fresh stack can run the social demo
+without AI keys using `--cache-only`; missing AI results stay unavailable.
+[Three-minute script](docs/demo-script.md).
+
+The P5 and earlier snapshots below are historical; P6 links above take precedence
+for current setup, acceptance and network details.
+
 **Latest verification:** [P5 review/results](docs/p5-verification.md): 256 configured
 tests and both native exports pass. Both developers' local code/tooling changes
 are implemented; user confirms Android/iPhone work. Detailed acceptance coverage

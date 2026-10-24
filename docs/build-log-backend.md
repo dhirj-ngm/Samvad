@@ -1,5 +1,31 @@
 # Developer B build log
 
+## 2026-10-24 — P6 stable local release preparation
+
+Implemented: seven-check local service/config/migration/mobile-manifest preflight
+with secret-safe failures and Git-visible source fingerprint. Fresh-local account
+mapping generates four random-password accounts without overwriting existing
+files; managed-email adoption requires ordinary password proof. Cache-only launcher
+works without provider keys and keeps automatic publication OFF. Docker base is
+pinned by digest and has a liveness healthcheck. Added restart, secure demo-account,
+seed, forward-migration/recovery and no-paid-fallback handoff.
+
+Tested: **135 Python passed / 3 legacy opt-in hosted live suites skipped**;
+105 SQL passed; Ruff/pip pass. Local eight-version ledger, lint and advisors pass.
+Seven ordinary-account social/Storage HTTP groups, shared SDK, provider-isolated
+P5 cache/private-save/retry/reviewer smoke and all fourteen fixture hashes pass.
+Fresh-bootstrap HTTP exercised twice with four temporary local accounts: stable
+passwords/IDs, A/B/C non-admin and D reviewer using ordinary JWTs; only those new
+users were removed. Existing demo accounts/passwords preserved. Docker build and
+network-disabled non-root health smoke pass. No provider inference, budget refill,
+hosted query/migration or schema/contract change performed.
+
+Blocked/next: named human language/policy review with model provenance, four
+unwaived dependency findings and final device/venue evidence. Hosted alignment
+and final main/tag/push remain separate; no P6 release sign-off claimed. Combined
+work stays on `release/p6-demo`. [P6 evidence](p6-verification.md) ·
+[runbook](P6_RELEASE_RUNBOOK.md).
+
 ## 2026-10-24 — P5 review and API recovery fixes
 
 Normalized malformed source responses, rejected blank/wrong-script/malformed

@@ -13,7 +13,9 @@ from app.config import Settings
 from tools.demo_accounts import ROOT, local_status
 
 
-def start(host, mobile=False, review_approved=False):
+def start(host, mobile=False, review_approved=False, cache_only=False):
+    if cache_only and review_approved:
+        raise ValueError('Cache-only rehearsal cannot approve automatic publication')
     address = ipaddress.ip_address(host)
     networks = ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']
     if address.version != 4 or not any(address in ipaddress.ip_network(n) for n in networks):
@@ -48,8 +50,11 @@ def start(host, mobile=False, review_approved=False):
                       SUPABASE_URL=status['API_URL'], SUPABASE_PUBLIC_KEY=status['ANON_KEY'],
                       SUPABASE_SERVICE_ROLE_KEY=status['SERVICE_ROLE_KEY'],
                       SUPABASE_JWKS_URL=status['API_URL']+'/auth/v1/.well-known/jwks.json')
+        if cache_only:
+            values.update(AI_ENABLED='false', SARVAM_ACCOUNT_USE_AUTHORIZED='false')
         config = Settings(_env_file=None, **{k.lower(): v for k, v in values.items()})
-        if not config.groq_api_key.get_secret_value() or not config.sarvam_api_key.get_secret_value():
+        if not cache_only and (not config.groq_api_key.get_secret_value()
+                               or not config.sarvam_api_key.get_secret_value()):
             raise ValueError('Provider credentials are missing')
         # JSON strings are valid dotenv values and preserve lists safely.
         (ROOT / 'api/.env.ai-demo-run').write_text(
@@ -70,7 +75,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--host', required=True)
     parser.add_argument('--mobile', action='store_true')
+    parser.add_argument('--cache-only', action='store_true',
+                        help='Disable external inference; missing caches remain unavailable')
     parser.add_argument('--review-approved', action='store_true',
                         help='Operator attests documented human EN/HI/ML policy review has passed')
     args = parser.parse_args()
-    start(args.host, args.mobile, args.review_approved)
+    start(args.host, args.mobile, args.review_approved, args.cache_only)

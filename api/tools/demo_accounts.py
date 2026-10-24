@@ -40,6 +40,21 @@ def session_for(client, account, admin):
     return {'Authorization': 'Bearer ' + r.json()['access_token']}
 
 
+def initialize_mapping():
+    """Fresh local installs only; refuse to replace any existing account mapping."""
+    PRIVATE.parent.mkdir(exist_ok=True)
+    accounts = [
+        {'email': f'p6-{role}@samvad.test', 'handle': handle, 'language': language,
+         'password': secrets.token_urlsafe(24)}
+        for role, handle, language in [
+            ('a', 'demo_ananya', 'ml'), ('b', 'demo_aarav', 'hi'),
+            ('c', 'demo_meera', 'en'), ('d', 'demo_faiz', 'en')]
+    ]
+    data = {'accounts': accounts[:3], 'existing': accounts[3], 'managed_existing': True}
+    with PRIVATE.open('x', encoding='utf-8') as stream:
+        json.dump(data, stream, ensure_ascii=False, indent=2)
+
+
 def prepare():
     status = local_status()
     data = json.loads(PRIVATE.read_text(encoding='utf-8'))
@@ -62,8 +77,16 @@ def prepare():
             u = existing[0]
             data['existing'] = {'id': u['id'], 'email': u['email'],
                                 'handle': profiles[u['id']]['handle'], 'language': profiles[u['id']]['preferred_language']}
-        for account in data['accounts']:
+        managed = data['accounts'] + ([data['existing']] if data.get('managed_existing') else [])
+        for account in managed:
             user = by_email.get(account['email'].casefold())
+            if user and data.get('managed_existing'):
+                # A fresh-install mapping must never adopt an unrelated pre-existing account.
+                login = client.post('/auth/v1/token', params={'grant_type': 'password'},
+                                    json={'email': account['email'], 'password': account['password']})
+                login.raise_for_status()
+                client.post('/auth/v1/logout', params={'scope': 'local'}, headers={
+                    'Authorization': 'Bearer ' + login.json()['access_token']}).raise_for_status()
             if not user:
                 account.setdefault('password', secrets.token_urlsafe(20))
                 PRIVATE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
@@ -98,14 +121,22 @@ def prepare():
                            cwd=ROOT, env=env, capture_output=True, text=True, timeout=60, check=False)
         if r.returncode:
             raise RuntimeError('Local reviewer setup not confirmed')
-    print('PASS: requested three local profiles prepared; existing account/password preserved.')
+    print('PASS: local demo profiles prepared; existing accounts/passwords preserved.')
     print('Private login/mapping sheet: api/.local/demo-accounts.json (ignored).')
 
 
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--fresh-local', action='store_true',
+                        help='Create a NEW private four-account mapping; refuses an existing mapping')
+    args = parser.parse_args()
     try:
+        if args.fresh_local:
+            local_status()  # Guard against missing or nonlocal Supabase before generating anything.
+            initialize_mapping()
         prepare()
-    except (RuntimeError, ValueError, KeyError, httpx.HTTPError, subprocess.SubprocessError) as e:
+    except (OSError, RuntimeError, ValueError, KeyError, httpx.HTTPError, subprocess.SubprocessError):
         # HTTP exception messages can echo request details; keep diagnostic generic.
         print('BLOCKED: local account preparation incomplete; inspect environment/mapping without printing secrets.')
-        raise SystemExit(1) from e
+        raise SystemExit(1) from None

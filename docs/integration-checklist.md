@@ -1,5 +1,21 @@
 # Integration gates
 
+## P6 local release candidate — 24 October 2026
+
+Both workstreams' P6 preparation is implemented on `release/p6-demo`; P0–P5
+history retained. 135 Python passed / 3 legacy hosted live skips, 105 SQL and
+34 mobile passed; TypeScript/Ruff/pip/Expo, native exports, local ordinary-user
+social/Storage/SDK and cache-isolated smoke pass. Eight-version ledger matches
+source. Backend image builds and runs non-root without networking. Fresh-account
+bootstrap retries/admin separation pass with temporary-account cleanup.
+Prior user-reported functional acceptance is preserved.
+
+**Gate PENDING:** final Android/iPhone venue rehearsal/screenshots, named human
+language/policy evidence and disposition of four dependency findings, followed by
+approved main/tag/publication. Ten-user pilot remains a separate observed step.
+No P6 push, final tag, hosted migration or deployment performed.
+[Exact evidence](p6-verification.md) · [current handoff](P6_RELEASE_RUNBOOK.md).
+
 ## P0–P5 GitHub publication — 24 October 2026
 
 User confirmed completion through P5 and requested pushing the combined source.

@@ -1,5 +1,12 @@
 # P4.5 local-only handoff
 
+**P6 operational update:** eight existing migrations verified locally, lint and
+advisors clear; P6 adds no migration and applies nothing hosted. Existing accounts,
+data, quotas and audit history preserved. Fresh-local demo bootstrap/retry and
+ordinary-user/admin separation verified with four temporary accounts and scoped
+cleanup. See [current runbook](../docs/P6_RELEASE_RUNBOOK.md) and
+[actual verification](../docs/p6-verification.md); older snapshots below are history.
+
 The new forward migration `20261024000335_social_experience.sql` is **not applied
 to the hosted project**. It adds profiles/avatars, social graph, mentions/feeds
 and protected human review while retaining P4 AI policy. Read

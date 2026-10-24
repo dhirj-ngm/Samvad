@@ -1,5 +1,22 @@
 # P0 decisions — 23 October 2026
 
+## P6 local demo release candidate — 24 October 2026
+
+- Combined A/B implementation continues from integrated P0–P5 on `release/p6-demo`.
+  Preserve earlier functional acceptance; no P6 remote push, hosted migration,
+  deployment or final release tag. Feature work is frozen for the candidate.
+- Expo Go on Android/iPhone is the selected permitted demo route. Exports and
+  manifests do not count as new device observations. Native signing/cloud builds
+  and store distribution remain separate.
+- Reproducible fresh-local accounts use private random credentials and explicit
+  operator provisioning; initialization refuses existing mappings. Cache-only
+  runtime is available without provider credentials and never fabricates outputs.
+- Existing providers/models/prompts and gated publication policy remain intact.
+  No new provider inference or paid fallback in P6. Automatic publication stays OFF.
+- Final language/policy provenance, dependency risk disposition and venue rehearsal
+  precede sign-off. Do not create `hackathon-demo-v1` until these are reviewed.
+  [Evidence](p6-verification.md) · [operational handoff](P6_RELEASE_RUNBOOK.md).
+
 ## P4.5 local implementation — 24 October 2026
 
 - Combined A/B work stays on `feature/p4-5-social`; main unchanged. No push, hosted

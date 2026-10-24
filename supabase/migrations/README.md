@@ -1,5 +1,11 @@
 # Identity migration and later-phase plan
 
+P6 status: all **eight** existing migration versions match the local Docker ledger,
+including `20261024025928`. P6 introduces no migration, rewrites no recorded SQL,
+resets no data and applies nothing hosted. Local lint/advisors and all 105 isolated
+SQL regressions pass. The earlier seven-version P4.5 snapshot below is historical.
+[P6 migration/recovery handoff](../../docs/P6_RELEASE_RUNBOOK.md).
+
 P4.5 **LOCAL ONLY**: `20261024000335_social_experience.sql` and forward
 `20261024005128_p45_feed_array_type.sql` are recorded in the Docker local ledger.
 The latter makes feed array initialization explicit to clear the local lint
