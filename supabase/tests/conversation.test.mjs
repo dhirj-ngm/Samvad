@@ -1,3 +1,4 @@
+import { storageShim } from './storage-shim.mjs';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { before, after, test } from 'node:test';
@@ -13,6 +14,7 @@ before(async () => {
     create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
     create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
     grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
+  await db.exec(storageShim);
   for (const file of (await readdir(new URL('../migrations/', import.meta.url))).filter(f => f.endsWith('.sql')).sort())
     await db.exec(await readFile(new URL(`../migrations/${file}`, import.meta.url), 'utf8'));
   await db.query('insert into auth.users(id,email) values($1,$2),($3,$4)', [A,'a@fixture.invalid',B,'b@fixture.invalid']);

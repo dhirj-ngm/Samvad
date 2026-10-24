@@ -1,5 +1,50 @@
 # Samvad project tracker
 
+**Current source integration (24 October):** User authorized merging
+`feature/ai-demo` with all earlier phases onto main and publishing to GitHub.
+Fresh checks: **94 configured Python tests (zero skips), 105 SQL tests, 22 mobile
+tests**, TypeScript, Expo compatibility, Ruff, pip check and Android/iOS exports
+passed. Local Auth/save/review HTTP smoke passed. See
+[AI demo verification](docs/ai-demo-verification.md). P0–P3 acceptance remains;
+P4/AI-demo language review, native device acceptance and venue rehearsal remain
+pending. Hosted social/final AI migrations and gateway deployment are separate
+from source publication. Automatic publication stays disabled.
+
+**P4.5 publication/preflight (24 October):** User authorized sharing current work
+on `feature/p4-5-social` before final AI development. Fresh checks: 96 SQL, 20 mobile,
+79 Python passed / 3 live tests skipped; TypeScript/Ruff/pip check passed. Local
+Auth A/B and reviewer R verified separately. Local Supabase has all seven versions;
+hosted still has five. Groq key/model catalog checked without inference; Sarvam key
+and usage authorization/cap are missing. See [six-item preflight](docs/AI_DEMO_PREFLIGHT.md)
+and [teammate setup](README.md). No hosted migration or final AI feature
+implementation was performed by this publication step.
+
+**Docker local verification completed:** Supabase runs locally; seven migrations
+recorded including forward P4.5 feed-type lint fix. Local lint/advisors clear.
+Seven actual HTTP check groups and the exact shared SDK pass with ordinary local
+A/B accounts and a separate reviewer fixture. SQL 96/mobile 20/API 79 pass (3 legacy
+live skips), TypeScript/Ruff pass. Local QR/preview ready on port 8085. Phone/email/
+pilot observations remain pending. No hosted migration/deploy/push. This supersedes
+the earlier Docker-blocked follow-up below; [current evidence](docs/p4-5-verification.md).
+
+**Local verification follow-up:** User chose to install Docker Desktop and keep
+P4.5 verification local. WSL is present; Docker is not ready. Local fixture/HTTP
+verification/preview tools are prepared, with 9 new guard tests; API now 79 pass/
+3 live skips. No hosted change or phone pass. [Next setup steps](docs/p4-5-verification.md).
+
+**P4.5 local implementation (24 October):** Combined Developer A/B work is on
+`feature/p4-5-social`, based on main `4d6c321`; no push/hosted migration/deployment.
+Profiles/preferences/avatars, durable social actions/counts/lists, People/mentions,
+attributed reposts/Following and protected human review are connected locally.
+96 SQL and 20 mobile tests pass; TypeScript, Expo compatibility, both platform
+exports pass; API 70 pass/3 live skips; Ruff/pip check pass. Existing 5 high npm
+audit findings remain. Docker/local Supabase, Storage HTTP, real P4.5 accounts and
+Android/iPhone acceptance are unobserved; hosted migration expressly deferred.
+Joint P4.5 gate and ten-user pilot are **pending**. Existing AI behavior and prior
+P4 quality gates unchanged. [Actual evidence/checklist](docs/p4-5-verification.md).
+The plan/source change request are preserved with the latest non-AI override.
+No P5/P6 started. Earlier planning-only status is superseded by this update.
+
 **Current P4 integration (24 October):** Both P4 workstreams are integrated with
 accepted P0–P3 for publication to main at the user's request. No merge conflicts.
 Preserved prior verification notes and the native-script Malayalam correction.
@@ -10,7 +55,7 @@ samples ran; human language/policy review and P4 Android/iOS acceptance remain
 pending. Code integration does not mark the P4 gate passed.
 [Next verification](docs/p4-verification.md). No P5/P6 started.
 
-**Snapshot:** 24 October 2026 (IST), P0–P4 code integrated for main; P0–P3 accepted, P4 acceptance pending
+**Snapshot:** 24 October 2026 (IST), P0-P4 on main; P4.5 local feature branch; P0-P3 accepted, P4/P4.5 acceptance pending.
 
 **Source of truth for scope:** [Product Scope](Samvad_Product_Scope.md), [technical specification](Samvad_Detailed_Project_Report_Codex.md), and [implementation plan](Samvad_Implementation.md).
 **Working branches:** `main` is the integrated handoff; Developer A uses `dev/mobile`, Developer B uses `dev/backend`. Pull `main` before starting new phase work. Keep owner changes on their branches and coordinate shared contracts through the integration captain.

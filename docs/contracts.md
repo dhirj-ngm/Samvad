@@ -1,6 +1,62 @@
-# Samvad shared contracts — P0 draft
+# Samvad shared contracts
 
-**Status:** P0–P3 are integrated and accepted on main `78e5825`. The user assigned both P4 workstreams and conflict resolution to one agent. P4 adds the authenticated AI routes below; live provider/account/language and Android/iOS P4 acceptance remain separate gates.
+## P4.5 additive social contract — combined A/B, 24 October 2026
+
+Local Docker execution now verifies these contracts through actual Auth/Storage
+HTTP and the shared SDK. Forward migration `20261024005128` fixes an inherited
+feed array-type lint warning without changing DTOs/order or AI behavior. Hosted
+P4.5 migration and Android/iPhone acceptance remain unperformed/pending.
+
+P4 AI providers, prompts, publication policy and HTTP contracts remain unchanged.
+The local forward migration introduces `social(p_action text,p_payload jsonb={})`,
+an invoker wrapper over a private, explicitly authorized implementation. Unknown
+actions/fields are rejected. Writes derive the actor from auth.uid(), serialize
+per actor and accept desired state, never toggle. No caller-supplied actor is used.
+
+- `save_profile`: `{handle,display_name,bio,language,interests:uuid[],avatar_path}`;
+  atomic profile/interest replacement, preserving created_at. Returns public profile.
+  Names/bios keep Unicode, max 80/280 code points; existing ASCII handle rules remain.
+- `profile`: `{id}` returns `{profile,followers,following,is_following}`; public
+  projection includes avatar_path, never Auth/email/private identity or interests.
+- `people`: `{query?,after?:uuid,limit?:20}`; bounded case-insensitive literal search
+  over handle/name, UUID keyset order. `connections`: `{id,direction,after?,limit?}`
+  returns public profiles in UUID order, direction followers/following.
+- `follow`: `{id,desired:boolean}` returns confirmed profile/counts/state; no self
+  follow. `like` / `repost`: `{id:conversation_uuid,desired:boolean}` returns
+  `{id,likes,reposts,liked,reposted}`. Unique actor/target, timestamps server-owned.
+  Creation requires a public allowed, nondeleted, non-hidden root. Removal is allowed
+  even after a source disappears. Hidden-source state/counts never leak publicly.
+- `interactions`: `{ids:conversation_uuid[]}` (max 50) returns visible public roots'
+  counts and caller state in one batch. No per-card count requests in feed pages.
+- `feed`: `{mode:'following'|'posts'|'reposts',id?:profile_uuid,after?:{at,id},limit?}`
+  returns `{item:FeedItem,at,id,reposter:PublicProfile|null}` rows ordered timestamp,
+  event UUID DESC. Following includes followed authors' public originals and followed
+  users' attributed reposts, preserving original conversation/source identity.
+  Posts/Reposts exclude held/pending own records; those stay in My submissions.
+- Mentions resolve on first durable post/reply INSERT only. Text/request keys stay
+  unchanged. Canonical handle tokens have stable target UUIDs; authored spelling stays in original text.
+  `mentions`: `{type:'post'|'reply',ids:uuid[]}` (max 50) returns visible-source
+  `{entity_id,handle,target_id}`. Unknown handles stay text; retries/handle changes
+  never redirect an existing mention. Suggestions use People search, not private data.
+- Avatars: public `avatars` bucket, <=2 MiB JPEG/PNG/WebP, owner UUID/versioned UUID
+  filename paths. Immutable uploads (no upsert); owner SELECT/INSERT/DELETE only.
+  Profile path must refer to an existing own object; replacement saves profile before
+  deleting superseded image. Cancellation/failure retains the previous avatar.
+- Human review: private trusted `review_admins` membership, provisioned only by an
+  operator, never user_metadata. `admin_status` returns own membership boolean.
+  `review_queue` returns bounded reports without reporter_id or private identity.
+  `review`: `{id:report_uuid,request_id:uuid,action:'reviewed'|'dismissed'|'hide'|'restore',reason}`
+  requires membership, nonempty <=500-character reason; exact retries reuse audit ID,
+  changed payload conflicts. Status maps reviewed/hide/restore to resolved. Hide/restore
+  applies to post/reply/news only, uses a separate manual-hidden flag and never changes
+  AI moderation_state. Restore cannot publish a pending/blocked/deleted source.
+  Private audit records reviewer/action/reason/previous state. No account punishment.
+
+Anonymous users may read public profiles/people/connections/feed/interactions/mentions;
+all mutations and Following require a real subject. Public RLS and internal source
+checks both enforce manual hiding. No hosted application is authorized in this thread.
+
+**Status:** P0-P4 code is merged on main `4d6c321`; P0-P3 accepted, P4 quality/device acceptance pending. P4.5 non-AI changes are implemented locally on `feature/p4-5-social`; hosted migration and joint acceptance remain pending. No push/deployment in this thread.
 
 ## Identity and transport
 
@@ -27,7 +83,7 @@
 
 All IDs are UUID strings, including interest IDs. Server owns timestamps. Handles are lowercase ASCII `[a-z0-9_]{3,30}` and unique case-insensitively. Post/reply bodies are limited to 2000 Unicode code points. `request_id` is a client-generated UUID reused on retries; the same ID with different content is a conflict. News has one primary `topic` equal to an interest slug. Feed pages default to 20/max 50, sorted by timestamp and UUID descending; replies sort ascending. Reports never reveal reporter identity to reported users. Feed responses exclude held/deleted bodies and private identity records. Full proposed constraints and RLS are in `supabase/schema-proposal.md`.
 
-P1 uses direct profile tables; P2 feed cursor and soft-delete contracts are below. A future reviewer UI/API remains deferred. Auth redirects retain the accepted P1 setup.
+P1 uses direct profile tables; P4.5 adds atomic profile saves and protected human review locally. P2 feed/soft-delete and historical phase contracts remain below. Auth redirects retain the accepted P1 setup.
 
 ## P2 discovery and publishing — 24 October 2026
 
@@ -174,3 +230,19 @@ contracts are implemented together by the mobile and backend owners:
 HTTP status semantics: `400` invalid input, `401` unauthenticated, `403` unauthorized, `404` inaccessible/not found, `409` idempotency conflict, `429` rate limited, `503` AI/auth unavailable. Planned error envelope: `{ "error": { "code": "ai_unavailable", "message": "...", "retryable": true } }`. Translation failure leaves the original visible.
 
 Provenance is `live`, `cache`, `fixture`, or `original` as applicable. Fixtures require explicit demo mode and a visible `Demo fixture` label; they cannot be presented as live inference. API base path is `/v1`; timeout and rate limits remain server-configurable. No live AI claim until provider access is verified. The full planned validation and failure rules are in `api/docs/contracts-proposal.md`.
+# Final bounded AI demo additions
+
+Enabled explicitly with server `AI_DEMO_ENABLED=true` and mobile
+`EXPO_PUBLIC_AI_DEMO=true`. Existing P4 routes remain available.
+
+| Route | Auth / contract |
+|---|---|
+| POST `/v1/submit-and-screen` | Caller JWT; entity_type post/reply, stable request_id, original body, EN/HI/ML language, reply conversation/optional parent. Saves using caller-authorized RPC before screening. HTTP 202 means saved privately with retryable screening; HTTP 200 means confirmed terminal/existing result. IDs remain stable on exact retry. |
+| POST `/v1/summarize` | Caller JWT; entity_type post/news, entity_id, target_language. Returns english_lines (4–5), native_lines/status/language, source basis/URL, independent English/native provenance and overall provenance. Inadequate source returns 400 insufficient_source. |
+| POST `/v1/review-queue` | Caller JWT plus protected DB reviewer membership; returns held nondeleted source/hash/state and fixture provenance, without contact identity. |
+| POST `/v1/review` | Reviewer only; stable request_id, source_hash, expected_state, entity_type/id, approve/reject and reason. Atomic audited idempotent transition; stale source/state conflicts. Does not modify manual_hidden. |
+
+Demo translation uses Sarvam with private persisted lifetime character reservations;
+moderation and English summaries use the configured Groq model. Every cache read
+retains caller source authorization. No client controls actor, model, budgets or
+publication state. See `AI_DEMO_RUNBOOK.md` for limits and human approval gates.

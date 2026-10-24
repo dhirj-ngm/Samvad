@@ -1,5 +1,102 @@
 # Developer A build log
 
+## 2026-10-24 — Final AI demo and all-phase integration checks
+
+User authorized committing/merging current work with all previous phases and
+pushing to GitHub. Mobile **22 tests**, TypeScript, Expo compatibility and fresh
+Android/iOS exports passed. Combined backend **94 configured tests, zero skips**
+and **105 SQL tests** passed. The demo UI retains originals, provider/cache
+provenance, retryable private saves and protected publication review. These checks
+do not replace actual phone or human language acceptance; those remain pending.
+See [AI demo verification](ai-demo-verification.md) and [runbook](AI_DEMO_RUNBOOK.md).
+
+## 2026-10-24 - Teammate UI handoff and pre-AI publication
+
+User authorized publishing current P4.5 on feature/p4-5-social for the other
+developer to refine/test. Fresh mobile tests 20 passed, TypeScript passed; database
+96 and API 79 passed with 3 live suites skipped, lint/dependency checks passed.
+Current Expo 8085/status and Android/iOS manifest requests returned HTTP 200 from
+the PC; CLI logged in. This is not a new phone acceptance claim. Local hotspot
+phone reachability and P4.5 screen observations remain for the user to confirm.
+
+README now explains branch checkout, own local Supabase setup and the missing
+hosted P4.5 migrations; no secrets/private test accounts are committed. Six-item
+preflight and v2 AI handoff included. Preserve full P4.5 UI/UX during later AI work.
+No new mobile AI behavior, provider calls or hosted deployment in this audit.
+
+### Current QR network follow-up
+
+User reported Expo Go loading failure and phone browser failure on the original
+192.168.40.199 LAN. PC Metro remained healthy; precise network blocker unproven.
+Enabled supported Windows Mobile Hotspot, preserving SSID/password, opened Settings;
+user confirmed connecting the phone. Preview/QR now `exp://192.168.137.1:8085`, local
+Supabase at port 54321. PC health/manifests/bundles HTTP 200; both platform bundles
+use hotspot backend and exclude old LAN address. Updated QR opened/displayed.
+Await actual phone status/app launch confirmation. No firewall disabled or local
+Supabase public tunnel; no hosted change. Keep hotspot on during device checks.
+
+## P4.5 local integration ready for phones — 24 October 2026
+
+Docker/local Supabase now running with P4.5 and forward feed-type lint fix. Shared
+mobile SDK passed against actual local Auth/RPC for state retries, batched counts,
+Following attribution and actor pinning. Seven HTTP backend groups passed using
+ordinary A/B and separate reviewer fixture; none are phone observations. Mobile
+20 tests and TypeScript passed; SQL 96, API 79 pass/3 legacy live skips, Ruff pass.
+Local lint/advisors clear. Temp social/avatar state was restored/cleaned.
+
+Isolated Expo preview `exp://192.168.137.1:8085`, QR in ignored
+`api/.local/p45-preview.html`, opened for the user. Android/iOS manifests and bundles
+HTTP 200 from PC; LAN manifests point to correct LAN host, compiled app uses local
+Supabase with hosted project absent. Launcher disables dotenv loading to prevent
+hosted API bleed-through, without editing `.env`. Existing P4 preview/config intact.
+Local AI unavailable; submissions remain pending, labeled approved local fixture
+supports public social tests. No Android/iPhone gesture, permission/offline/photo,
+email-confirmation or ten-user acceptance yet. Current device checklist is in
+[P4.5 verification](p4-5-verification.md). No hosted change, push or deployment.
+
+## P4.5 local verification preparation follow-up
+
+User chose local-only setup and will install Docker. Prepared a separate process-
+scoped LAN launcher (`api/tools/start-p45-mobile.ps1`) without changing mobile `.env`.
+No new phone observations or app deployment. WSL installed; Docker still absent.
+The local preview will use local Auth/Storage and leave AI unavailable/pending,
+preserving existing hosted P4 settings. See [verification](p4-5-verification.md).
+API preparation tooling checks pass (79 full tests/3 live skips); actual local
+HTTP and Android/iPhone tests remain blocked on Docker readiness.
+
+## P4.5 — local non-AI implementation, 24 October 2026
+
+**Implemented:** Combined A/B branch `feature/p4-5-social` from merged P0–P4.
+Refined handle/language/optional-interest setup; shared English/हिन्दी/മലയാളം
+registry, Unicode name/bio and optional avatar select/preview/upload/replace/remove.
+Atomic profile/preferences save, confirmed result and retained account retry draft;
+feed personalization refresh. Owner/public profiles, scrollable Posts/Reposts,
+persisted counts/lists; private email/settings/logout and own status submissions
+separate. Desired-state social actions with session pinning/retry; batched counts
+and mentions. People search, author/profile links, cursor-aware mention insertion,
+attributed reposts/Following. Protected reasoned human review and persisted audit
+retry. Shared 48-point actions, safe areas, Indic line heights/keyboard wrappers.
+Existing AIText/adapter/provider/prompt/policy unchanged; Activity stays honest.
+
+**Tested:** 20 mobile tests, TypeScript and Expo compatibility passed. ImagePicker
+58.0.10, Expo 58.0.19/Router 58.0.26 compatible patches, lockfile retained. Android
+and iOS exports passed, not native launches. 96 SQL tests include actual shared
+adapter against migrated PGlite with synthetic ordinary subjects. API 70 passed/
+3 live skips, Ruff/pip check passed. Existing 5 high npm audit findings remain.
+iOS export recovered from old Metro cache via full crawl; non-failing Node module,
+NO_COLOR/FORCE_COLOR and Starlette deprecation warnings remain.
+
+**Blocked:** No P4.5 phone observation, real-account/Storage HTTP or ten-user pilot.
+Docker/local Supabase absent; hosted migration not authorized or applied, so the
+existing hosted project still lacks P4.5. Missing RPCs are failures, not confirmed
+saves. Prior phase acceptance and pending P4 AI quality/device gates are retained.
+
+**Next:** [P4.5 verification](p4-5-verification.md) covers local setup, ordinary
+two-account privacy/social/Storage tests, avatar failure/cancellation, Android/iPhone
+Indic keyboard/accessibility and separate pilot acceptance. Abandoned uploaded
+previews may leave unreferenced objects; cleanup must respect references/drafts.
+Changes remain local; no push/deployment/invitations/P5/P6.
+
 ## P4 — 24 October 2026, combined A/B implementation
 
 **Implemented:** preferred-language translation and Show original on posts and

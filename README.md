@@ -1,13 +1,40 @@
 # Samvad
 
-**P4 branch handoff:** `integrate/p4` adds authenticated translation/Show original,
-headline-based three-line briefs, protected caching/quotas and moderation screening
-to the accepted P0–P3 code. Database migration is deployed; local/regression checks
-pass. Live inference awaits server-only Groq/Supabase keys and Free-plan/data
-configuration; language review and Android/iPhone P4 acceptance remain pending.
-Follow [P4 setup and verification](docs/p4-verification.md). Main remains accepted P3.
+**Current teammate handoff:** `feature/p4-5-social` contains the integrated P0-P4
+foundation plus P4.5 profiles/avatars, editable preferences, People, follows,
+likes/reposts, mentions and protected manual report review. P4.5 is verified against
+a local Docker/Supabase stack. Its two new migrations are **not on hosted Supabase**;
+the default old hosted configuration cannot run this branch's social features yet.
+Follow [P4.5 setup/verification](docs/p4-5-verification.md) and the
+[AI demo preflight](docs/AI_DEMO_PREFLIGHT.md). Device acceptance is still separate.
 
-Samvad is an Expo/React Native app for Android and iOS with a shared Supabase backend and FastAPI service. P0–P2 are integrated and accepted on both platforms. P3 adds threaded replies, private reports, saved retry-safe drafts and account write limits. New posts/replies remain private pending trusted review. The development database has P1–P3 migrations and labeled demo content. Translation/AI remains P4.
+Samvad is an Expo/React Native app for Android and iOS with shared Supabase data/Auth
+and a FastAPI AI gateway. New submissions remain pending until the existing trusted
+review or gated screening path approves them. P4 AI exists; the new four-person AI
+demo is specified in [the version 2 handoff](docs/AI_PILOT_IMPLEMENTATION_HANDOFF.md)
+and has not been implemented by this publication.
+
+## Get the P4.5 code for UI refinement
+
+```bash
+git clone --branch feature/p4-5-social --single-branch https://github.com/dhirj-ngm/Samvad.git
+cd Samvad
+npm ci --prefix mobile
+npm run typecheck --prefix mobile
+npm test --prefix mobile
+```
+
+For existing clones, fetch and check out `origin/feature/p4-5-social` on a local
+branch without discarding other work. Create a separate UI branch from this
+checkpoint to avoid racing the AI implementation session on shared files.
+
+Use your own local Supabase stack for complete social testing: Docker plus the
+pinned Supabase CLI instructions and local account preparation in
+[P4.5 verification](docs/p4-5-verification.md). The local-only launcher
+`api/tools/start-p45-mobile.ps1 -LanAddress <your-reachable-PC-IP>` uses process-only
+public configuration and leaves hosted `.env` files untouched. Local accounts and
+secrets are not in Git and cannot be reused from another developer's machine.
+Opening a phone requires a reachable LAN path; a bundle export is not a device test.
 
 **Current handoff:** [PROJECT_TRACKER.md](PROJECT_TRACKER.md) shows each owner's progress, open gates, and next actions.
 
@@ -32,7 +59,11 @@ with `npx expo start --clear`. If the phone cannot reach Metro over Wi-Fi, try
 
 The product scope, technical specification, and implementation plan are the three `Samvad_*.md` files at the repository root. The proposed shared contract is in `docs/contracts.md`; Developer B's proposal is in `api/docs/contracts-proposal.md`. Developer A owns `mobile/**`, while Developer B owns `api/**` and `supabase/**`.
 
-FastAPI still exposes only `GET /health`; see [api/README.md](api/README.md). Auth, onboarding and content use Supabase directly. P0–P2 acceptance is recorded in [integration gates](docs/integration-checklist.md). P3 automated/live backend and SDK checks pass; its Android/iPhone interaction gate requires the [P3 verification checklist](docs/p3-verification.md). Bundle exports do not prove a device launch.
+FastAPI exposes `/health` and P4's authenticated AI routes; see
+[api/README.md](api/README.md). Auth, content and P4.5 social actions use Supabase.
+The local-only P4.5 launcher intentionally leaves AI unavailable and submissions
+pending; use its reviewed fixture for public social testing. Human-language/policy
+review still gates automatic AI publication. No new Sarvam pipeline is live yet.
 
 ### If Expo Go buffers on a phone
 

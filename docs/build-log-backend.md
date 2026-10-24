@@ -1,5 +1,114 @@
 # Developer B build log
 
+## 2026-10-24 — Final AI demo and all-phase integration checks
+
+User authorized committing/merging current work with all previous phases and
+pushing to GitHub. Full configured API suite **94 passed, zero skips**, including
+hosted P1/P2/P3 regression; SQL **105 passed**; Ruff/pip check passed. Local HTTP
+Auth, private durable saves/retry, ordinary-user reviewer denial and exact
+temporary reviewer approval passed with owner cleanup. No new provider inference
+or hosted migration was performed. Docker packaging remains prepared/unverified.
+Human language review, device rehearsal and hosted deployment remain open;
+automatic publication remains disabled. Full evidence: [AI demo verification](ai-demo-verification.md).
+
+## 2026-10-24 - Pre-AI readiness audit and authorized P4.5 publication
+
+User authorized pushing existing P4.5 and documentation for teammate UI refinement.
+Fresh SQL 96/mobile 20/API 79 passed (3 general live suites skipped), TypeScript,
+Ruff and pip check passed. Read-only local SQL confirmed seven migrations, four
+confirmed Auth users and one reviewer. Ordinary local A/B/R login and Auth user
+validation returned 200; A/B non-admin and R reviewer verified; audit sessions
+signed out. No profile/social/provider inference or hosted schema mutation.
+
+Groq /models authenticated HTTP 200 and configured summary/moderation IDs present.
+Sarvam key/credit cap absent; language evaluation flag remains false. Existing local
+API and public HTTPS tunnel /health returned 200, proving liveness only. Hosted
+migration list has five P1-P4 versions; local P4.5 remains a different environment.
+Four named demo persona mappings/dataset have not been provisioned by this audit.
+
+Added docs/AI_DEMO_PREFLIGHT.md, a separate preparation-only Sarvam input template,
+and teammate README directions. Current strict Settings must not load unsupported
+Sarvam fields before the AI build adds them. No final AI code started; current
+keys/envs/private fixtures stay ignored. Staged configured-secret/artifact scan
+checked 101 files against 11 locally configured credential entries with zero hits;
+git diff --cached --check passed. Local project skill resources included; normalized
+one upstream contributing-guide trailing space without changing instructions.
+Publish the feature branch only; no main merge, hosted migration or paid deployment.
+
+## P4.5 Docker local execution — 24 October 2026
+
+**Implemented/tested:** Docker Engine 29.9.2 running; local Supabase started and
+recorded all migrations. P4.5 20261024000335 applied locally. Lint found an inherited
+text-to-array initialization warning; new forward migration 20261024005128 makes
+the empty array type explicit, without changing feed behavior or recorded files.
+Local lint/advisors now have no issues. Two ordinary local Auth accounts plus a
+separate reviewer fixture passed seven HTTP check groups: relogin preference
+persistence, privacy/cross-owner denial, duplicate handles, news/original social
+states/counts/retries, attributed Following, Storage owner/MIME/size restrictions,
+review actions/audit/idempotency/publication boundaries and post/reply mentions.
+Exact shared SDK adapter passed against local Auth/RPC. Only fixture setup used
+local admin/SQL; all authorization assertions used ordinary client sessions.
+
+Temporary preferences/social/avatar/submission changes cleaned; independent SQL
+observed 0 avatar objects/likes/reposts/follows. One labeled benign reviewed local
+post and reviewer membership retained for phone tests. Local report/audit/tombstone
+records remain. 96 SQL/20 mobile, TypeScript, API 79 pass/3 legacy live skips and
+Ruff pass. API local HTTP checks ran separately, not among skipped tests.
+
+**Next/limits:** Local preview/QR ready on port 8085 with local-only configuration;
+phone gestures/email confirmation and real consenting pilot not observed. Accounts
+were admin-confirmed local fixtures, not real participants. No hosted change,
+deployment, invitation or push; AI behavior/configuration preserved. See current
+[verification](p4-5-verification.md), which supersedes prior Docker-blocked entries.
+
+## P4.5 local verification preparation follow-up
+
+User selected local-only verification and will install Docker Desktop. Read-only
+hosted ledger/advisor preflight confirmed P0–P4 only; no remote change performed.
+Windows 11/WSL 2.7.14 present, Docker absent. Added local-only fixture preparation,
+ordinary-user social/Storage HTTP harness and LAN Expo launcher, preserving `.env`.
+Fixture admin key is used only for local account setup, never an RLS pass claim.
+Tools reject hosted origins and do not print keys/passwords. Profiles/social state
+are restored after checks; generated uploads cleaned. Nine new guard/PNG tests pass;
+full API 79 pass/3 live skips, Ruff passes, PowerShell parses without errors.
+Actual local preparation correctly reports BLOCKED before Docker is installed.
+Auth/Storage HTTP, reviewer setup and phone observations remain pending. Exact
+commands and limitations are in [P4.5 verification](p4-5-verification.md). No push,
+hosted migration/deployment or invitations. Existing advisor WARN about disabled
+leaked-password checks is unchanged; private-table no-policy INFO is intentional.
+[Auth remediation reference](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection).
+
+## P4.5 — local non-AI implementation, 24 October 2026
+
+**Implemented:** Combined A/B branch `feature/p4-5-social` from main 4d6c321.
+Preserved user planning edits, unrelated skills and local configuration. Supabase/
+Postgres skills/current docs consulted. CLI 2.122.0 help discovered before creating
+forward migration 20261024000335. Atomic profile/preferences save, owner avatar
+Storage policies, private unique relationships/mentions, batched state, public
+profiles/people/connections/Following, trusted human report review and retry-safe
+private audit. Explicit actor/membership/visibility checks, RLS and narrow grants.
+Manual hiding is independent of P4 decisions; forward visibility definitions cover
+public discovery, hidden parents/reports/news roots. Recorded migrations, original
+content/request keys and AI code/providers/prompts/policy remain unchanged.
+
+**Tested:** 96 PostgreSQL-in-WASM tests passed, including 22 new P4.5 cases and
+existing P0–P4 regressions. Actual mobile adapter exercised against migrated SQL
+with synthetic ordinary-role subjects, not real Auth/JWT/HTTP. Storage catalog
+shim verifies policies, not Storage HTTP enforcement. API 70 passed/3 live tests
+skipped, Ruff/pip check passed. Mobile 20 tests, TypeScript, Expo compatibility,
+Android/iOS exports pass. Existing 5 high npm audit findings remain.
+
+**Blocked:** No Docker/local Supabase; CLI local ledger connection refused on
+127.0.0.1:54322. Skill's Docker local pull/ledger/lint/advisor workflow could not
+run; migration was CLI-created and iterated/replayed in PGlite. Hosted migration
+expressly forbidden, not applied. No P4.5 real-account/Storage HTTP, Android/iPhone
+or ten-user pilot pass claimed. Prior pending P4 quality/native gates remain.
+
+**Next:** [P4.5 checklist](p4-5-verification.md) contains local setup, later reviewed
+migration/reviewer provisioning, ordinary-client RLS/Storage/social checks and
+separate device/pilot acceptance. Abandoned uploaded previews may need cleanup
+after checking current references and unresolved drafts. No push/deploy/P5/P6.
+
 ## P4 Malayalam output correction — 24 October 2026
 
 User's evaluation samples 2/3 were generated but failed target language: romanized

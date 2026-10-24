@@ -1,3 +1,4 @@
+import { storageShim } from './storage-shim.mjs';
 import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { after, before, test } from 'node:test';
@@ -20,6 +21,7 @@ before(async () => {
     grant execute on function auth.uid() to anon,authenticated;`);
   const migrations = (await readdir(new URL('../migrations/', import.meta.url)))
     .filter(file => file.endsWith('.sql')).sort();
+  await db.exec(storageShim);
   for (const file of migrations) {
     await db.exec(await readFile(new URL(`../migrations/${file}`, import.meta.url), 'utf8'));
   }

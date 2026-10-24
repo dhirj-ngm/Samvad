@@ -1,5 +1,40 @@
 # P0 decisions — 23 October 2026
 
+## P4.5 local implementation — 24 October 2026
+
+- Combined A/B work stays on `feature/p4-5-social`; main unchanged. No push, hosted
+  migration/deployment, invitations or P5/P6. User planning edits/config preserved.
+- Atomic preferences, optional versioned avatars, private unique social graph,
+  stable mentions, batched state and real Following. Public profile projection
+  excludes email/private identity/interests; existing handles and en/hi/ml retained.
+- Private authorized dispatcher behind invoker wrapper; human review requires
+  operator-controlled membership, reason and retry-safe audit. Separate hiding
+  never changes P4 AI decisions or auto-punishes by report count. No new AI work.
+- Docker absence blocks full local Auth/Storage/ledger/lint/advisors. PGlite roles
+  and adapter integration are distinct from real JWT/account/device evidence.
+  [P4.5 acceptance remains pending](p4-5-verification.md); this supersedes earlier
+  planning-only status while preserving its non-AI scope override.
+
+## P4.5 non-AI scope alignment — 24 October 2026
+
+- User requested review/planning of the supplied polishing vision, assigned both
+  mobile/backend roles, and explicitly excluded AI work from this build. The
+  [execution plan](p4-5-plan.md) supersedes AI priorities in the imported change
+  request for this phase; the original Downloads file remains untouched.
+- Refine existing language/interest onboarding instead of claiming it is absent.
+  Registry initially includes only actually supported en/hi/ml; no new provider
+  coverage, UI localization or automatic rewriting is promised.
+- Build full self/public profiles and then durable social actions/People/mentions.
+  Use original conversation IDs for news/post interactions, avoiding copied news
+  posts or fake human authors. Preserve publication visibility, drafts and reports.
+- Keep existing handle syntax stable; support Indic display names/content. Any
+  handle-grammar expansion needs separate uniqueness and mention-resolution work.
+- Manual protected report review is non-AI work. Model/provider/summary/translation
+  upgrades and fine-tuning are deferred. Ten real consenting participants and
+  hosted/device checks remain observed gates, never inferred from local fixtures.
+- This is planning/contract alignment, not a feature completion claim. No push,
+  hosted migration, invitations, deployment or paid service authorized/executed here.
+
 ## P4 combined implementation — 24 October 2026
 
 - User assigned both P4 workstreams and previous-phase conflict handling. Main

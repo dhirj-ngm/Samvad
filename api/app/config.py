@@ -10,6 +10,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="forbid", hide_input_in_errors=True)
 
+    local_demo_mode: bool = False
     supabase_url: str = ""
     supabase_public_key: SecretStr = SecretStr("")
     supabase_service_role_key: SecretStr = SecretStr("")
@@ -37,15 +38,24 @@ class Settings(BaseSettings):
     ai_max_output_tokens: int = Field(default=512, ge=1, le=512)
     ai_request_timeout_seconds: float = Field(default=20, gt=0, le=20)
     demo_mode: bool = False
+    ai_demo_enabled: bool = False
+    sarvam_api_key: SecretStr = SecretStr("")
+    sarvam_account_use_authorized: bool = False
+    sarvam_max_credit_inr: float = Field(default=0, ge=0, le=50, allow_inf_nan=False)
+    sarvam_max_characters: int = Field(default=0, ge=0, le=10000)
+    sarvam_prior_characters: int = Field(default=32, ge=0, le=10000)
+    sarvam_model: Literal["sarvam-translate:v1"] = "sarvam-translate:v1"
     allowed_origins: list[str] = Field(default_factory=list)
 
     @field_validator("supabase_url", "supabase_jwks_url")
     @classmethod
-    def https_url(cls, value: str) -> str:
+    def https_url(cls, value: str, info) -> str:
         if not value:
             return value
         parts = urlsplit(value)
-        if (parts.scheme != "https" or not parts.hostname or parts.username
+        local = (info.data.get('local_demo_mode') and parts.scheme == 'http'
+                 and parts.hostname in {'127.0.0.1', 'localhost'})
+        if ((parts.scheme != "https" and not local) or not parts.hostname or parts.username
                 or parts.password or parts.query or parts.fragment):
             raise ValueError("Expected HTTPS URL without credentials, query or fragment")
         return value.rstrip("/")
@@ -70,6 +80,8 @@ class Settings(BaseSettings):
         if self.supabase_jwks_url and not self.supabase_url:
             raise ValueError("SUPABASE_JWKS_URL requires SUPABASE_URL")
         if self.supabase_url:
+            if self.local_demo_mode and urlsplit(self.supabase_url).hostname not in {'localhost', '127.0.0.1'}:
+                raise ValueError('Local demo must use a loopback Supabase origin')
             if urlsplit(self.supabase_url).path:
                 raise ValueError("SUPABASE_URL must be the project origin")
             expected = self.supabase_url + "/auth/v1/.well-known/jwks.json"

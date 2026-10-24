@@ -9,6 +9,7 @@ from pydantic import BaseModel
 
 from app.ai import AIService, EntityRequest, Failure, SummaryRequest, TranslateRequest
 from app.config import Settings
+from app.demo_ai import DemoAIService, DemoSummaryRequest, ReviewRequest, SubmitRequest
 
 
 class HealthResponse(BaseModel):
@@ -20,7 +21,7 @@ class HealthResponse(BaseModel):
 
 def create_app(settings: Settings | None = None, transport=None) -> FastAPI:
     config = settings if settings is not None else Settings()
-    service = AIService(config, transport=transport)
+    service = (DemoAIService if config.ai_demo_enabled else AIService)(config, transport=transport)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -72,5 +73,31 @@ def create_app(settings: Settings | None = None, transport=None) -> FastAPI:
     @app.post('/v1/moderate')
     async def moderate(payload: EntityRequest, actor: Annotated[tuple[str, str], Depends(identity)]):
         return await service.process('moderation', payload, actor)
+
+    def demo_service():
+        if not isinstance(service, DemoAIService):
+            raise Failure(503, 'demo_unavailable', 'AI demo is not enabled in this environment.')
+        return service
+
+    @app.post('/v1/submit-and-screen')
+    async def submit_and_screen(payload: SubmitRequest,
+                                actor: Annotated[tuple[str, str], Depends(identity)]):
+        result = await demo_service().submit(payload, actor)
+        return JSONResponse(status_code=202 if result['retryable'] else 200, content=result)
+
+    @app.post('/v1/summarize')
+    async def summarize_content(payload: DemoSummaryRequest,
+                                actor: Annotated[tuple[str, str], Depends(identity)]):
+        return await demo_service().summarize(payload, actor)
+
+    @app.post('/v1/review-queue')
+    async def held_queue(actor: Annotated[tuple[str, str], Depends(identity)]):
+        return await demo_service().rpc('demo_review', {'p_action': 'queue', 'p_payload': {}}, actor[1])
+
+    @app.post('/v1/review')
+    async def review_content(payload: ReviewRequest,
+                             actor: Annotated[tuple[str, str], Depends(identity)]):
+        return await demo_service().rpc('demo_review',
+            {'p_action': 'decide', 'p_payload': payload.model_dump(mode='json')}, actor[1])
 
     return app
