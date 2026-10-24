@@ -1,5 +1,13 @@
 # Identity migration and later-phase plan
 
+P4.5 **LOCAL ONLY**: `20261024000335_social_experience.sql` and forward
+`20261024005128_p45_feed_array_type.sql` are recorded in the Docker local ledger.
+The latter makes feed array initialization explicit to clear the local lint
+warning, preserving behavior. Seven versions total locally; no recorded SQL was
+rewritten and no reset performed. Local Auth/Storage HTTP, ordinary-account SDK,
+lint/advisors and SQL checks pass. Neither P4.5 file is applied to the hosted
+project. See [actual evidence](../../docs/p4-5-verification.md).
+
 P4: `20261023225554_multilingual_ai.sql` deployed to agreed development project.
 Creates private server-only cache, global budget reservations and moderation events
 with service-only ai_control operations. Original user tables/policies preserved;

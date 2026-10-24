@@ -4,6 +4,7 @@ import { before,after,test } from 'node:test';
 import { createHash,randomUUID } from 'node:crypto';
 import { PGlite } from '@electric-sql/pglite';
 import { citext } from '@electric-sql/pglite/contrib/citext';
+import { storageShim } from './storage-shim.mjs';
 const db=new PGlite({extensions:{citext}});
 const A='60000000-0000-4000-8000-000000000001',B='60000000-0000-4000-8000-000000000002';
 let post;
@@ -12,6 +13,7 @@ before(async()=>{
     create schema auth;create table auth.users(id uuid primary key,email text,email_confirmed_at timestamptz);
     create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
     grant usage on schema auth to anon,authenticated;grant execute on function auth.uid() to anon,authenticated;`);
+  await db.exec(storageShim);
   for(const name of (await readdir(new URL('../migrations/',import.meta.url))).filter(f=>f.endsWith('.sql')).sort())
     await db.exec(await readFile(new URL(`../migrations/${name}`,import.meta.url),'utf8'));
   await db.query('insert into auth.users(id,email) values($1,$2),($3,$4)',[A,'a@fixture.invalid',B,'b@fixture.invalid']);

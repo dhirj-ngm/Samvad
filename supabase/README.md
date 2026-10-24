@@ -1,3 +1,19 @@
+# P4.5 local-only handoff
+
+The new forward migration `20261024000335_social_experience.sql` is **not applied
+to the hosted project**. It adds profiles/avatars, social graph, mentions/feeds
+and protected human review while retaining P4 AI policy. Read
+[P4.5 verification/setup](../docs/p4-5-verification.md) before running the new app.
+Docker/local Supabase now runs with all seven migration versions. Local Auth/Storage
+HTTP and the shared SDK pass with two ordinary accounts and a separate reviewer
+fixture. Local lint/advisors report no issues after the forward array-type fix
+`20261024005128_p45_feed_array_type.sql`. Hosted work and phone/pilot gates remain
+pending. QR preview uses the PC Mobile Hotspot at `192.168.137.1:8085`.
+No reset or hosted action is authorized by this handoff. Existing guidance below
+describes earlier phases and does not grant permission to apply the new migration.
+
+## Earlier phase handoffs (historical)
+
 # P1 identity backend
 
 **P4:** private AI cache/shared reservations/moderation event migration is deployed.
