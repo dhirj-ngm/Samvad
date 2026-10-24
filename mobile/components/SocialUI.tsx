@@ -9,12 +9,13 @@ import type {
   Mention,
   PublicProfile,
 } from "../types/contracts";
+import { Icon } from "./Icon";
 import { colors } from "../theme/tokens";
 
 export const actionStyle = {
   minHeight: 48,
   paddingHorizontal: 12,
-  paddingVertical: 14,
+  paddingVertical: 12,
 } as const;
 export const linkStyle = {
   color: colors.accent,
@@ -69,7 +70,9 @@ export function AuthorLink({ profile }: { profile: PublicProfile }) {
   return (
     <Pressable
       style={{
-        ...actionStyle,
+        minHeight: 48,
+        paddingVertical: 8,
+        flexShrink: 1,
         flexDirection: "row",
         alignItems: "center",
         gap: 12,
@@ -83,14 +86,12 @@ export function AuthorLink({ profile }: { profile: PublicProfile }) {
         })
       }
     >
-      <Avatar profile={profile} size={36} />
+      <Avatar profile={profile} size={42} />
       <View style={{ flex: 1, minWidth: 0 }}>
-        <Text style={linkStyle}>
-          {profile.display_name || `@${profile.handle}`}
+        <Text numberOfLines={1} style={{ color: colors.ink, fontWeight: "700", fontSize: 15 }}>
+          {profile.display_name || profile.handle}
         </Text>
-        {profile.display_name ? (
-          <Text style={{ color: colors.muted }}>@{profile.handle}</Text>
-        ) : null}
+        <Text numberOfLines={1} style={{ color: colors.muted, fontSize: 12, marginTop: 3 }}>@{profile.handle}</Text>
       </View>
     </Pressable>
   );
@@ -175,72 +176,28 @@ export function SocialActions({
       if (alive.current) setBusy(false);
     }
   }
-  return (
-    <View>
-      <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-        {confirmed ? (
-          (["like", "repost"] as const).map((action) => {
-            const active =
-              action === "like" ? confirmed.liked : confirmed.reposted;
-            return (
-              <Pressable
-                key={action}
-                disabled={busy || !!pending}
-                accessibilityRole="button"
-                accessibilityState={{
-                  selected: active,
-                  disabled: busy || !!pending,
-                }}
-                accessibilityLabel={`${active ? "Undo " : ""}${action}; ${action === "like" ? confirmed.likes : confirmed.reposts}`}
-                style={actionStyle}
-                onPress={() => void write(action, !active)}
-              >
-                <Text style={linkStyle}>
-                  {action === "like"
-                    ? active
-                      ? "Liked"
-                      : "Like"
-                    : active
-                      ? "Reposted"
-                      : "Repost"}{" "}
-                  · {action === "like" ? confirmed.likes : confirmed.reposts}
-                </Text>
-              </Pressable>
-            );
-          })
-        ) : (
-          <Text style={{ color: colors.muted, padding: 12 }}>
-            Social counts unavailable. Refresh to retry.
-          </Text>
-        )}
-        <Pressable
-          accessibilityRole="button"
-          style={actionStyle}
-          onPress={onReply}
-        >
-          <Text style={linkStyle}>Reply</Text>
-        </Pressable>
-      </View>
-      {message ? (
-        <Text
-          accessibilityLiveRegion="polite"
-          style={{ color: colors.warning, lineHeight: 24 }}
-        >
-          {message}
-        </Text>
-      ) : null}
-      {pending ? (
-        <Pressable
-          disabled={busy}
-          accessibilityRole="button"
-          style={actionStyle}
-          onPress={() => void write(pending.action, pending.desired)}
-        >
-          <Text style={linkStyle}>
-            {busy ? "Saving…" : `Retry same ${pending.action} state`}
-          </Text>
-        </Pressable>
-      ) : null}
+  return <View>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: colors.border, marginTop: 12, paddingTop: 2 }}>
+      <Pressable accessibilityRole="button" accessibilityLabel="Reply to this conversation" style={{ ...actionStyle, flexDirection: 'row', alignItems: 'center', gap: 7, paddingLeft: 0 }} onPress={onReply}>
+        <Icon name="chat" size={19} color={colors.muted} /><Text style={{ color: colors.muted, fontSize: 12 }}>Reply</Text>
+      </Pressable>
+      {confirmed ? (['repost', 'like'] as const).map(action => {
+        const active = action === 'like' ? confirmed.liked : confirmed.reposted;
+        const count = action === 'like' ? confirmed.likes : confirmed.reposts;
+        const tint = active ? (action === 'like' ? colors.danger : colors.accent) : colors.muted;
+        return <Pressable key={action} disabled={busy || !!pending} accessibilityRole="button"
+          accessibilityState={{ selected: active, disabled: busy || !!pending }}
+          accessibilityLabel={`${active ? 'Undo ' : ''}${action}; ${count}`}
+          style={{ ...actionStyle, flexDirection: 'row', alignItems: 'center', gap: 7 }}
+          onPress={() => void write(action, !active)}>
+          <Icon name={action === 'like' ? 'heart' : 'repost'} size={20} color={tint} filled={active} />
+          <Text style={{ color: tint, fontSize: 12 }}>{count || (action === 'like' ? 'Like' : 'Repost')}</Text>
+        </Pressable>;
+      }) : <Text style={{ color: colors.muted, fontSize: 12, alignSelf: 'center' }}>Likes unavailable</Text>}
     </View>
-  );
+    {message ? <Text accessibilityLiveRegion="polite" style={{ color: colors.warning, fontSize: 13, lineHeight: 20 }}>{message}</Text> : null}
+    {pending ? <Pressable disabled={busy} accessibilityRole="button" style={actionStyle} onPress={() => void write(pending.action, pending.desired)}>
+      <Text style={linkStyle}>{busy ? 'Saving…' : `Try ${pending.action} again`}</Text>
+    </Pressable> : null}
+  </View>;
 }

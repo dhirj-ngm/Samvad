@@ -43,10 +43,11 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
     } finally { inFlight.current = false; setBusy(false); }
   }
 
-  return <Screen title={signingUp ? 'Create account' : 'Sign in'} subtitle="Your email stays private. Others see your public handle.">
+  return <Screen title={signingUp ? 'Join Samvad' : 'Welcome back'} back subtitle="Your email stays private. Others see your public handle.">
     <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={styles.content}>
-        {!supabase ? <Text style={styles.notice}>Account setup is waiting for the development Supabase project. The sample app is still available.</Text> : null}
+        {!supabase ? <Text style={styles.notice}>Sign-in is temporarily unavailable. You can still browse public conversations.</Text> : null}
+        <View style={{backgroundColor:colors.accentSoft,borderRadius:20,padding:22,marginBottom:12}}><Text style={{fontSize:24,fontWeight:'800',color:colors.ink,lineHeight:32}}>A place for your perspective.</Text><Text style={{fontSize:14,lineHeight:22,color:colors.muted,marginTop:8}}>Ideas, conversations, and people — in a language that feels like home.</Text></View>
         <Text style={styles.label}>Email</Text>
         <TextInput style={styles.input} autoCapitalize="none" autoCorrect={false} keyboardType="email-address" autoComplete="email" value={email} onChangeText={setEmail} accessibilityLabel="Email" />
         <Text style={styles.label}>Password</Text>
@@ -58,18 +59,18 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
         <Pressable onPress={() => router.replace(signingUp ? '/sign-in' : '/sign-up')} accessibilityRole="link">
           <Text style={styles.link}>{signingUp ? 'Already have an account? Sign in' : 'New here? Create an account'}</Text>
         </Pressable>
-        <Pressable onPress={() => router.replace('/(tabs)')} accessibilityRole="link"><Text style={styles.link}>Back to sample app</Text></Pressable>
+        <Pressable onPress={() => router.replace('/(tabs)')} accessibilityRole="link"><Text style={styles.link}>Explore conversations</Text></Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
   </Screen>;
 }
 
 const styles = StyleSheet.create({
-  fill: { flex: 1 }, content: { padding: spacing.lg, gap: spacing.sm },
+  fill: { flex: 1 }, content: { padding: spacing.lg, gap: spacing.sm, paddingTop: 32 },
   label: { color: colors.ink, fontWeight: '700', marginTop: spacing.md },
-  input: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: radius.sm, padding: spacing.md, color: colors.ink, fontSize: type.body },
+  input: { backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1, borderRadius: 14, padding: spacing.md, color: colors.ink, fontSize: type.body },
   notice: { color: colors.warning, lineHeight: 21, marginVertical: spacing.sm },
-  button: { backgroundColor: colors.accent, padding: spacing.md, borderRadius: radius.sm, alignItems: 'center', marginTop: spacing.md },
+  button: { backgroundColor: colors.accent, padding: spacing.md, borderRadius: 14, alignItems: 'center', marginTop: spacing.md },
   disabled: { opacity: 0.45 }, buttonText: { color: colors.surface, fontWeight: '700', fontSize: type.body },
   link: { color: colors.accent, fontWeight: '600', textAlign: 'center', marginTop: spacing.md, minHeight: 44, paddingVertical: spacing.md },
 });

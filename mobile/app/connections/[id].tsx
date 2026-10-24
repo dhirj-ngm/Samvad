@@ -11,14 +11,7 @@ export default function Connections() {
   const router = useRouter();
   const mode = direction === "following" ? "following" : "followers";
   return (
-    <Screen title={mode === "following" ? "Following" : "Followers"}>
-      <Pressable
-        style={actionStyle}
-        accessibilityRole="button"
-        onPress={() => router.back()}
-      >
-        <Text style={linkStyle}>Back</Text>
-      </Pressable>
+    <Screen back title={mode === "following" ? "Following" : "Followers"}>
       <People id={id} direction={mode} />
     </Screen>
   );

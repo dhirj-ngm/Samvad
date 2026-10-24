@@ -7,6 +7,9 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { colors } from "../theme/tokens";
+import { Icon } from "./Icon";
+import { EmptyState } from "./UI";
 import { useAuth } from "../lib/auth";
 import { searchPeople, social } from "../lib/social";
 import { supabase } from "../lib/supabase";
@@ -71,22 +74,24 @@ export function People({
     };
   }, [query, id, direction, attempt, session?.user.id]);
   return (
-    <View style={{ flex: 1, paddingHorizontal: 24 }}>
+    <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 16 }}>
       {!id ? (
-        <TextInput
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 14, borderRadius: 24, backgroundColor: colors.canvas, marginBottom: 16 }}><Icon name="search" color={colors.muted} size={19} /><TextInput
           accessibilityLabel="Search public people"
-          placeholder="Search @handle or display name"
+          placeholder="Search people"
+          placeholderTextColor={colors.muted}
           value={query}
           maxLength={80}
           onChangeText={setQuery}
           autoCapitalize="none"
           style={{
-            padding: 16,
-            borderWidth: 1,
-            borderRadius: 12,
-            marginBottom: 12,
+            flex: 1,
+            minHeight: 48,
+            paddingVertical: 12,
+            color: colors.ink,
+            fontSize: 15,
           }}
-        />
+        /></View>
       ) : null}
       <FlatList
         data={rows}
@@ -94,12 +99,12 @@ export function People({
         keyboardShouldPersistTaps="handled"
         refreshing={busy}
         onRefresh={() => setAttempt((n) => n + 1)}
-        renderItem={({ item }) => <AuthorLink profile={item} />}
+        renderItem={({ item }) => <View style={{ borderBottomWidth: 1, borderBottomColor: colors.border, paddingVertical: 8 }}><AuthorLink profile={item} /></View>}
         ListEmptyComponent={
           busy ? (
-            <ActivityIndicator />
+            <ActivityIndicator color={colors.accent} />
           ) : (
-            <Text>No people found yet. Try another name or handle.</Text>
+            <EmptyState icon="person" title="Find your people" detail="Search a name or handle to discover voices to follow." />
           )
         }
         ListFooterComponent={
@@ -107,14 +112,7 @@ export function People({
             {message ? (
               <Text accessibilityLiveRegion="polite">{message}</Text>
             ) : null}
-            <Pressable
-              accessibilityRole="button"
-              style={actionStyle}
-              disabled={busy}
-              onPress={() => void load(true)}
-            >
-              <Text style={linkStyle}>Refresh people</Text>
-            </Pressable>
+            {message ? <Pressable accessibilityRole="button" style={actionStyle} disabled={busy} onPress={() => void load(true)}><Text style={linkStyle}>Try again</Text></Pressable> : null}
             {more ? (
               <Pressable
                 accessibilityRole="button"

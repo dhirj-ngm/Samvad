@@ -9,14 +9,7 @@ export default function Person() {
   const router = useRouter();
   const { session } = useAuth();
   return (
-    <Screen title="Public profile">
-      <Pressable
-        style={actionStyle}
-        accessibilityRole="button"
-        onPress={() => router.back()}
-      >
-        <Text style={linkStyle}>Back</Text>
-      </Pressable>
+    <Screen back title="Profile">
       <ProfileView key={`${id}:${session?.user.id ?? "public"}`} id={id} />
     </Screen>
   );

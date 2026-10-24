@@ -1,6 +1,8 @@
 import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { Screen } from "../../components/Screen";
+import { EmptyState } from "../../components/UI";
+import { colors } from "../../theme/tokens";
 import { ProfileView } from "../../components/ProfileView";
 import { actionStyle, linkStyle } from "../../components/SocialUI";
 import { useAuth } from "../../lib/auth";
@@ -17,28 +19,17 @@ export default function Profile() {
         </Pressable>
       </View> : null}
       {!ready || (session && !profile && profileLoading) ? (
-        <Text>Restoring account…</Text>
+        <Text style={{padding:24,color:colors.muted}}>Restoring account…</Text>
       ) : session && profile ? (
         <ProfileView key={session.user.id} id={session.user.id} />
       ) : session && profileError ? null : (
-        <View style={{ padding: 24 }}>
-          <Text style={{ fontSize: 20, lineHeight: 30 }}>
-            {session
-              ? "Finish your public profile"
-              : "Join the conversation with a public pseudonym"}
-          </Text>
-          <Pressable
-            style={actionStyle}
-            accessibilityRole="link"
-            onPress={() => router.push(session ? "/onboarding" : "/sign-in")}
-          >
-            <Text style={linkStyle}>
-              {session ? "Resume setup" : "Sign in"}
-            </Text>
-          </Pressable>
+        <View>
+          <EmptyState icon="person" title={session ? "Make yourself at home" : "Your voice belongs here"}
+            detail={session ? "Choose a name, your reading language, and the topics you enjoy." : "Follow interesting people and join conversations in your language."}
+            action={session ? "Complete profile" : "Sign in"} onAction={() => router.push(session ? "/onboarding" : "/sign-in")} />
           {!session ? (
             <Pressable
-              style={actionStyle}
+              style={[actionStyle,{alignItems:"center"}]}
               accessibilityRole="link"
               onPress={() => router.push("/sign-up")}
             >

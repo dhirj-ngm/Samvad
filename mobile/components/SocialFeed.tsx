@@ -19,6 +19,8 @@ import {
 } from "../lib/social";
 import { supabase } from "../lib/supabase";
 import type { InteractionState, Mention, SocialRow } from "../types/contracts";
+import { colors } from "../theme/tokens";
+import { EmptyState } from "./UI";
 import { FeedCard } from "./FeedCard";
 import { actionStyle, AuthorLink, linkStyle } from "./SocialUI";
 export function SocialFeed({
@@ -108,7 +110,7 @@ export function SocialFeed({
     <FlatList
       ListHeaderComponent={header}
       contentContainerStyle={{
-        paddingHorizontal: 24,
+        paddingHorizontal: 0,
         paddingBottom: 32,
         flexGrow: 1,
       }}
@@ -120,8 +122,8 @@ export function SocialFeed({
         <View>
           {r.reposter ? (
             <View>
-              <Text style={{ color: "#5D716E" }}>Reposted by</Text>
-              <AuthorLink profile={r.reposter} />
+              <Text style={{ color: colors.muted, fontSize: 12, marginHorizontal: 20, marginTop: 12 }}>Reposted by</Text>
+              <View style={{ paddingHorizontal: 20 }}><AuthorLink profile={r.reposter} /></View>
             </View>
           ) : null}
           <FeedCard
@@ -137,41 +139,13 @@ export function SocialFeed({
           />
         </View>
       )}
-      ListEmptyComponent={
-        busy ? (
-          <ActivityIndicator />
-        ) : (
-          <View>
-            <Text style={{ lineHeight: 24 }}>
-              {mode === "following"
-                ? "No public posts from people you follow yet. Discover people, follow them, and return here."
-                : "No public items yet. Pending or held submissions are kept separately for the owner."}
-            </Text>
-            {mode === "following" ? (
-              <Pressable
-                accessibilityRole="link"
-                style={actionStyle}
-                onPress={() => router.push("/people")}
-              >
-                <Text style={linkStyle}>Discover people</Text>
-              </Pressable>
-            ) : null}
-          </View>
-        )
-      }
+      ListEmptyComponent={busy ? <ActivityIndicator color={colors.accent} style={{ margin: 32 }} /> : <EmptyState icon={mode === 'following' ? 'person' : 'chat'} title={mode === 'following' ? 'Make this feed yours' : 'A new voice starts here'} detail={mode === 'following' ? 'Follow people whose ideas you enjoy. Their posts will appear here.' : 'Public posts will appear here when they are ready.'} action={mode === 'following' ? 'Find people' : undefined} onAction={() => router.push('/people')} />}
       ListFooterComponent={
         <>
           {message ? (
-            <Text accessibilityLiveRegion="polite">{message}</Text>
+            <Text accessibilityLiveRegion="polite" style={{ color: colors.warning, paddingHorizontal: 20 }}>{message}</Text>
           ) : null}
-          <Pressable
-            accessibilityRole="button"
-            style={actionStyle}
-            disabled={busy}
-            onPress={() => void load(true)}
-          >
-            <Text style={linkStyle}>Refresh</Text>
-          </Pressable>
+          {message ? <Pressable accessibilityRole="button" style={actionStyle} disabled={busy} onPress={() => void load(true)}><Text style={linkStyle}>Try again</Text></Pressable> : null}
           {more ? (
             <Pressable
               accessibilityRole="button"

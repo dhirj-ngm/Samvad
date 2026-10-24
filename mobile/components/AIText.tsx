@@ -5,6 +5,8 @@ import { supabase } from '../lib/supabase';
 import { aiDemoEnabled, requestAI } from '../lib/ai-client';
 import { parseDemoSummary } from '../lib/ai-model';
 import type { EntityType, LanguageCode } from '../types/contracts';
+import { Icon } from './Icon';
+import { languageLabel } from '../lib/languages';
 import { colors, spacing, type } from '../theme/tokens';
 
 export function AIText({entityType,id,original,language}: {entityType:EntityType;id:string;original:string;language:LanguageCode}) {
@@ -32,10 +34,9 @@ function Translation({entityType,id,original,language,target,actor}: {entityType
   }
   return <View>
     <Text selectable style={styles.body}>{show?translated:original}</Text>
-    {show?<Text style={styles.note}>{originalResult?'Original text':'Translated by AI'} · {target.toUpperCase()}{cached?' · cached':''}{experimental?' · experimental, language review pending':''}</Text>:null}
+    {show?<Text style={styles.note}>{originalResult?'Original text':'AI translation'} · {languageLabel(target)}{experimental?' · Preview':''}</Text>:null}
     {language!==target?<>
-      <Text style={styles.note}>AI translation may contain mistakes. {aiDemoEnabled?'Processed by Sarvam.':'Processed by Groq.'}</Text>
-      <Pressable accessibilityRole="button" disabled={busy} onPress={()=>show?setShow(false):void translate()}><Text style={styles.link}>{busy?'Translating…':show?'Show original':`Read in ${target==='ml'?'മലയാളം':target==='hi'?'हिन्दी':'English'}`}</Text></Pressable>
+      <Pressable accessibilityRole="button" disabled={busy} onPress={()=>show?setShow(false):void translate()}><Text style={styles.link}>{busy?'Translating…':show?'Show original':`Translate to ${languageLabel(target)}`}</Text></Pressable>
     </>:null}
     {message?<Text accessibilityLiveRegion="polite" style={styles.note}>{message}</Text>:null}
   </View>;
@@ -65,15 +66,15 @@ function DemoSummary({id,entityType,actor,target}:{id:string;entityType:'news'|'
     finally{lock.current=false;if(alive.current)setBusy(false);}
   }
   return <View>
-    <Pressable accessibilityRole="button" disabled={busy} onPress={()=>english.length?setOpen(!open):void load()}><Text style={styles.link}>{busy?'Preparing summary…':open?'Hide summary':'Summarize'}</Text></Pressable>
+    <Pressable accessibilityRole="button" accessibilityState={{expanded:open,disabled:busy}} disabled={busy} style={styles.summaryButton} onPress={()=>english.length?setOpen(!open):void load()}><Icon name="sparkles" size={18} color={colors.accent}/><Text style={styles.summaryButtonText}>{busy?'Preparing summary…':open?'Hide summary':'Get the gist'}</Text></Pressable>
     {open&&english.length?<View style={{backgroundColor:colors.accentSoft,padding:16,borderRadius:12}}>
-      <Text style={styles.note}>{label} · AI generated{cached?' · previously generated':''}</Text>
-        {target!=='en'?<View style={{flexDirection:'row',flexWrap:'wrap',gap:20}}>
-        <Pressable accessibilityRole="button" accessibilityState={{selected:!showNative}} onPress={()=>setShowNative(false)}><Text style={styles.link}>English</Text></Pressable>
-        <Pressable accessibilityRole="button" disabled={busy} accessibilityState={{selected:showNative,busy,disabled:busy}} onPress={()=>native.length?setShowNative(true):void load(true)}><Text style={styles.link}>{target==='ml'?'മലയാളം':'हिन्दी'}{!native.length?' · retry':''}</Text></Pressable>
+      <Text style={styles.note}>{label} · AI summary</Text>
+        {target!=='en'?<View style={{flexDirection:'row',flexWrap:'wrap',gap:8,marginVertical:8}}>
+        <Pressable style={[styles.languageTab,!showNative&&styles.selectedLanguage]} accessibilityRole="button" accessibilityState={{selected:!showNative}} onPress={()=>setShowNative(false)}><Text style={[styles.summaryButtonText,!showNative&&{color:colors.surface}]}>English</Text></Pressable>
+        <Pressable style={[styles.languageTab,showNative&&styles.selectedLanguage]} accessibilityRole="button" disabled={busy} accessibilityState={{selected:showNative,busy,disabled:busy}} onPress={()=>native.length?setShowNative(true):void load(true)}><Text style={[styles.summaryButtonText,showNative&&{color:colors.surface}]}>{languageLabel(target)}{!native.length?' · retry':''}</Text></Pressable>
       </View>:null}
       {(showNative&&native.length?native:english).map((line,i)=><Text key={i} selectable style={styles.body}>• {line}</Text>)}
-      <Text style={styles.note}>The full original stays above. AI can make mistakes.</Text>
+      <Text style={styles.note}>AI can make mistakes. Read the original for context.</Text>
     </View>:null}
     {message?<Text accessibilityLiveRegion="polite" style={styles.note}>{message}</Text>:null}
   </View>;
@@ -93,12 +94,11 @@ function Brief({id,actor,language}: {id:string;actor?:string;language:LanguageCo
     finally{inFlight.current=false;if(alive.current)setBusy(false);}
   }
   return <View>
-    <Text style={styles.note}>Optional AI brief uses only the headline and short excerpt, processed by Groq Free-plan AI.</Text>
-    {lines?<><Text style={styles.note}>Headline-based brief · AI generated · {language.toUpperCase()}{cached?' · cached':''}</Text>{lines.map((line,index)=><Text key={index} style={styles.body}>{index+1}. {line}</Text>)}</>:<Pressable disabled={busy} accessibilityRole="button" onPress={()=>void load()}><Text style={styles.link}>{busy?'Preparing brief…':'Read 3-line headline brief'}</Text></Pressable>}
+    {lines?<><Text style={styles.note}>Headline-based brief · AI summary · {languageLabel(language)}</Text>{lines.map((line,index)=><Text key={index} style={styles.body}>{index+1}. {line}</Text>)}</>:<Pressable disabled={busy} accessibilityRole="button" onPress={()=>void load()}><Text style={styles.link}>{busy?'Preparing brief…':'Get the gist'}</Text></Pressable>}
     {message?<Text accessibilityLiveRegion="polite" style={styles.note}>{message}</Text>:null}
   </View>;
 }
-const styles=StyleSheet.create({body:{color:colors.ink,fontSize:type.body,lineHeight:26,marginVertical:spacing.xs},note:{color:colors.muted,fontSize:type.small,lineHeight:20,marginTop:spacing.sm},link:{color:colors.accent,fontWeight:'700',paddingVertical:spacing.md}});
+const styles=StyleSheet.create({languageTab:{minHeight:44,paddingHorizontal:16,justifyContent:'center',borderRadius:22},selectedLanguage:{backgroundColor:colors.accent},body:{color:colors.ink,fontSize:type.body,lineHeight:26,marginVertical:spacing.xs},note:{color:colors.muted,fontSize:type.small,lineHeight:20,marginTop:spacing.sm},link:{color:colors.accent,fontSize:13,fontWeight:'600',paddingVertical:12,minHeight:44},summaryButton:{alignSelf:'flex-start',flexDirection:'row',alignItems:'center',gap:6,minHeight:44,paddingHorizontal:12,marginTop:6,backgroundColor:colors.accentSoft,borderRadius:22},summaryButtonText:{color:colors.accent,fontSize:12,fontWeight:'700'}});
 
 export function ScreeningRetry({actor,entityType,id,onDone}: {actor:string;entityType:EntityType;id:string;onDone:()=>void}) {
   const [busy,setBusy]=useState(false),[message,setMessage]=useState('');
@@ -109,9 +109,9 @@ export function ScreeningRetry({actor,entityType,id,onDone}: {actor:string;entit
     inFlight.current=true;setBusy(true);setMessage('');
     try{const result=await requestAI(supabase,actor,'moderate',{entity_type:entityType,entity_id:id});
       if(!['allowed','flagged','blocked'].includes(result?.status))throw new Error('Screening was not confirmed. Content stays pending.');
-      if(alive.current){setMessage(result.status==='allowed'?'Screened and public.':'Held for trusted review.');onDone();}}
+      if(alive.current){setMessage(result.status==='allowed'?'Screened and public.':'Awaiting review.');onDone();}}
     catch(error){if(alive.current)setMessage(error instanceof Error?error.message:'Screening unavailable. Content stays pending.');}
     finally{inFlight.current=false;if(alive.current)setBusy(false);}
   }
-  return <View><Text style={styles.note}>Screening uses Groq and, when needed, Sarvam. Unavailable or uncertain screening keeps it private.</Text><Pressable disabled={busy} accessibilityRole="button" onPress={()=>void screen()}><Text style={styles.link}>{busy?'Checking screening…':'Retry AI screening'}</Text></Pressable>{message?<Text style={styles.note}>{message}</Text>:null}</View>;
+  return <View><Text style={styles.note}>Your post stays private until the check is complete.</Text><Pressable disabled={busy} accessibilityRole="button" onPress={()=>void screen()}><Text style={styles.link}>{busy?'Checking screening…':'Retry check'}</Text></Pressable>{message?<Text style={styles.note}>{message}</Text>:null}</View>;
 }

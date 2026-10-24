@@ -30,6 +30,7 @@ export function ConversationThread({
   root: FeedItem;
 }) {
   const { session, profile } = useAuth();
+  const [showOptions, setShowOptions] = useState(false);
   const actor = session?.user.id;
   const canWrite = !!actor && profile?.user_id === actor;
   const [mentions, setMentions] = useState<Mention[]>([]);
@@ -147,7 +148,11 @@ export function ConversationThread({
     }
   }
   return (
-    <View>
+    <View style={{paddingHorizontal:20}}>
+      <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+        <Text style={styles.heading}>Replies</Text><Pressable accessibilityRole="button" accessibilityLabel="Conversation options" accessibilityState={{expanded:showOptions}} style={{minWidth:44,minHeight:44,alignItems:'center',justifyContent:'center'}} onPress={() => setShowOptions(!showOptions)}><Text style={{fontSize:22,color:colors.muted}}>···</Text></Pressable>
+      </View>
+      {showOptions ? <View style={{backgroundColor:colors.canvas,paddingHorizontal:12,borderRadius:12}}>
       <Pressable
         accessibilityRole="button"
         onPress={() =>
@@ -168,7 +173,7 @@ export function ConversationThread({
           <Text style={styles.link}>Report @{root.post.author.handle}</Text>
         </Pressable>
       ) : null}
-      <Text style={styles.heading}>Replies</Text>
+      </View> : null}
       <Pressable
         accessibilityRole="button"
         disabled={busy}
@@ -180,7 +185,7 @@ export function ConversationThread({
       </Pressable>
       {!busy && !rows.length && !message ? (
         <Text style={styles.note}>
-          No visible replies yet. Start the conversation.
+          Be the first to add your perspective.
         </Text>
       ) : null}
       {rows.map((reply) => {
@@ -194,7 +199,7 @@ export function ConversationThread({
           >
             <AuthorLink profile={reply.author} />
             {reply.is_fixture ? (
-              <Text style={styles.note}>Demo fixture</Text>
+              <Text style={styles.note}>Sample reply</Text>
             ) : null}
             <Text style={styles.note}>
               {new Date(reply.created_at).toLocaleString()} · {reply.language}
@@ -357,7 +362,7 @@ export function ConversationThread({
                 ? "This reply was already removed. It was not created again."
                 : result.moderation_state === "allowed"
                   ? "Reply saved and public."
-                  : "Reply saved for trusted review. Only you can see it until approved. Refresh after review.";
+                  : "Your reply is saved and awaiting review. Only you can see it for now.";
             }}
           />
         </View>
@@ -378,16 +383,16 @@ const styles = StyleSheet.create({
     marginVertical: spacing.md,
   },
   reply: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    padding: spacing.md,
-    marginBottom: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    paddingVertical: 12,
+    marginBottom: 8,
     backgroundColor: colors.surface,
   },
   nested: {
     marginLeft: spacing.md,
-    borderLeftWidth: 3,
+    paddingLeft: 12,
+    borderLeftWidth: 2,
     borderLeftColor: colors.accent,
   },
   author: { fontWeight: "700", color: colors.ink, fontSize: type.body },
@@ -400,8 +405,10 @@ const styles = StyleSheet.create({
   },
   link: {
     color: colors.accent,
-    fontWeight: "700",
-    paddingVertical: spacing.md,
+    fontWeight: "600",
+    fontSize: 13,
+    minHeight: 44,
+    paddingVertical: 12,
   },
   actions: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md },
 });

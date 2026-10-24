@@ -256,8 +256,8 @@ function OnboardingAccount() {
     );
   return (
     <Screen
-      title="Your Samvad profile"
-      subtitle="Your public identity and private reading preferences."
+      back title="Edit profile"
+      subtitle="Make yourself at home."
     >
       <KeyboardAvoidingView
         style={styles.fill}
@@ -267,7 +267,7 @@ function OnboardingAccount() {
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={styles.content}
         >
-          <Text style={styles.label}>1 · Public identity</Text>
+          <Text style={styles.label}>Your profile</Text>
           <Text style={styles.info}>
             A pseudonym is welcome. Your email is never shown on this profile.
           </Text>
@@ -284,7 +284,7 @@ function OnboardingAccount() {
             accessibilityLabel="Public handle"
           />
           <Text style={styles.label}>
-            Display name (optional · 80 characters)
+            Display name
           </Text>
           <TextInput
             editable={!saving}
@@ -293,7 +293,7 @@ function OnboardingAccount() {
             onChangeText={setDisplayName}
             accessibilityLabel="Public display name"
           />
-          <Text style={styles.label}>Bio (optional · 280 characters)</Text>
+          <Text style={styles.label}>Bio</Text>
           <TextInput
             editable={!saving}
             multiline
@@ -312,10 +312,9 @@ function OnboardingAccount() {
               onBusyChange={setAvatarBusy}
             />
           ) : null}
-          <Text style={styles.label}>2 · Reading language</Text>
+          <Text style={styles.label}>Reading language</Text>
           <Text style={styles.info}>
-            Used for supported on-demand translation. Original text stays
-            available. This does not translate the entire app interface.
+            Choose the language you prefer for translations and summaries.
           </Text>
           <View style={styles.row}>
             {languages.map((item) => (
@@ -331,7 +330,7 @@ function OnboardingAccount() {
               </Pressable>
             ))}
           </View>
-          <Text style={styles.label}>3 · Interests (optional)</Text>
+          <Text style={styles.label}>Your interests</Text>
           <Text style={styles.hint}>
             Pick a few now, or leave them empty and edit later.
           </Text>
@@ -405,14 +404,14 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderColor: colors.border,
     borderWidth: 1,
-    borderRadius: radius.sm,
+    borderRadius: 24,
     backgroundColor: colors.surface,
   },
   active: { backgroundColor: colors.accentSoft, borderColor: colors.accent },
   choiceText: { color: colors.ink },
   hint: { color: colors.muted },
   error: { color: colors.warning, marginTop: spacing.md, lineHeight: 21 },
-  info: { color: colors.muted, padding: spacing.lg },
+  info: { color: colors.muted, fontSize: 13, lineHeight: 21, marginBottom: 12 },
   button: {
     backgroundColor: colors.accent,
     alignItems: "center",

@@ -1,13 +1,15 @@
 export const colors = {
-  canvas: '#F8F6F1',
+  canvas: '#F5F7F8',
   surface: '#FFFFFF',
-  ink: '#172C2A',
-  muted: '#5D716E',
-  border: '#DCE4DE',
-  accent: '#096B60',
-  accentSoft: '#E4F3EE',
-  story: '#FFF1DC',
-  warning: '#8A4D00',
+  ink: '#182C30',
+  muted: '#64767A',
+  border: '#E6ECEE',
+  accent: '#087E78',
+  accentSoft: '#E8F5F2',
+  story: '#FCF3E5',
+  warning: '#9B561D',
+  warm: '#E6A04D',
+  danger: '#C34763',
 } as const;
 
 export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 } as const;

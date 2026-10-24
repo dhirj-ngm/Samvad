@@ -126,8 +126,7 @@ function ConversationContext({ id }: { id: string }) {
   );
   return (
     <Screen
-      title="Conversation"
-      subtitle="Original text, public handles and sourced context"
+      back title="Conversation"
     >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -138,9 +137,6 @@ function ConversationContext({ id }: { id: string }) {
           keyboardDismissMode="on-drag"
           contentContainerStyle={styles.content}
         >
-          <Pressable onPress={() => router.back()} accessibilityRole="button">
-            <Text style={styles.link}>Back</Text>
-          </Pressable>
           {item ? (
             <FeedCard
               interaction={interaction}
@@ -164,15 +160,11 @@ function ConversationContext({ id }: { id: string }) {
               root={item}
             />
           ) : null}
-          <Text style={styles.body}>
-            AI translations may contain mistakes. Show original always restores
-            the author’s text.
-          </Text>
           <Pressable
             onPress={() => setAttempt((n) => n + 1)}
             accessibilityRole="button"
           >
-            <Text style={styles.link}>Refresh context</Text>
+            <Text style={styles.link}>Refresh conversation</Text>
           </Pressable>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -180,17 +172,19 @@ function ConversationContext({ id }: { id: string }) {
   );
 }
 const styles = StyleSheet.create({
-  content: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
+  content: { paddingHorizontal: 0, paddingBottom: spacing.xl },
   link: {
     color: colors.accent,
     fontSize: type.body,
     fontWeight: "700",
     paddingVertical: spacing.md,
+    paddingHorizontal: 20,
   },
   body: {
     color: colors.muted,
     fontSize: type.body,
     lineHeight: 24,
     marginBottom: spacing.md,
+    paddingHorizontal: 20,
   },
 });

@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { colors } from "../theme/tokens";
+import { Icon } from "../components/Icon";
 import { Screen } from "../components/Screen";
 import { OwnPosts } from "../components/OwnPosts";
 import { actionStyle, linkStyle } from "../components/SocialUI";
@@ -69,93 +71,40 @@ function AccountSettings() {
       setMessage("Sign out was not confirmed. Check your connection and retry.");
     } finally { setBusy(false); }
   }
-  return (
-    <Screen
-      title="Private settings"
-      subtitle="Visible only in your signed-in account"
-    >
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 32 }}
-      >
-        <Pressable
-          style={actionStyle}
-          accessibilityRole="button"
-          onPress={() => router.back()}
-        >
-          <Text style={linkStyle}>Back</Text>
-        </Pressable>
-        {session ? (
-          <View>
-            {saved === "1" ? (
-              <Text accessibilityLiveRegion="polite" style={{ lineHeight: 24 }}>
-                Profile, language and interests saved and confirmed.
-              </Text>
-            ) : null}
-            <Text style={{ lineHeight: 26 }}>
-              Account email: {session.user.email}
-            </Text>
-            <Text style={{ lineHeight: 26 }}>
-              Reading language:{" "}
-              {profile
-                ? languageLabel(profile.preferred_language)
-                : "Finish setup"}
-            </Text>
-            <Text style={{ lineHeight: 26 }}>
-              My interests:{" "}
-              {topics.length
-                ? topics.join(" · ")
-                : "All topics (no selections)"}
-            </Text>
-            {pending ? (
-              <Text>
-                A previous profile save needs confirmation. Resume editing to
-                retry.
-              </Text>
-            ) : null}
-            <Pressable
-              style={actionStyle}
-              accessibilityRole="link"
-              onPress={() => router.push("/onboarding")}
-            >
-              <Text style={linkStyle}>Edit profile / language / interests</Text>
-            </Pressable>
-            {admin ? (
-              <Pressable
-                style={actionStyle}
-                accessibilityRole="link"
-                onPress={() => router.push("/review")}
-              >
-                <Text style={linkStyle}>Human report review</Text>
-              </Pressable>
-            ) : null}
-            <Pressable
-              style={actionStyle}
-              accessibilityRole="button"
-              onPress={() => setAttempt((n) => n + 1)}
-            >
-              <Text style={linkStyle}>Refresh preferences</Text>
-            </Pressable>
-            <Pressable
-              style={actionStyle}
-              accessibilityRole="button"
-              disabled={busy}
-              onPress={() => void logout()}
-            >
-              <Text style={linkStyle}>
-                {busy ? "Signing out…" : "Sign out"}
-              </Text>
-            </Pressable>
-            {profile ? (
-              <OwnPosts key={session.user.id} actor={session.user.id} />
-            ) : null}
-          </View>
-        ) : (
-          <Text>Sign in to manage account preferences.</Text>
-        )}
-        {message ? (
-          <Text accessibilityLiveRegion="polite">{message}</Text>
-        ) : null}
-      </ScrollView>
-    </Screen>
-  );
+  return <Screen back title="Settings" subtitle="Your account, your preferences.">
+    <ScrollView contentContainerStyle={styles.content}>
+      {session ? <>
+        {saved === '1' ? <Text accessibilityLiveRegion="polite" style={styles.saved}>Your profile has been updated.</Text> : null}
+        <Text style={styles.section}>ACCOUNT</Text>
+        <View style={styles.card}>
+          <Text style={styles.label}>Email address</Text><Text style={styles.value}>{session.user.email}</Text>
+          <Text style={styles.note}>Only visible to you.</Text>
+        </View>
+        <Text style={styles.section}>MAKE IT YOURS</Text>
+        <View style={styles.card}>
+          <Pressable style={styles.row} accessibilityRole="button" onPress={() => router.push('/onboarding')}><Icon name="globe" color={colors.accent}/><View style={{flex:1}}><Text style={styles.label}>Reading language</Text><Text style={styles.value}>{profile ? languageLabel(profile.preferred_language) : 'Complete your profile'}</Text></View><Icon name="arrow" size={17} color={colors.muted}/></Pressable>
+          <View style={styles.divider}/>
+          <Text style={styles.label}>Your interests</Text><View style={styles.tags}>{(topics.length ? topics : ['All topics']).map(topic => <View style={styles.tag} key={topic}><Text style={styles.tagText}>{topic}</Text></View>)}</View>
+          <Pressable accessibilityRole="button" style={actionStyle} onPress={() => router.push('/onboarding')}><Text style={linkStyle}>Edit profile & interests</Text></Pressable>
+        </View>
+        {pending ? <Text style={styles.note}>Your last profile change needs a retry. Open Edit profile to finish saving.</Text> : null}
+        {admin ? <Pressable accessibilityRole="button" style={styles.admin} onPress={() => router.push('/review')}><Icon name="book" color={colors.accent}/><Text style={linkStyle}>Review reports</Text><Icon name="arrow" size={17} color={colors.accent}/></Pressable> : null}
+        {profile ? <OwnPosts key={session.user.id} actor={session.user.id}/> : null}
+        <View style={[styles.card,{marginTop:24}]}><Text style={styles.label}>About AI features</Text><Text style={styles.note}>AI features use Groq and, where available, Sarvam. Posts are checked before publishing; requesting a translation or summary also sends text to these services. AI can make mistakes; you can always read the original.</Text></View>
+        <Pressable style={styles.signOut} accessibilityRole="button" disabled={busy} onPress={() => void logout()}><Text style={{color:colors.danger,fontWeight:'700'}}>{busy ? 'Signing out…' : 'Sign out'}</Text></Pressable>
+      </> : <Text style={styles.value}>Sign in to manage your account.</Text>}
+      {message ? <View><Text accessibilityLiveRegion="polite" style={styles.note}>{message}</Text><Pressable style={actionStyle} onPress={() => setAttempt(n => n + 1)} accessibilityRole="button"><Text style={linkStyle}>Try again</Text></Pressable></View> : null}
+    </ScrollView>
+  </Screen>;
 }
+const styles = StyleSheet.create({
+  content:{paddingHorizontal:20,paddingBottom:40,backgroundColor:colors.canvas},
+  section:{fontSize:11,fontWeight:'700',letterSpacing:1.2,color:colors.muted,marginTop:24,marginBottom:10},
+  card:{backgroundColor:colors.surface,borderRadius:18,padding:18,borderWidth:1,borderColor:colors.border},
+  label:{fontSize:14,fontWeight:'700',color:colors.ink},value:{fontSize:15,lineHeight:24,color:colors.ink,marginTop:5},note:{fontSize:13,lineHeight:21,color:colors.muted,marginTop:8},
+  saved:{backgroundColor:colors.accentSoft,color:colors.accent,borderRadius:12,padding:14,marginTop:12},
+  row:{flexDirection:'row',alignItems:'center',gap:14,minHeight:54},divider:{height:1,backgroundColor:colors.border,marginVertical:16},
+  tags:{flexDirection:'row',flexWrap:'wrap',gap:6,marginTop:10},tag:{backgroundColor:colors.accentSoft,borderRadius:20,paddingVertical:7,paddingHorizontal:12},tagText:{color:colors.accent,fontSize:12},
+  admin:{flexDirection:'row',alignItems:'center',gap:12,backgroundColor:colors.surface,padding:18,borderRadius:16,marginTop:16},
+  signOut:{alignItems:'center',justifyContent:'center',minHeight:48,marginTop:24},
+});

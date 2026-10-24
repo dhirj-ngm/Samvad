@@ -120,8 +120,8 @@ export function ConversationComposer({
     <View style={styles.box}>
       <Text style={styles.note}>
         {report
-          ? "Your report and details are private to you and platform reviewers. Reporting does not automatically remove content."
-          : "Be respectful. Disagreement is allowed; threats, harassment and sharing private information are not. When AI is enabled, submitting uses Groq for screening and Sarvam for translation. Unavailable or uncertain screening keeps it private for review."}
+          ? "Your report is private. Our reviewers will take a look."
+          : "Share your perspective respectfully. Replies are checked with AI before appearing publicly."}
       </Text>
       {!draft ? (
         <Pressable
@@ -174,7 +174,7 @@ export function ConversationComposer({
             placeholder={
               report
                 ? "Optional details (do not include passwords or private contact data)"
-                : "Write an original reply…"
+                : "Add to the conversation…"
             }
             accessibilityLabel={
               report ? "Private report details" : "Reply text"
@@ -193,8 +193,8 @@ export function ConversationComposer({
             />
           ) : null}
           <Text style={styles.note}>
-            {count}/{limit} Unicode code points
-            {draft.attempted ? " · Exact draft locked for safe retry" : ""}
+            {count}/{limit}
+            {draft.attempted ? " · Ready to retry" : ""}
           </Text>
           <Pressable
             accessibilityRole="button"
@@ -207,10 +207,10 @@ export function ConversationComposer({
               {busy
                 ? "Saving…"
                 : draft.attempted
-                  ? "Retry same submission"
+                  ? "Try again"
                   : report
-                    ? "Submit private report"
-                    : "Submit reply for review"}
+                    ? "Send report"
+                    : "Reply"}
             </Text>
           </Pressable>
           {draft.attempted && !busy ? (
@@ -269,10 +269,12 @@ const styles = StyleSheet.create({
     marginVertical: spacing.sm,
   },
   chip: {
-    padding: spacing.md,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    minHeight: 44,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: radius.md,
+    borderRadius: 24,
   },
   selected: { backgroundColor: colors.accentSoft, borderColor: colors.accent },
   input: {

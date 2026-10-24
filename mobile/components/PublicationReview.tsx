@@ -56,7 +56,7 @@ export function PublicationReview(){
       <Text>Showing up to 50 oldest held submissions. Refresh after decisions to load the next items.</Text>
       <Pressable accessibilityRole="button" style={actionStyle} disabled={busy} onPress={()=>void load()}><Text style={linkStyle}>Refresh publication queue</Text></Pressable>
       {rows.map(row=><View key={`${row.entity_type}:${row.entity_id}`} style={{padding:16,marginVertical:8,borderWidth:1,borderColor:'#DCE4DE',borderRadius:16}}>
-        <Text style={{fontWeight:'700'}}>@{row.handle} · {row.moderation_state}{row.is_fixture?' · Demo fixture':''}</Text>
+        <Text style={{fontWeight:'700'}}>@{row.handle} · {row.moderation_state}{row.is_fixture?' · Sample post':''}</Text>
         <Text selectable style={{lineHeight:26,marginVertical:8}}>{row.body}</Text>
         {row.manual_hidden?<Text>Manually hidden; approval will not make it public.</Text>:null}
         <View style={{flexDirection:'row',flexWrap:'wrap',gap:20}}>{(['approve','reject'] as const).map(action=><Pressable key={action} accessibilityRole="button" style={actionStyle}

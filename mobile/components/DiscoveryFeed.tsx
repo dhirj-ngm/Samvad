@@ -21,6 +21,7 @@ import type {
   InteractionState,
   Mention,
 } from "../types/contracts";
+import { EmptyState } from "./UI";
 import { FeedCard } from "./FeedCard";
 import { colors, spacing, type } from "../theme/tokens";
 
@@ -40,7 +41,7 @@ export function DiscoveryFeed({ topic = null }: { topic?: string | null }) {
     async (reset: boolean) => {
       if (!supabase) {
         setMessage(
-          "The shared backend is not configured. Please try again after setup.",
+          "Your feed is temporarily unavailable. Please try again later.",
         );
         return;
       }
@@ -101,39 +102,8 @@ export function DiscoveryFeed({ topic = null }: { topic?: string | null }) {
       contentContainerStyle={styles.list}
       refreshing={loading}
       onRefresh={() => void fetchPage(true)}
-      ListHeaderComponent={
-        <View style={styles.intro}>
-          <Text style={styles.note}>
-            Historical source archive and public original posts. New posts await
-            review in Profile → My submissions.
-          </Text>
-          {message ? (
-            <Text style={styles.error} accessibilityLiveRegion="polite">
-              {message}
-            </Text>
-          ) : null}
-          <Pressable
-            onPress={() => void fetchPage(true)}
-            accessibilityRole="button"
-          >
-            <Text style={styles.link}>Refresh feed</Text>
-          </Pressable>
-        </View>
-      }
-      ListEmptyComponent={
-        loading ? (
-          <ActivityIndicator
-            color={colors.accent}
-            accessibilityLabel="Loading feed"
-          />
-        ) : (
-          <Text style={styles.note}>
-            {message
-              ? "Your feed will appear after a successful retry."
-              : "No public posts or source items match yet. Try another topic."}
-          </Text>
-        )
-      }
+      ListHeaderComponent={message ? <View style={styles.intro}><Text style={styles.error} accessibilityLiveRegion="polite">{message}</Text><Pressable onPress={() => void fetchPage(true)} accessibilityRole="button"><Text style={styles.link}>Try again</Text></Pressable></View> : undefined}
+      ListEmptyComponent={loading ? <ActivityIndicator style={{ marginTop: 48 }} color={colors.accent} accessibilityLabel="Loading feed" /> : <EmptyState title="Start a conversation" detail={message ? 'Your feed will be back when your connection is restored.' : 'No posts here yet. Share a thought or explore another topic.'} action="Write a post" onAction={() => router.push('/(tabs)/compose')} />}
       renderItem={({ item }) => (
         <FeedCard
           interaction={states[conversationId(asFeedItem(item))]}
@@ -165,11 +135,11 @@ export function DiscoveryFeed({ topic = null }: { topic?: string | null }) {
 }
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: 0,
     paddingBottom: spacing.xl,
     flexGrow: 1,
   },
-  intro: { marginBottom: spacing.md },
+  intro: { margin: spacing.md },
   note: { color: colors.muted, fontSize: type.small, lineHeight: 21 },
   link: {
     color: colors.accent,

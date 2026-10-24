@@ -6,14 +6,7 @@ import { actionStyle, linkStyle } from "../components/SocialUI";
 export default function PeopleScreen() {
   const router = useRouter();
   return (
-    <Screen title="People" subtitle="Find public voices across languages">
-      <Pressable
-        style={actionStyle}
-        accessibilityRole="button"
-        onPress={() => router.back()}
-      >
-        <Text style={linkStyle}>Back</Text>
-      </Pressable>
+    <Screen back title="People" subtitle="Find public voices across languages">
       <People />
     </Screen>
   );

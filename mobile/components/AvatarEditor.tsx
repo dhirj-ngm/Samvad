@@ -147,7 +147,7 @@ export function AvatarEditor({
   return (
     <View>
       <Text style={linkStyle}>
-        Optional public avatar · JPEG / PNG / WebP · up to 2 MiB
+        Profile photo · optional
       </Text>
       {selected ? (
         <Image
@@ -181,7 +181,7 @@ export function AvatarEditor({
         accessibilityRole="button"
         onPress={() => void choose()}
       >
-        <Text style={linkStyle}>Choose / replace image</Text>
+        <Text style={linkStyle}>Choose photo</Text>
       </Pressable>
       {selected ? (
         <View>
@@ -192,7 +192,7 @@ export function AvatarEditor({
             onPress={() => void upload()}
           >
             <Text style={linkStyle}>
-              {busy ? "Uploading…" : "Upload this preview"}
+              {busy ? "Uploading…" : "Use this photo"}
             </Text>
           </Pressable>
           <Pressable
@@ -215,7 +215,7 @@ export function AvatarEditor({
             setMessage("Save profile to confirm removal.");
           }}
         >
-          <Text style={linkStyle}>Remove avatar</Text>
+          <Text style={linkStyle}>Remove photo</Text>
         </Pressable>
       ) : null}
       {message ? (

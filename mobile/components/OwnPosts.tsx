@@ -63,8 +63,7 @@ export function OwnPosts({ actor }: { actor: string }) {
     <View style={styles.section}>
       <Text style={styles.heading}>My submissions</Text>
       <Text style={styles.note}>
-        Your latest 20 posts. Pending posts are visible only to you until
-        trusted review.
+        Your recent posts, including those waiting for review.
       </Text>
       <Pressable accessibilityRole="button" onPress={() => void refresh()}>
         <Text style={styles.link}>Refresh submissions</Text>
@@ -89,7 +88,7 @@ export function OwnPosts({ actor }: { actor: string }) {
                 : post.moderation_state === "pending"
                   ? "Pending review · only you"
                   : "Held for review · only you"}
-            {post.is_fixture ? " · Demo fixture" : ""}
+            {post.is_fixture ? " · Sample post" : ""}
           </Text>
           <Text style={styles.body}>{post.body}</Text>
           <Text style={styles.note}>

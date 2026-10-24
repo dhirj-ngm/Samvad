@@ -26,6 +26,7 @@ import type { LanguageCode } from "../types/contracts";
 import { colors, radius, spacing, type } from "../theme/tokens";
 
 import { languages } from "../lib/languages";
+import { Icon } from "./Icon";
 import { MentionSuggestions } from "./MentionSuggestions";
 
 export function PostComposer({
@@ -125,8 +126,8 @@ export function PostComposer({
         result.deleted
           ? "This submission was already removed. It was not created again."
           : result.moderation_state === "allowed"
-            ? "Your post is public. See it in Home or My submissions."
-            : "Saved for review. Only you can see it in Profile → My submissions until it is approved.",
+            ? "Your post is live. Find it on your profile."
+            : "Your post is saved and awaiting review. You can find it in Settings → My submissions.",
       );
     } catch (error) {
       if (mounted.current)
@@ -170,12 +171,10 @@ export function PostComposer({
         keyboardDismissMode="on-drag"
         contentContainerStyle={styles.wrap}
       >
-        <Text style={styles.author}>Posting as @{handle}</Text>
-        <Text style={styles.note}>
-          Write in English, Hindi or Malayalam. When AI is enabled, submitting
-          uses Groq for screening and Sarvam for translation. Unavailable
-          or uncertain screening keeps it private for trusted review.
-        </Text>
+        <View style={{flexDirection:'row',alignItems:'center',gap:12,marginBottom:8}}>
+          <View style={{width:44,height:44,borderRadius:22,backgroundColor:colors.accentSoft,alignItems:'center',justifyContent:'center'}}><Text style={{color:colors.accent,fontWeight:'800',fontSize:16}}>{handle.slice(0,2).toUpperCase()}</Text></View>
+          <View><Text style={styles.author}>@{handle}</Text><View style={{flexDirection:'row',alignItems:'center',gap:5,marginTop:4}}><Icon name="globe" size={13} color={colors.muted}/><Text style={{color:colors.muted,fontSize:12}}>Public conversation</Text></View></View>
+        </View>
         {loadFailed ? (
           <Pressable
             accessibilityRole="button"
@@ -211,7 +210,7 @@ export function PostComposer({
               onSelectionChange={(e) => setCursor(e.nativeEvent.selection.end)}
               value={draft.body}
               editable={!busy && !draft.attempted}
-              placeholder="What would you like to discuss?"
+              placeholder="What's on your mind?"
               placeholderTextColor={colors.muted}
               accessibilityLabel="Original post text"
               style={styles.input}
@@ -229,7 +228,7 @@ export function PostComposer({
               />
             ) : null}
             <Text style={[styles.counter, count > 2000 && styles.error]}>
-              {count} / 2000 characters
+              {count.toLocaleString()} / 2,000
             </Text>
             {draft.attempted ? (
               <Text style={styles.note}>
@@ -251,8 +250,8 @@ export function PostComposer({
                 {busy
                   ? "Saving…"
                   : draft.attempted
-                    ? "Retry same submission"
-                    : "Submit for review"}
+                    ? "Try posting again"
+                    : "Post"}
               </Text>
             </Pressable>
             {draft.attempted && !busy ? (
@@ -282,11 +281,12 @@ export function PostComposer({
             {message}
           </Text>
         ) : null}
+        <Text style={styles.note}>Posts are checked before appearing publicly. Keep the conversation respectful.</Text>
         <Pressable
           accessibilityRole="button"
-          onPress={() => router.push("/(tabs)/profile")}
+          onPress={() => router.push("/settings")}
         >
-          <Text style={styles.link}>View my submissions →</Text>
+          <Text style={styles.link}>My submissions</Text>
         </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -294,12 +294,12 @@ export function PostComposer({
 }
 const styles = StyleSheet.create({
   fill: { flex: 1 },
-  wrap: { paddingHorizontal: spacing.lg, paddingBottom: spacing.xl },
-  author: { color: colors.ink, fontSize: type.heading, fontWeight: "700" },
+  wrap: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: spacing.xl },
+  author: { color: colors.ink, fontSize: 16, fontWeight: "700" },
   note: {
     color: colors.muted,
-    fontSize: type.body,
-    lineHeight: 24,
+    fontSize: 13,
+    lineHeight: 21,
     marginTop: spacing.md,
   },
   languages: {
@@ -311,28 +311,31 @@ const styles = StyleSheet.create({
   chip: {
     borderWidth: 1,
     borderColor: colors.border,
-    padding: spacing.md,
-    borderRadius: radius.md,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    minHeight: 44,
+    borderRadius: 24,
   },
   selected: { backgroundColor: colors.accentSoft, borderColor: colors.accent },
   chipText: { color: colors.ink },
   input: {
-    minHeight: 180,
-    borderWidth: 1,
+    minHeight: 240,
+    borderWidth: 0,
     borderColor: colors.border,
     borderRadius: radius.md,
-    padding: spacing.md,
+    paddingVertical: 16,
+    paddingHorizontal: 0,
     color: colors.ink,
     backgroundColor: colors.surface,
-    fontSize: type.body,
-    lineHeight: 25,
+    fontSize: 20,
+    lineHeight: 30,
   },
   counter: { color: colors.muted, textAlign: "right", marginTop: spacing.sm },
   error: { color: colors.warning },
   button: {
     backgroundColor: colors.accent,
     padding: spacing.md,
-    borderRadius: radius.md,
+    borderRadius: 28,
     alignItems: "center",
     marginTop: spacing.md,
   },

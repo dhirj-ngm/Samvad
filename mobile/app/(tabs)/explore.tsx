@@ -1,3 +1,4 @@
+import { SegmentedTabs } from "../../components/UI";
 import { People } from "../../components/People";
 import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -36,22 +37,8 @@ export default function Explore() {
     };
   }, [attempt]);
   return (
-    <Screen title="Explore" subtitle="Topics from across India">
-      <View style={{ flexDirection: "row", paddingHorizontal: 24 }}>
-        {(["topics", "people"] as const).map((m) => (
-          <Pressable
-            key={m}
-            accessibilityRole="button"
-            accessibilityState={{ selected: mode === m }}
-            style={styles.chip}
-            onPress={() => setMode(m)}
-          >
-            <Text style={styles.label}>
-              {m === "topics" ? "Topics" : "People"}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+    <Screen title="Explore" subtitle="Find your interests. Meet new voices.">
+      <SegmentedTabs options={[{value:'topics',label:'Topics'},{value:'people',label:'People'}]} value={mode} onChange={setMode} />
       {mode === "people" ? (
         <People />
       ) : (
@@ -99,13 +86,17 @@ export default function Explore() {
 }
 const styles = StyleSheet.create({
   topics: {
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: 20,
+    paddingTop: 12,
     gap: spacing.sm,
     paddingBottom: spacing.md,
   },
   chip: {
-    padding: spacing.md,
-    borderRadius: radius.md,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    minHeight: 44,
+    justifyContent: "center",
+    borderRadius: 24,
     borderColor: colors.border,
     borderWidth: 1,
     backgroundColor: colors.surface,
